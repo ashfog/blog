@@ -1,0 +1,4 @@
+interface:
+  display_name: "AshFog Daily Publisher"
+  short_description: "Research and publish daily briefs"
+  default_prompt: "Use $ashfog-daily-publisher in Preview mode for the current AshFog daily brief."

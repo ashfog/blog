@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "categories": [
+    { "id": "models", "label": "模型", "slug": "models" },
+    { "id": "agents", "label": "智能体", "slug": "agents" },
+    { "id": "open-source", "label": "开源", "slug": "open-source" },
+    { "id": "developer-tools", "label": "开发工具", "slug": "developer-tools" },
+    { "id": "infrastructure", "label": "基础设施", "slug": "infrastructure" },
+    { "id": "research", "label": "研究", "slug": "research" },
+    { "id": "hardware", "label": "硬件", "slug": "hardware" },
+    { "id": "security", "label": "安全", "slug": "security" },
+    { "id": "policy", "label": "政策", "slug": "policy" },
+    { "id": "community", "label": "社区", "slug": "community" }
+  ]
+}

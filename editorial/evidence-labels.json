@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "labels": {
+    "officially_stated": "官方发布或项目原始资料明确陈述",
+    "maintainer_confirmed": "负责维护者已确认",
+    "multiple_users_report": "至少两个独立用户报告",
+    "single_community_test": "一个带配置的社区测试",
+    "community_discussion_suggests": "社区讨论提出的早期信号",
+    "not_independently_verified": "尚未得到独立验证"
+  }
+}

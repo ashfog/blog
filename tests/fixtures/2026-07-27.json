@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "editionDate": "2026-07-27",
+  "timezone": "Asia/Shanghai",
+  "cutoffAt": "2026-07-27T09:00:00+08:00",
+  "generatedAt": "2026-07-27T09:18:00+08:00",
+  "runId": "fixture-2026-07-27-editorial-foundation",
+  "title": "AshFog Daily｜AI 工具链正在走向可验证的工程系统",
+  "description": "一份用于验证 AshFog 日报 Schema、来源约束、事实账本和发布门禁的结构化示例。",
+  "qualityShortfallReason": "这是基础设施测试夹具，只保留四条具有代表性的项目。",
+  "heroImageId": null,
+  "dailyAnalysis": {
+    "title": "从模型能力竞争转向系统可靠性竞争",
+    "body": "今天的几个信号指向同一个变化：AI 工具的竞争重点正在从单次演示中的模型能力，转向可以长期运行、能够被检查并且方便维护的工程系统。模型厂商开始提供更明确的能力边界，开源运行时把兼容性与部署体验放在更重要的位置，协议项目则尝试减少工具与智能体之间的连接成本。与此同时，社区讨论持续提醒开发者，官方发布只是判断的起点，真实环境中的版本差异、硬件配置、失败恢复和维护节奏同样决定产品是否可靠。对小团队来说，更实际的做法不是追逐每个新功能，而是建立固定的验证清单：记录模型与运行时版本，保存关键来源，测量延迟与成本，检查权限边界，并为失败准备可回退路径。当这些步骤被标准化之后，团队才能把新的模型、协议和开源组件快速接入现有系统，同时避免把未经验证的宣传结论带入生产环境。",
+    "signalIds": [
+      "openai-platform-update",
+      "ollama-runtime-release",
+      "mcp-spec-release"
+    ]
+  },
+  "stories": [
+    {
+      "id": "openai-platform-update",
+      "eventId": "openai-platform-2026-07-26",
+      "position": 1,
+      "kind": "news",
+      "highlight": true,
+      "category": "models",
+      "topics": ["models", "agents"],
+      "company": "OpenAI",
+      "ecosystem": "openai",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "OpenAI 更新模型与智能体平台能力",
+      "summary": "官方更新说明了模型和智能体平台的最新能力、适用范围与开发者接入方式。",
+      "whyItMatters": "更明确的能力边界有助于团队评估升级成本，并减少仅凭演示结果做技术决策的风险。",
+      "source": {
+        "id": "openai-news",
+        "name": "OpenAI News",
+        "tier": "A",
+        "url": "https://openai.com/news/",
+        "publishedAt": "2026-07-26T08:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "OpenAI 官方新闻页面发布了平台更新信息。",
+          "evidenceUrl": "https://openai.com/news/",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": ["hacker-news"],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 5,
+        "novelty": 4,
+        "practicalUtility": 4,
+        "impact": 4,
+        "communitySignal": 1,
+        "total": 23
+      },
+      "materialUpdate": "",
+      "windowException": "",
+      "imageId": null
+    },
+    {
+      "id": "ollama-runtime-release",
+      "eventId": "ollama-runtime-2026-07-26",
+      "position": 2,
+      "kind": "news",
+      "highlight": true,
+      "category": "open-source",
+      "topics": ["open-source", "local-ai"],
+      "company": "Ollama",
+      "ecosystem": "local-ai",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "Ollama 发布新的本地模型运行时版本",
+      "summary": "项目发布页记录了新的运行时版本，为本地模型部署带来兼容性和运行体验方面的更新。",
+      "whyItMatters": "本地运行时的版本变化会直接影响模型兼容性、硬件利用率以及个人和小团队的部署成本。",
+      "source": {
+        "id": "ollama-releases",
+        "name": "Ollama Releases",
+        "tier": "A",
+        "url": "https://github.com/ollama/ollama/releases",
+        "publishedAt": "2026-07-26T10:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "Ollama 官方仓库发布页包含新的运行时版本。",
+          "evidenceUrl": "https://github.com/ollama/ollama/releases",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": ["github"],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 5,
+        "novelty": 4,
+        "practicalUtility": 5,
+        "impact": 3,
+        "communitySignal": 2,
+        "total": 24
+      },
+      "materialUpdate": "",
+      "windowException": "",
+      "imageId": null
+    },
+    {
+      "id": "mcp-spec-release",
+      "eventId": "mcp-spec-2026-07-26",
+      "position": 3,
+      "kind": "news",
+      "highlight": true,
+      "category": "developer-tools",
+      "topics": ["agents", "protocol"],
+      "company": null,
+      "ecosystem": "mcp",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "MCP 规范发布新的协议版本",
+      "summary": "MCP 规范仓库发布页记录了新的协议版本，重点涉及工具连接、互操作和安全边界。",
+      "whyItMatters": "协议层趋于稳定后，开发者可以减少重复集成工作，并更清楚地评估智能体工具调用的风险。",
+      "source": {
+        "id": "mcp-spec-releases",
+        "name": "MCP Specification Releases",
+        "tier": "A",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases",
+        "publishedAt": "2026-07-26T12:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "MCP 规范仓库发布页记录了新的协议版本。",
+          "evidenceUrl": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": ["github"],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 5,
+        "novelty": 4,
+        "practicalUtility": 5,
+        "impact": 4,
+        "communitySignal": 2,
+        "total": 25
+      },
+      "materialUpdate": "",
+      "windowException": "",
+      "imageId": null
+    },
+    {
+      "id": "hacker-news-community",
+      "eventId": "hn-ai-engineering-2026-07-26",
+      "position": 4,
+      "kind": "community",
+      "highlight": false,
+      "category": "community",
+      "topics": ["community", "developer-tools"],
+      "company": null,
+      "ecosystem": "hacker-news",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "Hacker News 讨论 AI 工具的生产可靠性",
+      "summary": "社区讨论集中在版本固定、失败恢复、权限控制和成本测量等生产环境问题。",
+      "whyItMatters": "这些讨论不能替代官方证据，但可以帮助团队发现发布说明中没有覆盖的实际运维约束。",
+      "source": {
+        "id": "hacker-news",
+        "name": "Hacker News",
+        "tier": "C",
+        "url": "https://news.ycombinator.com/",
+        "publishedAt": "2026-07-26T14:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "community_discussion_suggests"
+      },
+      "factualClaims": [
+        {
+          "text": "Hacker News 当天存在关于 AI 工具生产可靠性的讨论。",
+          "evidenceUrl": "https://news.ycombinator.com/",
+          "evidenceLabel": "community_discussion_suggests"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": ["hacker-news"],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 2,
+        "relevance": 4,
+        "novelty": 3,
+        "practicalUtility": 4,
+        "impact": 2,
+        "communitySignal": 4,
+        "total": 19
+      },
+      "materialUpdate": "",
+      "windowException": "",
+      "imageId": null
+    }
+  ],
+  "research": {
+    "collectedUrls": [
+      "https://openai.com/news/",
+      "https://github.com/ollama/ollama/releases",
+      "https://github.com/modelcontextprotocol/modelcontextprotocol/releases",
+      "https://news.ycombinator.com/"
+    ],
+    "excludedCandidates": [],
+    "unavailableSources": [],
+    "warnings": [
+      "测试夹具不代表真实日报内容，也不执行实时链接检查。"
+    ]
+  }
+}

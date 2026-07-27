@@ -1,0 +1,425 @@
+{
+  "version": 2,
+  "last_reviewed": "2026-07-26",
+  "timezone": "Asia/Shanghai",
+  "default_candidate_window_hours": 48,
+  "items_per_source_hint": 15,
+  "tiers": {
+    "A": "Primary facts: official announcements, repositories, releases, specifications, model cards, and papers.",
+    "B": "Engineering evidence: reproducible benchmarks, practitioner reports, technical analysis, and community threads.",
+    "C": "Discovery radar: newsletters, aggregators, and social signals that must lead back to stronger evidence."
+  },
+  "operating_rules": {
+    "prefer_machine_readable_access": true,
+    "use_conditional_requests": true,
+    "respect_terms_and_rate_limits": true,
+    "community_access_is_best_effort": true,
+    "community_outage_is_blocking": false,
+    "tier_c_must_resolve_to_stronger_evidence": true,
+    "do_not_bypass_authentication_or_paywalls": true
+  },
+  "access_profiles": {
+    "official-web": {
+      "method": "web",
+      "authentication": "none unless required by the publisher",
+      "rate_policy": "low-frequency targeted reads; cache discovered URLs",
+      "fallback": "official RSS, changelog, repository, or release page"
+    },
+    "github-rest": {
+      "method": "GitHub REST or GraphQL",
+      "authentication": "recommended",
+      "rate_policy": "honor response headers; use ETag/If-None-Match and targeted repository queries",
+      "fallback": "public repository release or discussion page"
+    },
+    "hn-api": {
+      "method": "official Firebase API",
+      "authentication": "none",
+      "endpoint": "https://hacker-news.firebaseio.com/v0/",
+      "rate_policy": "cache item responses and request only relevant threads",
+      "fallback": "public Hacker News thread"
+    },
+    "hf-hub": {
+      "method": "Hugging Face Hub API or hf CLI",
+      "authentication": "optional for public resources",
+      "rate_policy": "use structured paper/discussion commands and targeted repository reads",
+      "fallback": "public paper, model card, or discussion page"
+    },
+    "arxiv-api": {
+      "method": "arXiv API or category listing",
+      "authentication": "none",
+      "endpoint": "https://export.arxiv.org/api/query",
+      "rate_policy": "query narrow categories and cache metadata",
+      "fallback": "arXiv abstract page"
+    },
+    "reddit-targeted": {
+      "method": "approved Reddit API or manual targeted search",
+      "authentication": "as required",
+      "rate_policy": "comply with Reddit Developer/Data API terms and rate limits",
+      "fallback": "record unavailable; use GitHub/HN/Hugging Face evidence"
+    },
+    "x-targeted": {
+      "method": "official X API or manual targeted search",
+      "authentication": "usually required",
+      "rate_policy": "honor endpoint and plan limits; stop on 429",
+      "fallback": "record unavailable; use author repository, paper, or official announcement"
+    },
+    "newsletter-radar": {
+      "method": "public newsletter archive or subscribed edition",
+      "authentication": "do not bypass subscriber access",
+      "rate_policy": "check at source cadence; use only for discovery",
+      "fallback": "none"
+    }
+  },
+  "kind_access_defaults": {
+    "official": "official-web",
+    "official-community": "hf-hub",
+    "official-and-repository": "github-rest",
+    "changelog": "official-web",
+    "repository-releases": "github-rest",
+    "papers": "arxiv-api",
+    "paper-index": "hf-hub",
+    "paper-code-trends": "hf-hub",
+    "community-discovery": "hn-api",
+    "community": "reddit-targeted",
+    "curated-social-list": "x-targeted",
+    "newsletter-radar": "newsletter-radar",
+    "discovery": "official-web",
+    "media": "official-web",
+    "independent-benchmark": "official-web",
+    "deep-technical-analysis": "official-web",
+    "industry-analysis": "official-web"
+  },
+  "sources": [
+    {
+      "id": "openai-news",
+      "name": "OpenAI News",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://openai.com/news/",
+      "topics": ["models", "agents", "research", "safety"]
+    },
+    {
+      "id": "anthropic-news",
+      "name": "Anthropic Newsroom",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://www.anthropic.com/news",
+      "topics": ["models", "agents", "safety", "research"]
+    },
+    {
+      "id": "deepmind-blog",
+      "name": "Google DeepMind Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://deepmind.google/discover/blog/",
+      "topics": ["models", "research", "science", "safety"]
+    },
+    {
+      "id": "google-ai-blog",
+      "name": "Google AI Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://blog.google/technology/ai/",
+      "topics": ["models", "products", "developer-tools"]
+    },
+    {
+      "id": "meta-ai-blog",
+      "name": "Meta AI Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://ai.meta.com/blog/",
+      "topics": ["open-models", "research", "infrastructure"]
+    },
+    {
+      "id": "mistral-news",
+      "name": "Mistral AI News",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://mistral.ai/news",
+      "topics": ["models", "open-models", "api"]
+    },
+    {
+      "id": "microsoft-ai-blog",
+      "name": "Microsoft AI Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://blogs.microsoft.com/ai/",
+      "topics": ["agents", "enterprise-ai", "research"]
+    },
+    {
+      "id": "nvidia-developer-blog",
+      "name": "NVIDIA Developer Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://developer.nvidia.com/blog/",
+      "topics": ["inference", "gpu", "cuda", "robotics", "deployment"]
+    },
+    {
+      "id": "hugging-face-blog",
+      "name": "Hugging Face Blog",
+      "tier": "A",
+      "kind": "official-community",
+      "url": "https://huggingface.co/blog",
+      "topics": ["open-models", "training", "inference", "community"]
+    },
+    {
+      "id": "github-changelog",
+      "name": "GitHub Changelog",
+      "tier": "A",
+      "kind": "changelog",
+      "url": "https://github.blog/changelog/",
+      "topics": ["coding-agents", "copilot", "actions", "developer-tools"]
+    },
+    {
+      "id": "cloudflare-blog",
+      "name": "Cloudflare Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://blog.cloudflare.com/",
+      "topics": ["ai-infrastructure", "security", "edge", "developer-platform"]
+    },
+    {
+      "id": "github-trending",
+      "name": "GitHub Trending",
+      "tier": "C",
+      "kind": "discovery",
+      "url": "https://github.com/trending",
+      "topics": ["open-source", "repositories"],
+      "use": "Discover candidates, then verify repository activity, license, releases, and maintainer history."
+    },
+    {
+      "id": "hacker-news",
+      "name": "Hacker News",
+      "tier": "C",
+      "kind": "community-discovery",
+      "url": "https://news.ycombinator.com/",
+      "api": "https://hacker-news.firebaseio.com/v0/",
+      "cadence": "continuous",
+      "topics": ["engineering", "open-source", "research"]
+    },
+    {
+      "id": "show-hn",
+      "name": "Show HN",
+      "tier": "C",
+      "kind": "community-discovery",
+      "url": "https://news.ycombinator.com/show",
+      "api": "https://hacker-news.firebaseio.com/v0/showstories.json",
+      "cadence": "continuous",
+      "topics": ["open-source", "independent-tools", "developer-tools"]
+    },
+    {
+      "id": "hugging-face-papers",
+      "name": "Hugging Face Papers",
+      "tier": "A",
+      "kind": "paper-index",
+      "url": "https://huggingface.co/papers",
+      "structured_access": "hf papers ls --date YYYY-MM-DD --format json",
+      "cadence": "daily",
+      "topics": ["papers", "code", "community-interest"]
+    },
+    {
+      "id": "arxiv-cs-ai",
+      "name": "arXiv cs.AI recent",
+      "tier": "A",
+      "kind": "papers",
+      "url": "https://arxiv.org/list/cs.AI/recent",
+      "api": "https://export.arxiv.org/api/query?search_query=cat:cs.AI",
+      "cadence": "daily",
+      "topics": ["agents", "reasoning", "planning"]
+    },
+    {
+      "id": "arxiv-cs-cl",
+      "name": "arXiv cs.CL recent",
+      "tier": "A",
+      "kind": "papers",
+      "url": "https://arxiv.org/list/cs.CL/recent",
+      "api": "https://export.arxiv.org/api/query?search_query=cat:cs.CL",
+      "cadence": "daily",
+      "topics": ["llm", "nlp", "evaluation"]
+    },
+    {
+      "id": "arxiv-cs-lg",
+      "name": "arXiv cs.LG recent",
+      "tier": "A",
+      "kind": "papers",
+      "url": "https://arxiv.org/list/cs.LG/recent",
+      "api": "https://export.arxiv.org/api/query?search_query=cat:cs.LG",
+      "cadence": "daily",
+      "topics": ["machine-learning", "training", "evaluation"]
+    },
+    {
+      "id": "ars-ai",
+      "name": "Ars Technica AI",
+      "tier": "B",
+      "kind": "media",
+      "url": "https://arstechnica.com/ai/",
+      "topics": ["technology", "industry", "policy"]
+    },
+    {
+      "id": "mit-tech-review-ai",
+      "name": "MIT Technology Review AI",
+      "tier": "B",
+      "kind": "media",
+      "url": "https://www.technologyreview.com/topic/artificial-intelligence/",
+      "topics": ["research", "governance", "industry"]
+    },
+    {
+      "id": "ieee-spectrum-ai",
+      "name": "IEEE Spectrum AI",
+      "tier": "B",
+      "kind": "media",
+      "url": "https://spectrum.ieee.org/artificial-intelligence",
+      "topics": ["engineering", "robotics", "hardware"]
+    },
+    {
+      "id": "reddit-localllama",
+      "name": "Reddit r/LocalLLaMA",
+      "tier": "B",
+      "kind": "community",
+      "url": "https://www.reddit.com/r/LocalLLaMA/",
+      "topics": ["local-ai", "ollama", "vllm", "gguf", "quantization", "benchmarks"],
+      "use": "Targeted checks only; label reports and seek reproducible configurations."
+    },
+    {
+      "id": "x-curated-experts",
+      "name": "X Curated AI Experts",
+      "tier": "C",
+      "kind": "curated-social-list",
+      "url": "https://x.com/",
+      "topics": ["researchers", "maintainers", "founders"],
+      "use": "Search selected people around final stories; never scan the general feed or use a post as the sole release source."
+    },
+    {
+      "id": "phoronix",
+      "name": "Phoronix",
+      "tier": "B",
+      "kind": "independent-benchmark",
+      "url": "https://www.phoronix.com/",
+      "topics": ["linux", "gpu", "cuda", "rocm", "drivers", "benchmarks"]
+    },
+    {
+      "id": "mcp-blog",
+      "name": "Model Context Protocol Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://blog.modelcontextprotocol.io/",
+      "topics": ["mcp", "agents", "protocol"]
+    },
+    {
+      "id": "mcp-spec-releases",
+      "name": "MCP Specification Releases",
+      "tier": "A",
+      "kind": "repository-releases",
+      "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases",
+      "api": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/releases",
+      "topics": ["mcp", "specification", "security", "interoperability"]
+    },
+    {
+      "id": "vercel-ai",
+      "name": "Vercel AI SDK",
+      "tier": "A",
+      "kind": "official-and-repository",
+      "url": "https://vercel.com/blog",
+      "repository": "https://github.com/vercel/ai",
+      "releases_api": "https://api.github.com/repos/vercel/ai/releases",
+      "topics": ["ai-sdk", "agents", "tool-calling", "frontend", "deployment"]
+    },
+    {
+      "id": "ollama-blog",
+      "name": "Ollama Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://ollama.com/blog",
+      "topics": ["local-ai", "models", "deployment"]
+    },
+    {
+      "id": "ollama-releases",
+      "name": "Ollama Releases",
+      "tier": "A",
+      "kind": "repository-releases",
+      "url": "https://github.com/ollama/ollama/releases",
+      "api": "https://api.github.com/repos/ollama/ollama/releases",
+      "topics": ["local-ai", "runtime", "compatibility"]
+    },
+    {
+      "id": "langchain-blog",
+      "name": "LangChain Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://www.langchain.com/blog",
+      "topics": ["agents", "langgraph", "evaluation", "observability"]
+    },
+    {
+      "id": "llamaindex-blog",
+      "name": "LlamaIndex Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://www.llamaindex.ai/blog",
+      "topics": ["rag", "agents", "data", "workflows"]
+    },
+    {
+      "id": "dify-blog",
+      "name": "Dify Blog",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://dify.ai/blog",
+      "topics": ["agent-workflows", "rag", "self-hosting", "releases"]
+    },
+    {
+      "id": "hugging-face-trending-papers",
+      "name": "Hugging Face Trending Papers",
+      "tier": "A",
+      "kind": "paper-code-trends",
+      "url": "https://huggingface.co/papers/trending",
+      "structured_access": "hf papers ls --sort trending --format json",
+      "cadence": "daily",
+      "topics": ["papers", "code", "trending-research"]
+    },
+    {
+      "id": "chips-and-cheese",
+      "name": "Chips and Cheese",
+      "tier": "B",
+      "kind": "deep-technical-analysis",
+      "url": "https://chipsandcheese.com/",
+      "cadence": "event-driven",
+      "topics": ["microarchitecture", "cache", "memory-bandwidth", "accelerators"]
+    },
+    {
+      "id": "semianalysis",
+      "name": "SemiAnalysis",
+      "tier": "B",
+      "kind": "industry-analysis",
+      "url": "https://semianalysis.com/",
+      "cadence": "event-driven",
+      "topics": ["chips", "datacenters", "inference-economics", "supply-chain"],
+      "use": "Background and cost analysis; do not replace official specifications or reproducible benchmarks."
+    },
+    {
+      "id": "the-batch",
+      "name": "The Batch",
+      "tier": "C",
+      "kind": "newsletter-radar",
+      "url": "https://www.deeplearning.ai/the-batch/",
+      "cadence": "weekly",
+      "topics": ["weekly-ai", "research", "industry"]
+    },
+    {
+      "id": "alphasignal",
+      "name": "AlphaSignal",
+      "tier": "C",
+      "kind": "newsletter-radar",
+      "url": "https://alphasignal.ai/",
+      "cadence": "daily",
+      "topics": ["ai-news", "papers", "models", "repositories"]
+    },
+    {
+      "id": "tldr-ai",
+      "name": "TLDR AI",
+      "tier": "C",
+      "kind": "newsletter-radar",
+      "url": "https://tldr.tech/ai",
+      "cadence": "weekdays",
+      "topics": ["ai-news", "papers", "developer-tools"]
+    }
+  ]
+}
