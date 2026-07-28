@@ -72,7 +72,7 @@ PUBLIC_GOOGLE_SITE_VERIFICATION=your-token
 
 - Build command: `pnpm run build`
 - Output directory: `dist`
-- Node.js: `22.12` or newer
+- Node.js: `22.22.2` or newer
 - Production branch: `main`
 
 Cloudflare Pages does not need a database or server runtime. A daily task writes
