@@ -30,6 +30,7 @@ export interface DailyStory {
   ecosystem: string;
   openSource: boolean;
   mediaOnly: boolean;
+  imageId?: string | null;
   headline: string;
   summary: string;
   whyItMatters: string;

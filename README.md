@@ -1,6 +1,6 @@
-# AshFog
+# ASHFOG
 
-AshFog is a static Astro publication for one verified AI, open-source, and
+ASHFOG is a static Astro publication for one verified AI, open-source, and
 developer-ecosystem intelligence brief per day.
 
 ## Content contract
@@ -23,6 +23,26 @@ When the formal content directory is empty, the site uses
 `tests/fixtures/2026-07-28.json` as a theme preview. The preview fixture is not
 part of the publication directory. As soon as a formal edition exists, only
 formal editions are rendered.
+
+## Image library
+
+The committed library contains 40 story artworks and 8 page artworks. Each
+artwork has 768 px and 1536 px WebP renditions. The canonical manifest is:
+
+```text
+editorial/image-library.json
+```
+
+Daily JSON normally omits `imageId`. Astro then assigns images by category
+using `editionDate`, story ID, and category as a stable seed. Assignment is
+deterministic across rebuilds and globally unique within one edition. A daily
+edition can therefore contain up to 40 stories without repeating an image.
+
+Use a story `imageId` only for an intentional editorial override. It must exist
+in the manifest, match the story category, and not be used by another story in
+the same edition. `heroImageId` can reference any story or page artwork.
+Validation fails before publication when an ID is unknown, mismatched, repeated,
+or when a rendition file is missing.
 
 ## Local development
 

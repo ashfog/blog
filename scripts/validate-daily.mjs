@@ -252,12 +252,13 @@ const loadPreviousEditions = async (contentDir, currentFile, limit) => {
 };
 
 export async function loadEditorialConfig(root = repoRoot) {
-  const [schema, rules, sourceData, categoriesData, evidenceData] = await Promise.all([
+  const [schema, rules, sourceData, categoriesData, evidenceData, imageData] = await Promise.all([
     readJson(path.join(root, "schemas", "daily.schema.json")),
     readJson(path.join(root, "editorial", "publishing-rules.json")),
     readJson(path.join(root, "editorial", "sources.json")),
     readJson(path.join(root, "editorial", "categories.json")),
     readJson(path.join(root, "editorial", "evidence-labels.json")),
+    readJson(path.join(root, "editorial", "image-library.json")),
   ]);
   const sourceUrlFields = ["url", "api", "repository", "releases_api", "endpoint"];
   const allowedHosts = new Set();
@@ -289,6 +290,46 @@ export async function loadEditorialConfig(root = repoRoot) {
   if (new Set(categoryIds).size !== categoryIds.length) {
     throw new Error("editorial/categories.json contains duplicate category ids");
   }
+
+  const allImages = [...imageData.storyImages, ...imageData.pageImages];
+  const imageIds = allImages.map((image) => image.id);
+  if (new Set(imageIds).size !== imageIds.length) {
+    throw new Error("editorial/image-library.json contains duplicate image ids");
+  }
+  const storyImageCategories = new Map();
+  for (const image of imageData.storyImages) {
+    if (!categoryIds.includes(image.category)) {
+      throw new Error(
+        `editorial/image-library.json image ${image.id} has unknown category ${image.category}`,
+      );
+    }
+    storyImageCategories.set(image.id, image.category);
+  }
+  const pageImageIds = new Set(imageData.pageImages.map((image) => image.id));
+  for (const requiredPage of [
+    "home",
+    "daily",
+    "analysis",
+    "archive",
+    "topics",
+    "about",
+    "search",
+    "404",
+  ]) {
+    if (!imageData.pageImages.some((image) => image.page === requiredPage)) {
+      throw new Error(`editorial/image-library.json is missing page image ${requiredPage}`);
+    }
+  }
+  for (const image of allImages) {
+    const directory = "category" in image
+      ? path.join("stories", image.category)
+      : "pages";
+    for (const width of imageData.dimensions.renditions) {
+      await fs.access(
+        path.join(root, "public", "images", "library", directory, `${image.id}-${width}.webp`),
+      );
+    }
+  }
   return {
     schema,
     rules,
@@ -297,6 +338,10 @@ export async function loadEditorialConfig(root = repoRoot) {
     sourceHosts,
     categories: new Set(categoryIds),
     evidenceLabels: new Set(Object.keys(evidenceData.labels)),
+    imageIds: new Set(imageIds),
+    storyImageCategories,
+    pageImageIds,
+    storyImageCount: imageData.storyImages.length,
   };
 }
 
@@ -320,6 +365,9 @@ export async function validateEdition(
     sourceHosts,
     categories,
     evidenceLabels,
+    imageIds,
+    storyImageCategories,
+    storyImageCount,
   } = config;
   const cutoff = parseDateTime(edition.cutoffAt);
   const generated = parseDateTime(edition.generatedAt);
@@ -339,6 +387,14 @@ export async function validateEdition(
   let highlights = 0;
   let openSource = 0;
   let mediaOnly = 0;
+  const requestedImageIds = new Set();
+
+  if (edition.heroImageId && !imageIds.has(edition.heroImageId)) {
+    errors.push("$.heroImageId: unknown image ID");
+  }
+  if (edition.stories.length > storyImageCount) {
+    errors.push(`$.stories: ${edition.stories.length} stories exceed the ${storyImageCount}-image pool`);
+  }
 
   edition.stories.forEach((story, index) => {
     const at = `$.stories[${index}]`;
@@ -347,6 +403,18 @@ export async function validateEdition(
     ids.add(story.id);
     if (eventIds.has(story.eventId)) errors.push(`${at}.eventId: duplicate ${story.eventId}`);
     eventIds.add(story.eventId);
+
+    if (story.imageId) {
+      if (!storyImageCategories.has(story.imageId)) {
+        errors.push(`${at}.imageId: unknown story image ID`);
+      } else if (storyImageCategories.get(story.imageId) !== story.category) {
+        errors.push(`${at}.imageId: image category must match story.category`);
+      }
+      if (requestedImageIds.has(story.imageId)) {
+        errors.push(`${at}.imageId: duplicate image ID in this edition`);
+      }
+      requestedImageIds.add(story.imageId);
+    }
 
     const normalizedSource = normalizeUrl(story.source.url);
     if (sourceUrls.has(normalizedSource)) {
