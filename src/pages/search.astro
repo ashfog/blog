@@ -2,7 +2,15 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="搜索" description="搜索 AshFog 日报、主题与来源。">
+<BaseLayout
+  title="搜索"
+  description="搜索 AshFog 日报、主题与来源。"
+  noindex
+  breadcrumbs={[
+    { name: "AshFog", path: "/" },
+    { name: "搜索", path: "/search" }
+  ]}
+>
   <section class="search-page page-shell">
     <header>
       <span class="eyebrow">Search the signals</span>

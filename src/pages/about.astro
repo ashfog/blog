@@ -2,7 +2,15 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="关于 AshFog" description="AshFog 的编辑原则、证据标准与自动发布方式。">
+<BaseLayout
+  title="关于 AshFog"
+  description="AshFog 的编辑原则、证据标准与自动发布方式。"
+  pageType="AboutPage"
+  breadcrumbs={[
+    { name: "AshFog", path: "/" },
+    { name: "关于", path: "/about" }
+  ]}
+>
   <section class="about page-shell">
     <header>
       <span class="eyebrow">About AshFog</span>

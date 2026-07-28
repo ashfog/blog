@@ -5,7 +5,15 @@ import { categoryLabels, getAllTopics, getStoriesByTopic } from "../../lib/daily
 const topics = getAllTopics();
 ---
 
-<BaseLayout title="主题索引" description="按主题浏览 AshFog 每日行业情报。">
+<BaseLayout
+  title="主题索引"
+  description="按主题浏览 AshFog 每日行业情报。"
+  pageType="CollectionPage"
+  breadcrumbs={[
+    { name: "AshFog", path: "/" },
+    { name: "主题索引", path: "/topics" }
+  ]}
+>
   <section class="topics page-shell">
     <header>
       <span class="eyebrow">Topic index</span>

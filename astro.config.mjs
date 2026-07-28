@@ -5,7 +5,11 @@ export default defineConfig({
   site: "https://ashfog.com",
   output: "static",
   trailingSlash: "never",
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => new URL(page).pathname !== "/search"
+    })
+  ],
   vite: {
     build: {
       cssMinify: true

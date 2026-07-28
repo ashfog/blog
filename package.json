@@ -10,7 +10,8 @@
     "dev": "astro dev",
     "build:astro": "astro build",
     "build:search": "pagefind --site dist",
-    "build": "pnpm run build:astro && pnpm run build:search",
+    "build:seo": "node scripts/validate-seo.mjs",
+    "build": "pnpm run build:astro && pnpm run build:search && pnpm run build:seo",
     "preview": "astro preview",
     "validate:daily": "node scripts/validate-daily.mjs",
     "test:editorial": "node --test tests/validate-daily.test.mjs"

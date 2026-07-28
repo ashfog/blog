@@ -5,7 +5,15 @@ import { formatDate, getEditions, readingMinutes } from "../../lib/daily";
 const editions = getEditions();
 ---
 
-<BaseLayout title="日报归档" description="AshFog 每日行业情报归档。">
+<BaseLayout
+  title="日报归档"
+  description="AshFog 每日行业情报归档。"
+  pageType="CollectionPage"
+  breadcrumbs={[
+    { name: "AshFog", path: "/" },
+    { name: "日报归档", path: "/daily" }
+  ]}
+>
   <section class="archive page-shell">
     <header>
       <span class="eyebrow">Daily archive</span>

@@ -23,9 +23,36 @@ interface Props {
 const { edition } = Astro.props;
 const news = edition.stories.filter((story) => story.kind === "news");
 const community = edition.stories.filter((story) => story.kind === "community");
+const articleTags = [
+  ...new Set(
+    edition.stories.flatMap((story) => [
+      categoryLabels[story.category] ?? story.category,
+      ...story.topics
+    ])
+  )
+];
+const citations = [
+  ...new Set(edition.stories.map((story) => story.source.url))
+];
 ---
 
-<BaseLayout title={edition.title} description={edition.description} type="article">
+<BaseLayout
+  title={edition.title}
+  description={edition.description}
+  type="article"
+  breadcrumbs={[
+    { name: "AshFog", path: "/" },
+    { name: "日报归档", path: "/daily" },
+    { name: edition.editionDate, path: `/daily/${edition.editionDate}` }
+  ]}
+  article={{
+    publishedTime: edition.generatedAt,
+    modifiedTime: edition.generatedAt,
+    section: "AI 与开发者行业情报",
+    tags: articleTags,
+    citations
+  }}
+>
   <article class="edition page-shell" data-pagefind-body>
     <header class="edition-header">
       <div class="edition-kicker">

@@ -38,6 +38,35 @@ pnpm run build
 ```
 
 The build creates the Astro site, then generates the Pagefind search index.
+It also verifies canonical links, crawl directives, Sitemap output, and
+structured data. A missing SEO artifact fails the deployment build.
+
+## Search indexing
+
+Astro generates:
+
+- `/robots.txt`
+- `/sitemap-index.xml`
+- `/sitemap-0.xml`
+- `/rss.xml`
+
+Daily pages include `NewsArticle` and breadcrumb JSON-LD. Collection and about
+pages declare their corresponding Schema.org page types. Search and 404 pages
+are marked `noindex`; search is also excluded from the Sitemap.
+
+After the production domain is online, verify `ashfog.com` in Google Search
+Console and submit:
+
+```text
+https://ashfog.com/sitemap-index.xml
+```
+
+If Search Console provides an HTML verification token, set this Cloudflare
+Pages build variable:
+
+```text
+PUBLIC_GOOGLE_SITE_VERIFICATION=your-token
+```
 
 ## Cloudflare Pages
 

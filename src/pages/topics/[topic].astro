@@ -19,7 +19,16 @@ const items = getStoriesByTopic(topic);
 const title = categoryLabels[topic] ?? topic;
 ---
 
-<BaseLayout title={`${title}主题`} description={`AshFog ${title}主题信号归档。`}>
+<BaseLayout
+  title={`${title}主题`}
+  description={`AshFog ${title}主题信号归档。`}
+  pageType="CollectionPage"
+  breadcrumbs={[
+    { name: "AshFog", path: "/" },
+    { name: "主题索引", path: "/topics" },
+    { name: `${title}主题`, path: `/topics/${topic}` }
+  ]}
+>
   <section class="topic-page page-shell">
     <header>
       <a href="/topics">← 所有主题</a>
