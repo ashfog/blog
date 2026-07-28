@@ -16,11 +16,11 @@ const categories = [...new Set(edition.stories.map((story) => story.category))];
 const sourceCount = new Set(edition.stories.map((story) => story.source.id)).size;
 ---
 
-<BaseLayout title="AshFog — 每日行业情报" description={edition.description}>
+<BaseLayout title="ASHFOG — 每日行业情报" description={edition.description}>
   <section class="hero page-shell">
     <div class="hero-copy">
       <span class="eyebrow">Daily intelligence · {edition.editionDate}</span>
-      <h1>穿过噪音，<br /><em>看见今天。</em></h1>
+      <h1>穿过噪音<br /><em>看见今天</em></h1>
       <p>{edition.description}</p>
       <div class="hero-actions">
         <a class="primary" href={`/daily/${edition.editionDate}`}>阅读完整日报 <span>↗</span></a>

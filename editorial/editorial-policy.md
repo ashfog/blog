@@ -43,8 +43,8 @@ Use the highest available evidence and link the primary source even when a lower
 For every selected item:
 
 - State what changed without marketing language.
-- Write an original concise summary.
-- Explain why it matters to developers, researchers, operators, founders, or open-source users.
+- Write an original, self-contained summary that meets the exact `summary` length limits in `schemas/daily.schema.json`.
+- Explain why it matters to developers, researchers, operators, founders, or open-source users within the exact `whyItMatters` length limits in the schema.
 - Preserve uncertainty and configuration-specific caveats.
 - Attribute benchmarks and community findings with their conditions.
 - Keep all published URLs inside `research.collectedUrls`.

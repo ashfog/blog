@@ -116,8 +116,8 @@
         "openSource": { "type": "boolean" },
         "mediaOnly": { "type": "boolean" },
         "headline": { "type": "string", "minLength": 4, "maxLength": 180 },
-        "summary": { "type": "string", "minLength": 20, "maxLength": 600 },
-        "whyItMatters": { "type": "string", "minLength": 20, "maxLength": 600 },
+        "summary": { "type": "string", "minLength": 200, "maxLength": 300 },
+        "whyItMatters": { "type": "string", "minLength": 70, "maxLength": 100 },
         "source": { "$ref": "#/$defs/source" },
         "factualClaims": {
           "type": "array",

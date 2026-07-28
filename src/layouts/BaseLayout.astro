@@ -24,7 +24,7 @@ interface Props {
 }
 
 const {
-  title = "AshFog — 每日行业情报",
+  title = "ASHFOG — 每日行业情报",
   description = "每天一份经过来源核验的 AI、开源与开发者生态要点，帮你穿过噪音，看见真正重要的信号。",
   image,
   type = "website",
@@ -36,7 +36,7 @@ const {
 
 const site = Astro.site ?? new URL("https://ashfog.com");
 const canonical = new URL(Astro.url.pathname, site);
-const fullTitle = title.includes("AshFog") ? title : `${title} · AshFog`;
+const fullTitle = title.includes("ASHFOG") ? title : `${title} · ASHFOG`;
 const imageUrl = image ? new URL(image, site).href : undefined;
 const organizationId = new URL("/#organization", site).href;
 const websiteId = new URL("/#website", site).href;
@@ -47,7 +47,7 @@ const graph: Array<Record<string, unknown>> = [
   {
     "@type": "NewsMediaOrganization",
     "@id": organizationId,
-    name: "AshFog",
+    name: "ASHFOG",
     url: new URL("/", site).href,
     description:
       "每天发布经过来源核验的 AI、开源与开发者生态行业情报。"
@@ -56,7 +56,7 @@ const graph: Array<Record<string, unknown>> = [
     "@type": "WebSite",
     "@id": websiteId,
     url: new URL("/", site).href,
-    name: "AshFog",
+    name: "ASHFOG",
     description:
       "每天一份经过来源核验的 AI、开源与开发者生态要点。",
     inLanguage: "zh-CN",
@@ -102,7 +102,7 @@ if (article) {
     isAccessibleForFree: true,
     author: {
       "@type": "Organization",
-      name: "AshFog",
+      name: "ASHFOG",
       url: new URL("/about", site).href
     },
     publisher: { "@id": organizationId },
@@ -138,10 +138,10 @@ const jsonLd = JSON.stringify({
     <meta name="theme-color" content="#f4f3ef" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/rss+xml" title="AshFog RSS" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="ASHFOG RSS" href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:type" content={type} />
-    <meta property="og:site_name" content="AshFog" />
+    <meta property="og:site_name" content="ASHFOG" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />

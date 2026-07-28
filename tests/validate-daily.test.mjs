@@ -11,7 +11,7 @@ import {
 
 const testDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(testDir, "..");
-const fixturePath = path.join(testDir, "fixtures", "2026-07-27.json");
+const fixturePath = path.join(testDir, "fixtures", "2026-07-28.json");
 const fixture = JSON.parse(await fs.readFile(fixturePath, "utf8"));
 const config = await loadEditorialConfig(root);
 const clone = () => structuredClone(fixture);
@@ -25,11 +25,11 @@ const validate = (edition, options = {}) =>
     ...options,
   });
 
-test("valid fixture passes with only documented shortfall warnings", async () => {
+test("valid fixture passes with only the documented analysis-length warning", async () => {
   const report = await validate(clone());
   assert.equal(report.status, "ok");
   assert.deepEqual(report.errors, []);
-  assert.ok(report.warnings.some((warning) => warning.includes("below target")));
+  assert.ok(report.warnings.every((warning) => warning.includes("daily analysis has")));
 });
 
 test("schema rejects a missing source URL", async () => {
@@ -38,6 +38,42 @@ test("schema rejects a missing source URL", async () => {
   const report = await validate(edition);
   assert.equal(report.status, "error");
   assert.ok(report.errors.some((error) => error.includes("missing required property url")));
+});
+
+test("schema enforces summary length between 200 and 300 characters", async () => {
+  const tooShort = clone();
+  tooShort.stories[0].summary = "短".repeat(199);
+  const shortReport = await validate(tooShort);
+  assert.equal(shortReport.status, "error");
+  assert.ok(shortReport.errors.some((error) => error.includes("summary: string is shorter than 200")));
+
+  const tooLong = clone();
+  tooLong.stories[0].summary = "长".repeat(301);
+  const longReport = await validate(tooLong);
+  assert.equal(longReport.status, "error");
+  assert.ok(longReport.errors.some((error) => error.includes("summary: string is longer than 300")));
+});
+
+test("schema enforces whyItMatters length between 70 and 100 characters", async () => {
+  const tooShort = clone();
+  tooShort.stories[0].whyItMatters = "短".repeat(69);
+  const shortReport = await validate(tooShort);
+  assert.equal(shortReport.status, "error");
+  assert.ok(
+    shortReport.errors.some((error) =>
+      error.includes("whyItMatters: string is shorter than 70"),
+    ),
+  );
+
+  const tooLong = clone();
+  tooLong.stories[0].whyItMatters = "长".repeat(101);
+  const longReport = await validate(tooLong);
+  assert.equal(longReport.status, "error");
+  assert.ok(
+    longReport.errors.some((error) =>
+      error.includes("whyItMatters: string is longer than 100"),
+    ),
+  );
 });
 
 test("domain rules reject an unknown source", async () => {
@@ -50,7 +86,7 @@ test("domain rules reject an unknown source", async () => {
 
 test("domain rules reject a future publication time", async () => {
   const edition = clone();
-  edition.stories[0].source.publishedAt = "2026-07-28T10:00:00+08:00";
+  edition.stories[0].source.publishedAt = "2026-07-28T15:00:00+08:00";
   const report = await validate(edition);
   assert.equal(report.status, "error");
   assert.ok(report.errors.some((error) => error.includes("after cutoffAt")));
@@ -93,7 +129,7 @@ test("domain rules reject inconsistent score totals", async () => {
 test("Tier C cannot be the primary source for news", async () => {
   const edition = clone();
   edition.stories[0].source = {
-    ...edition.stories[3].source,
+    ...edition.stories[9].source,
     publishedAt: edition.stories[0].source.publishedAt,
   };
   const report = await validate(edition);
