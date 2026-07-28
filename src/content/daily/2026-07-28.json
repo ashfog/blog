@@ -1,0 +1,758 @@
+{
+  "schemaVersion": 1,
+  "language": "en",
+  "edition": "global",
+  "editionDate": "2026-07-28",
+  "timezone": "Asia/Shanghai",
+  "cutoffAt": "2026-07-28T22:35:33+08:00",
+  "generatedAt": "2026-07-28T22:50:44+08:00",
+  "runId": "publish-2026-07-28-223533-cst",
+  "title": "Agents Meet Harder Security and Reliability Boundaries",
+  "description": "Microsoft, GitHub, Moonshot, Tencent, DeepSeek, Qwen, and new research converge on stronger controls for capable models and the systems around them.",
+  "qualityShortfallReason": "Twenty-five registered sources could not expose an inspectable dated entry list or returned an access restriction. Every source was attempted, failures are recorded, and no prior-day stories were used to compensate.",
+  "dailyAnalysis": {
+    "title": "Capability is moving faster than the contracts around it",
+    "body": "The day’s strongest signals are less about another isolated model score than about the contracts needed to operate increasingly capable systems. Microsoft’s MAI-Cyber-1-Flash story shows a vendor turning model capability into a bounded, multi-model security workflow, while GitHub’s new approval hold moves a similar principle into CI: unfamiliar automation should not inherit execution authority merely because it arrived through a valid contribution path. The APPA research pushes that idea into agent architecture, separating a contaminated child trajectory from a trusted parent context instead of treating every read as permanently safe or permanently toxic.\n\nOpen releases add a second pressure. Kimi K3 raises the practical ceiling for open-weight, multimodal, long-context systems, and Tencent’s RxBrain update makes fine-tuning an embodied model materially more accessible. Those gains increase the value of explicit operational boundaries. DeepSeek’s high-SM kernel fix, Qwen’s newer-GPU support, and the UniRL shutdown work all show that model capability becomes useful only when runtimes survive real hardware, lifecycle, and failure conditions.\n\nFor builders, the practical implication is to treat permissions, provenance, state, and teardown as product features. Benchmark gains remain useful, but deployment readiness now depends just as much on whether a system can prove what it ran, constrain what it may touch, preserve validated state, and stop cleanly when the surrounding assumptions break.",
+    "signalIds": [
+      "microsoft-mai-cyber-1-flash",
+      "github-actions-unproven-workflows",
+      "appa-agent-taint-confinement",
+      "kimi-k3-open-frontier-model",
+      "tencent-rxbrain-finetuning"
+    ]
+  },
+  "stories": [
+    {
+      "id": "microsoft-mai-cyber-1-flash",
+      "eventId": "microsoft-project-perception-mai-cyber-1-flash",
+      "position": 1,
+      "kind": "news",
+      "highlight": true,
+      "region": "north-america",
+      "category": "security",
+      "topics": ["agentic-security", "vulnerability-management", "cybersecurity"],
+      "company": "Microsoft",
+      "ecosystem": "microsoft-security",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "Microsoft pairs MAI-Cyber-1-Flash with MDASH for lower-cost vulnerability work",
+      "summary": "Microsoft announced MAI-Cyber-1-Flash, a cybersecurity model designed to work inside its MDASH multi-model agent system, and introduced Project Perception as the broader delivery vehicle for agentic security workflows. The company says the MAI-Cyber-1-Flash configuration scored 96 percent on CyberGym, twelve points above the comparison it labels Mythos, while reducing cost by almost half relative to the MDASH configuration currently in market. Those numbers are vendor-reported and have not been independently reproduced. The first described use is software vulnerability management: specialized models and agents cooperate rather than asking one general model to discover, validate, and prioritize every finding. Project Perception is scheduled to enter public preview on August 3 and is intended to extend the same system approach beyond vulnerability discovery. The announcement also frames signals, sensors, identity, data, and policy enforcement as parts of a new security stack built for autonomous systems.",
+      "whyItMatters": "Security teams evaluating coding or vulnerability agents now have a concrete production architecture to compare: specialized models inside an orchestrated system, measured on a public benchmark and priced as a workflow. The vendor-only results still need independent testing, but the cost claim and imminent preview make configuration, false-positive rates, scope controls, and evidence retention immediate procurement questions.",
+      "source": {
+        "id": "microsoft-ai-blog",
+        "name": "Microsoft AI Blog",
+        "tier": "A",
+        "url": "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-27T16:54:02Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "Microsoft says MAI-Cyber-1-Flash inside MDASH scored 96 percent on CyberGym and cut cost by almost half versus its current configuration.",
+          "evidenceUrl": "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
+          "evidenceLabel": "not_independently_verified"
+        },
+        {
+          "text": "Project Perception is scheduled to enter public preview on August 3.",
+          "evidenceUrl": "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": ["Hacker News", "GitHub"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 5, "relevance": 5, "novelty": 4, "practicalUtility": 5, "impact": 5, "communitySignal": 0, "total": 24},
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "kimi-k3-open-frontier-model",
+      "eventId": "moonshot-kimi-k3-open-frontier-intelligence",
+      "position": 2,
+      "kind": "news",
+      "highlight": true,
+      "region": "china",
+      "category": "models",
+      "topics": ["open-models", "multimodal", "long-context", "agents"],
+      "company": "Moonshot AI",
+      "ecosystem": "kimi",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "Moonshot releases Kimi K3 weights for a 2.8-trillion-parameter multimodal model",
+      "summary": "Moonshot AI released Kimi K3 as an open-weight, native multimodal mixture-of-experts model with 2.8 trillion total parameters, 104 billion activated parameters, and a claimed one-million-token context window. The technical report describes Kimi Delta Attention, Attention Residuals, and Stable LatentMoE, which activates 16 of 896 routed experts per token. Moonshot says the architecture and training recipe improve scaling efficiency by about 2.5 times over Kimi K2. The model is trained for coding, tool use, reasoning, vision, and long-horizon work, with low, high, and max reasoning-effort settings. The repository provides weights, deployment guidance for vLLM, SGLang, and TokenSpeed, and an API with OpenAI- and Anthropic-compatible interfaces. Moonshot’s benchmark comparisons are vendor-run and harness-dependent; its own report says K3 still trails the strongest proprietary models overall. The same-day report update and public artifacts make the release directly inspectable despite those evaluation caveats.",
+      "whyItMatters": "K3 substantially raises the scale and context available in an open-weight package, giving researchers and infrastructure teams a new reference point for sparse-model serving, multimodal agents, and long-running coding work. Its size also makes deployment a serious systems project: teams should verify memory, quantization, harness behavior, and license obligations before treating vendor benchmark tables as adoption evidence.",
+      "source": {
+        "id": "moonshot-ai",
+        "name": "Moonshot AI",
+        "tier": "A",
+        "url": "https://github.com/MoonshotAI/Kimi-K3",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-27T15:08:00Z",
+        "updatedAt": "2026-07-28T11:48:20Z",
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "Moonshot describes Kimi K3 as a 2.8-trillion-parameter MoE model with 104 billion activated parameters and a one-million-token context window.",
+          "evidenceUrl": "https://arxiv.org/abs/2607.24653",
+          "evidenceLabel": "officially_stated"
+        },
+        {
+          "text": "The official repository provides public model artifacts and deployment guidance for multiple inference engines.",
+          "evidenceUrl": "https://github.com/MoonshotAI/Kimi-K3",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": ["GitHub", "Hacker News"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 5, "relevance": 5, "novelty": 5, "practicalUtility": 4, "impact": 5, "communitySignal": 1, "total": 25},
+      "materialUpdate": "Moonshot updated the public technical report twice during the edition window after the repository's initial publication.",
+      "windowException": ""
+    },
+    {
+      "id": "github-actions-unproven-workflows",
+      "eventId": "github-actions-holds-unproven-workflows",
+      "position": 3,
+      "kind": "news",
+      "highlight": true,
+      "region": "north-america",
+      "category": "security",
+      "topics": ["github-actions", "ci-cd", "workflow-security"],
+      "company": "GitHub",
+      "ecosystem": "github-actions",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "GitHub Actions adds an approval hold for unproven workflows",
+      "summary": "GitHub added a protection that holds unproven Actions workflows for approval before they execute. The change targets the point where automation from an unfamiliar or insufficiently trusted path could otherwise obtain a runner, repository token, cache access, or configured secrets merely because an event matched a workflow trigger. The new behavior adds a review boundary to the execution path instead of relying only on the workflow file’s syntax or the contributor’s ability to open a change. It continues GitHub’s broader 2026 work on workflow execution protections, bot-created pull-request approvals, safer checkout behavior, and read-only cache credentials for untrusted triggers. Repository owners should still inspect their exact settings and event model, because approval controls do not make dangerous workflow code safe after approval. The material change is that GitHub is now applying an explicit trust gate to another class of previously unproven workflow runs.",
+      "whyItMatters": "CI workflows routinely hold credentials and production-adjacent permissions, so a default pause can remove an automatic execution path for attacker-controlled code. Maintainers should verify who may approve, which events are covered, and how the hold interacts with required checks. The control is most valuable when paired with least-privilege tokens, pinned actions, protected environments, and review of workflow-file changes.",
+      "source": {
+        "id": "github-changelog",
+        "name": "GitHub Changelog",
+        "tier": "A",
+        "url": "https://github.blog/changelog/2026-07-28-github-actions-holds-unproven-workflows-for-approval",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-28T04:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "GitHub announced that Actions holds unproven workflows for approval before execution.",
+          "evidenceUrl": "https://github.blog/changelog/2026-07-28-github-actions-holds-unproven-workflows-for-approval",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": ["Hacker News", "GitHub"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 5, "relevance": 5, "novelty": 4, "practicalUtility": 5, "impact": 4, "communitySignal": 0, "total": 23},
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "appa-agent-taint-confinement",
+      "eventId": "appa-agentic-permissions-policy-algebra",
+      "position": 4,
+      "kind": "news",
+      "highlight": true,
+      "region": "global",
+      "category": "security",
+      "topics": ["agent-security", "prompt-injection", "information-flow"],
+      "company": null,
+      "ecosystem": "agent-security-research",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "APPA isolates untrusted agent work in child trajectories",
+      "summary": "A new paper proposes Agentic Permissions Policy Algebra, or APPA, an information-flow framework for agents that must process data with different trust or confidentiality labels. Traditional taint tracking can permanently contaminate an agent context after it reads untrusted data, preserving safety at the cost of making later work unusable. APPA instead evaluates permission changes before acquisition and can create a label-seeded child trajectory to inspect unvetted material. A trusted sanitizer may return a bounded derivative while the parent context retains its original label. The authors model labels and event logs algebraically and provide proofs for parent-label preservation and confined merging. In a multi-turn tool-chaining benchmark across four models, they report that the design reduced exfiltration attack success from a 31-to-50-percent range to 0-to-7 percent. Those results come from the paper’s controlled benchmark, not an independent production deployment.",
+      "whyItMatters": "Agent platforms need a usable middle ground between letting untrusted content influence everything and permanently disabling a context after one risky read. APPA’s branch-and-sanitize contract offers implementers a concrete architecture to evaluate. The benchmark is early evidence, but the formal separation of acquisition, authorization, and merge policy could inform tool runtimes handling email, documents, browsers, and secrets.",
+      "source": {
+        "id": "arxiv-cs-ai",
+        "name": "arXiv cs.AI recent",
+        "tier": "A",
+        "url": "https://arxiv.org/abs/2607.24625",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-27T16:19:45Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "The paper reports reducing exfiltration attack success from 31-to-50 percent to 0-to-7 percent in its benchmark.",
+          "evidenceUrl": "https://arxiv.org/abs/2607.24625",
+          "evidenceLabel": "not_independently_verified"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": ["Hacker News", "GitHub"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 4, "relevance": 5, "novelty": 5, "practicalUtility": 4, "impact": 4, "communitySignal": 0, "total": 22},
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "tencent-rxbrain-finetuning",
+      "eventId": "tencent-rxbrain-open-finetuning-pipeline",
+      "position": 5,
+      "kind": "news",
+      "highlight": true,
+      "region": "china",
+      "category": "open-source",
+      "topics": ["embodied-ai", "multimodal", "fine-tuning", "world-models"],
+      "company": "Tencent",
+      "ecosystem": "tencent-hunyuan",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "Tencent opens RxBrain’s multimodal fine-tuning pipeline",
+      "summary": "Tencent’s Hunyuan organization added a fine-tuning pipeline to RxBrain, its embodied cognition model for joint language-visual reasoning and image-based imagination. The same-day change covers visual question answering, multi-frame generation, and interleaved generation, with a shared packed-sequence training layout for understanding and flow-matching image objectives. The implementation includes data converters, ratio-controlled bucket mixing, per-stream learning rates and freezing, optional widening initialization, FLUX VAE encoding, and Accelerate plus DeepSpeed ZeRO-2 launch support. The maintainers also reorganized inference entry points and documented a multi-GPU verification run across all four data paths. The commit explicitly removed unreachable code carrying a license incompatible with the repository’s stated Apache-2.0 clean-room implementation. This is a material expansion from inference artifacts to trainable infrastructure, although adopters still need to inspect model-weight terms separately because repository code and model artifacts can carry different obligations.",
+      "whyItMatters": "Opening the training path lets robotics and multimodal researchers adapt the model instead of only replaying Tencent’s inference examples. The mixed understanding-and-generation layout is especially relevant to embodied work where observations, plans, and imagined frames share a trajectory. Teams should still reproduce the multi-GPU run, audit the data pipeline, and resolve the repository’s incomplete license metadata before redistribution.",
+      "source": {
+        "id": "tencent-hunyuan",
+        "name": "Tencent Hunyuan",
+        "tier": "A",
+        "url": "https://github.com/Tencent-Hunyuan/Hy-Embodied-RxBrain-1.0/commit/b3db1712497982a4e354516eae67b5098bb0eaef",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-14T12:10:37Z",
+        "updatedAt": "2026-07-28T09:36:48Z",
+        "evidenceLabel": "maintainer_confirmed"
+      },
+      "factualClaims": [
+        {
+          "text": "Tencent added fine-tuning code and documented workflows for VQA, multi-frame generation, and interleaved generation.",
+          "evidenceUrl": "https://github.com/Tencent-Hunyuan/Hy-Embodied-RxBrain-1.0/commit/b3db1712497982a4e354516eae67b5098bb0eaef",
+          "evidenceLabel": "maintainer_confirmed"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": ["GitHub", "Hacker News"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 5, "relevance": 4, "novelty": 4, "practicalUtility": 5, "impact": 4, "communitySignal": 1, "total": 23},
+      "materialUpdate": "The project added its previously unavailable fine-tuning pipeline during the edition window.",
+      "windowException": ""
+    },
+    {
+      "id": "tencent-unirl-runtime-update",
+      "eventId": "tencent-unirl-qwen-omni-ltx-runtime-update",
+      "position": 6,
+      "kind": "news",
+      "highlight": false,
+      "region": "china",
+      "category": "infrastructure",
+      "topics": ["reinforcement-learning", "multimodal", "training", "runtime"],
+      "company": "Tencent",
+      "ecosystem": "unirl",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "UniRL adds audio-in-video training and safer distributed shutdown",
+      "summary": "Tencent’s UniRL framework received a substantial same-day set of multimodal and runtime changes. One merged update adds audio embedded in video to Qwen3-Omni reinforcement-learning workflows, carrying aligned audio and video features through rollout, replay, multimodal position encoding, and distributed training. The maintainers also documented and fixed a lifecycle failure in which terminated training drivers could leave tensor-parallel vLLM-Omni workers holding GPU memory. The new shutdown path combines parent-death signaling, process anchoring, bounded teardown, reverse role release, and cleanup for partially initialized engines. A separate change adds aligned SGLang rollout and LoRA-merge support for LTX-Video-2. Together, the commits broaden the framework’s supported multimodal training paths while addressing a concrete operational hazard in long-running GPU jobs. The detailed measurements in commit messages are maintainer-reported and should be reproduced on the adopter’s own Ray, vLLM-Omni, driver, and GPU configuration.",
+      "whyItMatters": "Training frameworks fail in expensive ways when rollout and replay disagree or worker processes outlive their owner. UniRL’s update addresses both correctness and resource cleanup, while widening support for audio-video and video-generation workloads. Operators can reuse the teardown design beyond this project, but should test signal handling and GPU release under their scheduler because process behavior varies across containers and cluster managers.",
+      "source": {
+        "id": "tencent-hunyuan",
+        "name": "Tencent Hunyuan",
+        "tier": "A",
+        "url": "https://github.com/Tencent-Hunyuan/UniRL/commit/c1da41bdccd0c4c399772074b1dad034bdaca140",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-06-08T12:29:36Z",
+        "updatedAt": "2026-07-28T08:03:13Z",
+        "evidenceLabel": "maintainer_confirmed"
+      },
+      "factualClaims": [
+        {
+          "text": "UniRL added Qwen3-Omni audio-in-video training paths and a bounded shutdown design for distributed inference workers.",
+          "evidenceUrl": "https://github.com/Tencent-Hunyuan/UniRL/commit/c1da41bdccd0c4c399772074b1dad034bdaca140",
+          "evidenceLabel": "maintainer_confirmed"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": ["GitHub"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 5, "relevance": 4, "novelty": 4, "practicalUtility": 5, "impact": 4, "communitySignal": 1, "total": 23},
+      "materialUpdate": "The framework added new multimodal training paths and a materially revised distributed shutdown contract during the edition window.",
+      "windowException": ""
+    },
+    {
+      "id": "deepseek-flashmla-high-sm-fix",
+      "eventId": "deepseek-flashmla-256-split-buckets",
+      "position": 7,
+      "kind": "news",
+      "highlight": false,
+      "region": "china",
+      "category": "infrastructure",
+      "topics": ["attention-kernels", "gpu", "inference", "compatibility"],
+      "company": "DeepSeek",
+      "ecosystem": "flashmla",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "FlashMLA fixes decode scheduling on high-SM GPUs",
+      "summary": "DeepSeek’s FlashMLA accepted a targeted compatibility fix for GPUs whose decode scheduler can request more than 160 splits. The existing compile-time switch only defined split buckets through 160, so requests in the 161-to-256 range could fall through to an assertion and fail at kernel launch. The change adds 192, 224, and 256 buckets to the decode-combine path without altering the lower ranges. FlashMLA supplies optimized multi-head latent-attention kernels used by DeepSeek models, including dense and sparse prefill and decoding paths. The patch is small in code volume but material for operators using newer or high-SM-count accelerators, where a scheduling choice could otherwise become a hard runtime failure. It was contributed through the official repository and includes a concrete failure mechanism rather than a generic performance claim. No independent benchmark was attached, so this edition treats it as a compatibility fix, not evidence of higher throughput.",
+      "whyItMatters": "Kernel launch assertions in production inference can turn hardware upgrades into availability regressions. Operators using FlashMLA on GPUs with enough streaming multiprocessors to request larger split counts should take the patch or verify their pinned version’s behavior. The change also illustrates why accelerator compatibility needs boundary tests tied to scheduler outputs, not only correctness tests on one reference GPU.",
+      "source": {
+        "id": "deepseek-official",
+        "name": "DeepSeek",
+        "tier": "A",
+        "url": "https://github.com/deepseek-ai/FlashMLA/commit/15f13e5030374295491c5ce31b02d7e63a7772c6",
+        "sourceLanguage": "en",
+        "publishedAt": "2025-02-21T06:31:27Z",
+        "updatedAt": "2026-07-28T06:18:25Z",
+        "evidenceLabel": "maintainer_confirmed"
+      },
+      "factualClaims": [
+        {
+          "text": "The patch extends decode-combine split buckets through 256 to avoid an assertion for scheduler requests above 160.",
+          "evidenceUrl": "https://github.com/deepseek-ai/FlashMLA/commit/15f13e5030374295491c5ce31b02d7e63a7772c6",
+          "evidenceLabel": "maintainer_confirmed"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": ["GitHub"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 5, "relevance": 4, "novelty": 3, "practicalUtility": 5, "impact": 3, "communitySignal": 1, "total": 21},
+      "materialUpdate": "The official repository added a fix for previously unsupported scheduler split counts on high-SM GPUs.",
+      "windowException": ""
+    },
+    {
+      "id": "qwen-flashqla-new-gpu-support",
+      "eventId": "qwen-flashqla-sm120-and-accuracy-fix",
+      "position": 8,
+      "kind": "news",
+      "highlight": false,
+      "region": "china",
+      "category": "infrastructure",
+      "topics": ["linear-attention", "gpu", "training", "kernels"],
+      "company": "Alibaba",
+      "ecosystem": "qwen",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "Qwen’s FlashQLA adds SM120 support after a gradient-accuracy fix",
+      "summary": "Qwen’s FlashQLA kernel library updated its documentation to mark NVIDIA SM120 hardware as supported, following a same-edition-day fix that increases numerical precision for a matrix transposition used in the gate-gradient path. FlashQLA implements fused forward and backward kernels for gated delta-rule linear attention on TileLang. The project reports two-to-three-times forward speedups and two-times backward speedups over its stated FLA Triton baseline across selected Hopper configurations, but those are maintainer benchmarks with specific software versions and should not be generalized to the new hardware target. The same-day commits are material primarily as compatibility and correctness work: one expands the declared accelerator range, while the other addresses gradient accuracy. The repository requires CUDA 12.8 or newer, PyTorch 2.8 or newer, and compatible GPU architecture. Adopters should run the included correctness tests before relying on the performance suite.",
+      "whyItMatters": "Linear-attention kernels are increasingly central to long-context training and edge-oriented agent workloads, but fast kernels are useful only when gradients remain accurate and new GPU targets are explicit. Teams considering FlashQLA on SM120 can now begin validation against a declared support point. They should reproduce both numerical tolerances and end-to-end speedups with their model shapes, tensor parallelism, and compiler versions.",
+      "source": {
+        "id": "qwen-official",
+        "name": "Qwen",
+        "tier": "A",
+        "url": "https://github.com/QwenLM/FlashQLA/commit/821fd9d37ede18fdc2a4e707fefe3770bfc32e58",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-04-24T09:18:05Z",
+        "updatedAt": "2026-07-28T09:24:11Z",
+        "evidenceLabel": "maintainer_confirmed"
+      },
+      "factualClaims": [
+        {
+          "text": "The official project marked SM120 as supported during the edition window.",
+          "evidenceUrl": "https://github.com/QwenLM/FlashQLA/commit/821fd9d37ede18fdc2a4e707fefe3770bfc32e58",
+          "evidenceLabel": "maintainer_confirmed"
+        },
+        {
+          "text": "A preceding same-day commit changed matrix-transposition precision to fix gate-gradient accuracy.",
+          "evidenceUrl": "https://github.com/QwenLM/FlashQLA/commit/6e5d2ea1536f50485746caf7ff7fb4b846a85040",
+          "evidenceLabel": "maintainer_confirmed"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": ["GitHub"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 5, "relevance": 4, "novelty": 3, "practicalUtility": 5, "impact": 3, "communitySignal": 1, "total": 21},
+      "materialUpdate": "The project added a new declared GPU target and a same-day numerical-accuracy fix.",
+      "windowException": ""
+    },
+    {
+      "id": "moonshot-perceptionbench",
+      "eventId": "moonshot-perceptionbench-atomic-vision",
+      "position": 9,
+      "kind": "news",
+      "highlight": false,
+      "region": "china",
+      "category": "research",
+      "topics": ["multimodal", "evaluation", "vision", "benchmarks"],
+      "company": "Moonshot AI",
+      "ecosystem": "kimi",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "Moonshot releases PerceptionBench for atomic visual perception",
+      "summary": "Moonshot AI published PerceptionBench, a benchmark intended to separate basic visual perception failures from higher-level reasoning mistakes in multimodal models. The official repository contains the benchmark definition, evaluation materials, and an Apache-2.0 license, and its initial public commit landed within the Shanghai edition window. Moonshot’s accompanying claims say no evaluated frontier model exceeded 60 percent, but the result remains vendor-reported until independent teams reproduce the task construction, scoring, and model settings. The benchmark focuses on atomic visual judgments rather than broad conversational or agent performance, which may help developers diagnose whether a system failed to see a detail or failed after seeing it. Because benchmark design can strongly shape rankings, the useful artifact is the released evaluation process, not the headline leaderboard alone. Teams should inspect contamination risk, annotation quality, prompt format, and confidence intervals before comparing models.",
+      "whyItMatters": "Multimodal evaluations often collapse perception and reasoning into one score, making failures hard to debug. A narrower benchmark can help model builders decide whether to invest in encoders, resolution, data, or downstream reasoning. PerceptionBench is therefore most valuable as a diagnostic instrument. Independent reruns are needed before its vendor headline should influence model selection or procurement.",
+      "source": {
+        "id": "moonshot-ai",
+        "name": "Moonshot AI",
+        "tier": "A",
+        "url": "https://github.com/MoonshotAI/PerceptionBench",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-27T18:31:48Z",
+        "updatedAt": "2026-07-27T19:10:58Z",
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "Moonshot published the PerceptionBench repository and evaluation artifacts under an Apache-2.0 license.",
+          "evidenceUrl": "https://github.com/MoonshotAI/PerceptionBench",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": ["GitHub", "Hacker News"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 4, "relevance": 4, "novelty": 4, "practicalUtility": 4, "impact": 3, "communitySignal": 1, "total": 20},
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "denial-of-deadline-inference",
+      "eventId": "denial-of-deadline-distributed-inference-attack",
+      "position": 10,
+      "kind": "news",
+      "highlight": false,
+      "region": "global",
+      "category": "security",
+      "topics": ["distributed-inference", "availability", "edge-cloud", "adversarial-load"],
+      "company": null,
+      "ecosystem": "distributed-inference-research",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "Shaped traffic can silently erase slow-path inference accuracy",
+      "summary": "Researchers describe a denial-of-deadline attack against inference systems that combine a fast local path with a more accurate remote slow path. By shaping bursts around shared resources, an attacker can delay the slow result past the application deadline; the merger then discards it while the fast path continues returning apparently healthy responses. In a simulated edge-cloud multi-object-tracking pipeline for autonomous driving, the paper reports that roughly 4,000 burst-shaped requests increased benign p99 latency from 92 milliseconds to two seconds and reduced tracking quality by an average of 7.0 HOTA points. Targeted intervals produced reported degradation from 2.0 to 18.7 points, with rare classes such as stop signs losing nearly half their prior accuracy. The study is a controlled simulation, not evidence of an observed production exploit, but it identifies a failure mode that ordinary uptime and response-latency dashboards could miss.",
+      "whyItMatters": "Two-tier inference is attractive because it can balance cost, latency, and quality, yet the coordination layer creates a security boundary. Operators need metrics for discarded slow-path results and quality under contention, not only successful fast responses. Schedulers, mergers, resource isolation, admission control, and deadline policy should be tested with adversarial burst patterns before the architecture reaches safety-sensitive workloads.",
+      "source": {
+        "id": "arxiv-cs-ai",
+        "name": "arXiv cs.AI recent",
+        "tier": "A",
+        "url": "https://arxiv.org/abs/2607.24692",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-27T17:34:09Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "The simulated attack raised benign p99 latency from 92 milliseconds to two seconds and reduced tracking quality by 7.0 HOTA points on average.",
+          "evidenceUrl": "https://arxiv.org/abs/2607.24692",
+          "evidenceLabel": "not_independently_verified"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": ["Hacker News"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 4, "relevance": 4, "novelty": 5, "practicalUtility": 4, "impact": 4, "communitySignal": 0, "total": 21},
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "dataorchestra-example-curation",
+      "eventId": "dataorchestra-per-example-pretraining-curation",
+      "position": 11,
+      "kind": "news",
+      "highlight": false,
+      "region": "global",
+      "category": "research",
+      "topics": ["pretraining", "data-curation", "training-efficiency"],
+      "company": null,
+      "ecosystem": "model-training-research",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "DataOrchestra learns a different cleaning path for each training example",
+      "summary": "DataOrchestra proposes replacing corpus-wide data-cleaning recipes with an orchestrator that chooses a processing path for each pretraining example. For every chunk, the system can drop it, leave it unchanged, or clean it; cleaning can invoke programmatic editing or one or more model-based rewrites with generated instructions. The authors trained models from 0.5 billion to 7 billion parameters from scratch on processed web data and report stable average gains across eleven benchmarks compared with individual processing methods. They also report gains for math continued pretraining and lower processing compute because the system skips operations it considers unnecessary. The paper’s results are author-run, and the abstract does not establish how the orchestrator behaves under distribution shift or adversarial content. Still, the work turns data curation from a single pipeline configuration into a learned per-example routing problem that can be tested against fixed baselines.",
+      "whyItMatters": "Pretraining teams spend significant compute rewriting data that may already be usable, while one fixed cleaning policy can erase valuable structure from some examples. Per-example routing could improve both data quality and processing cost. Before adoption, teams should examine router training signals, failure auditing, reproducibility, and whether an LLM-based cleaner introduces homogeneous style, factual drift, or hidden policy bias.",
+      "source": {
+        "id": "arxiv-cs-ai",
+        "name": "arXiv cs.AI recent",
+        "tier": "A",
+        "url": "https://arxiv.org/abs/2607.24717",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-27T17:54:12Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "The authors report training 0.5B-to-7B models and observing average gains across eleven benchmarks while skipping unnecessary processing operations.",
+          "evidenceUrl": "https://arxiv.org/abs/2607.24717",
+          "evidenceLabel": "not_independently_verified"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": ["Hacker News"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 4, "relevance": 4, "novelty": 4, "practicalUtility": 4, "impact": 3, "communitySignal": 0, "total": 19},
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "looping-code-repair-reliability",
+      "eventId": "state-bound-evidence-agentic-code-repair",
+      "position": 12,
+      "kind": "news",
+      "highlight": false,
+      "region": "global",
+      "category": "agents",
+      "topics": ["coding-agents", "verification", "state-management"],
+      "company": null,
+      "ecosystem": "coding-agent-research",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "Code-repair study finds revision loops can destroy correct patches",
+      "summary": "A study of agentic code repair argues that repeated generate-test-revise cycles do not provide a reliability guarantee because agents may overwrite a correct patch or rely on evidence generated for an earlier code state. In 900 three-revision trajectories over thirty HumanEval repairs, the authors report that correctness with current traces fell from 0.820 after one forced revision to 0.673 after two, even as the share that had been correct at some point increased. In a separate controlled study, stale traces harmed 34 of 135 correct starting states versus four with current traces. The paper separates admission, checkpoint preservation, grounded certification, competence, and liveness, then proposes a typed loop contract that binds verifier evidence to an exact code state and emits auditable receipts. The authors explicitly say their reference implementation is an executable specification, not proof that repair competence or verifier calibration improved.",
+      "whyItMatters": "Coding-agent products often equate another iteration with progress. This work shows why systems should preserve verified checkpoints and invalidate test evidence whenever the underlying code changes. Builders can adopt that contract without accepting the paper’s broader empirical generality: bind every verdict to a commit or content hash, keep the last verified state, and make regression across revisions visible.",
+      "source": {
+        "id": "arxiv-cs-cl",
+        "name": "arXiv cs.CL recent",
+        "tier": "A",
+        "url": "https://arxiv.org/abs/2607.24604",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-27T16:05:23Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "The paper reports current correctness falling from 0.820 after one forced revision to 0.673 after two in its HumanEval repair study.",
+          "evidenceUrl": "https://arxiv.org/abs/2607.24604",
+          "evidenceLabel": "not_independently_verified"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": ["Hacker News"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 4, "relevance": 5, "novelty": 4, "practicalUtility": 5, "impact": 4, "communitySignal": 0, "total": 22},
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "ars-chatgpt-style-requests",
+      "eventId": "chatgpt-direct-living-author-style-block",
+      "position": 13,
+      "kind": "news",
+      "highlight": false,
+      "region": "north-america",
+      "category": "policy",
+      "topics": ["copyright", "model-behavior", "creative-tools"],
+      "company": "OpenAI",
+      "ecosystem": "openai",
+      "openSource": false,
+      "mediaOnly": true,
+      "headline": "ChatGPT starts refusing direct requests to copy living authors’ styles",
+      "summary": "Ars Technica reports that ChatGPT has begun refusing direct requests to imitate the style of living authors while still offering to produce text with broader, non-identifying characteristics. The change narrows one visible form of stylistic imitation without resolving the underlying copyright and training-data disputes around generative writing systems. Because OpenAI’s registered news page returned an access restriction during this run and no same-day primary announcement was available, this item relies on original media reporting and is marked media-only. The reported behavior should also be treated as product-state evidence rather than a permanent policy: refusals can vary by model, account, prompt, region, and rollout cohort. The practical change is nonetheless material to developers building writing interfaces or prompt libraries, because a previously common request pattern may now return a refusal and require a feature-level rather than author-name description.",
+      "whyItMatters": "Creative-tool developers should avoid depending on named living-author imitation as a stable capability and should revise templates, tests, and user guidance accordingly. The policy boundary may reduce direct substitution claims, but it does not settle questions about training or generalized stylistic similarity. Teams need regression tests across supported models and clear fallback language that does not disguise the same request.",
+      "source": {
+        "id": "ars-ai",
+        "name": "Ars Technica AI",
+        "tier": "B",
+        "url": "https://arstechnica.com/ai/2026/07/chatgpt-stops-cloning-famous-writers-voices-but-may-capture-a-similar-feeling/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-27T12:58:46-04:00",
+        "updatedAt": null,
+        "evidenceLabel": "not_independently_verified"
+      },
+      "factualClaims": [
+        {
+          "text": "Ars reports that ChatGPT refuses direct imitation requests for living authors while allowing broader stylistic characteristics.",
+          "evidenceUrl": "https://arstechnica.com/ai/2026/07/chatgpt-stops-cloning-famous-writers-voices-but-may-capture-a-similar-feeling/",
+          "evidenceLabel": "not_independently_verified"
+        }
+      ],
+      "communityCheck": {
+        "status": "unavailable",
+        "platformsAttempted": ["Reddit", "X"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 3, "relevance": 4, "novelty": 4, "practicalUtility": 4, "impact": 3, "communitySignal": 0, "total": 18},
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "ars-scraping-court-ruling",
+      "eventId": "serpapi-google-reddit-scraping-ruling",
+      "position": 14,
+      "kind": "news",
+      "highlight": false,
+      "region": "north-america",
+      "category": "policy",
+      "topics": ["web-scraping", "data-access", "ai-training", "courts"],
+      "company": null,
+      "ecosystem": "open-web",
+      "openSource": false,
+      "mediaOnly": true,
+      "headline": "Court loss complicates Google and Reddit’s campaign against a web scraper",
+      "summary": "Ars Technica reports that a web-scraping company prevailed in a court dispute involving efforts by Google and Reddit to restrict access to publicly reachable web content. The decision matters to AI and developer infrastructure because search, retrieval, evaluation, and dataset pipelines often depend on the boundary between public access and prohibited circumvention. This edition treats the item as media-only: the registered source supplied original reporting, but the underlying court materials were not available through a registered source host during the run. The ruling should not be generalized into a blanket right to scrape. Contract terms, authentication, robots directives, privacy law, copyright, database rights, rate limits, and jurisdiction can create different obligations for different systems. The material event is a concrete legal setback for two large platforms’ asserted control strategy, not a universal permission for automated collection.",
+      "whyItMatters": "Developers should expect public-web access rules to remain contested and jurisdiction-specific. The ruling may strengthen arguments for some unauthenticated collection, but it does not remove product, privacy, or contractual risk. Teams operating crawlers should preserve request logs, honor technical limits, document lawful purpose, and obtain counsel before changing collection policy based on a media headline or one court outcome.",
+      "source": {
+        "id": "ars-ai",
+        "name": "Ars Technica AI",
+        "tier": "B",
+        "url": "https://arstechnica.com/tech-policy/2026/07/google-wont-give-up-odd-war-against-ai-web-scraping-despite-court-loss/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-27T16:12:42-04:00",
+        "updatedAt": null,
+        "evidenceLabel": "not_independently_verified"
+      },
+      "factualClaims": [
+        {
+          "text": "Ars reports a court loss for Google and Reddit in litigation against a web-scraping company.",
+          "evidenceUrl": "https://arstechnica.com/tech-policy/2026/07/google-wont-give-up-odd-war-against-ai-web-scraping-despite-court-loss/",
+          "evidenceLabel": "not_independently_verified"
+        }
+      ],
+      "communityCheck": {
+        "status": "unavailable",
+        "platformsAttempted": ["Reddit", "X"],
+        "platformsUnavailable": ["Reddit", "X"],
+        "signals": []
+      },
+      "score": {"evidenceStrength": 3, "relevance": 4, "novelty": 4, "practicalUtility": 3, "impact": 4, "communitySignal": 0, "total": 18},
+      "materialUpdate": "",
+      "windowException": ""
+    }
+  ],
+  "research": {
+    "sourceScan": [
+      {"sourceId":"openai-news","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"HTTP 403 from the registered news page; same-day site search returned no inspectable entries."},
+      {"sourceId":"anthropic-news","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The landing page was reachable but exposed no machine-readable dated entry list; same-day site search returned no entries."},
+      {"sourceId":"deepmind-blog","status":"empty","itemsFetched":7,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"google-ai-blog","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The landing page exposed no inspectable dated entries and same-day site search returned no results."},
+      {"sourceId":"meta-ai-blog","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The landing page exposed no inspectable dated entries and same-day site search returned no results."},
+      {"sourceId":"mistral-news","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"microsoft-ai-blog","status":"collected","itemsFetched":11,"itemsOnEditionDay":2,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
+      {"sourceId":"nvidia-developer-blog","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The landing page exposed no inspectable dated entries and same-day site search returned no results."},
+      {"sourceId":"hugging-face-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"github-changelog","status":"collected","itemsFetched":15,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
+      {"sourceId":"cloudflare-blog","status":"collected","itemsFetched":1,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"github-trending","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The registered trending endpoint returned HTTP 404 during collection."},
+      {"sourceId":"hacker-news","status":"collected","itemsFetched":15,"itemsOnEditionDay":13,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"show-hn","status":"collected","itemsFetched":15,"itemsOnEditionDay":14,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"hugging-face-papers","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The public page did not expose a dated July 28 entry list through the available client."},
+      {"sourceId":"arxiv-cs-ai","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":3,"failureReason":""},
+      {"sourceId":"arxiv-cs-cl","status":"collected","itemsFetched":15,"itemsOnEditionDay":8,"duplicatesRemoved":4,"selectedCount":1,"failureReason":""},
+      {"sourceId":"arxiv-cs-lg","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":7,"selectedCount":0,"failureReason":""},
+      {"sourceId":"ars-ai","status":"collected","itemsFetched":15,"itemsOnEditionDay":4,"duplicatesRemoved":0,"selectedCount":2,"failureReason":""},
+      {"sourceId":"mit-tech-review-ai","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"Robots restrictions blocked inspection of the registered topic page."},
+      {"sourceId":"ieee-spectrum-ai","status":"collected","itemsFetched":15,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"reddit-localllama","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"Reddit returned HTTP 403 for the targeted newest-posts request."},
+      {"sourceId":"x-curated-experts","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"Official X API credentials were unavailable; the general feed was not used as a substitute."},
+      {"sourceId":"phoronix","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The registered site returned HTTP 403."},
+      {"sourceId":"mcp-blog","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The page exposed no inspectable dated entry list."},
+      {"sourceId":"mcp-spec-releases","status":"empty","itemsFetched":8,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"vercel-ai","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"ollama-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"ollama-releases","status":"collected","itemsFetched":15,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"langchain-blog","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The page exposed no inspectable dated entry list and same-day site search returned no results."},
+      {"sourceId":"llamaindex-blog","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The page exposed no inspectable dated entry list and same-day site search returned no results."},
+      {"sourceId":"dify-blog","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The page exposed no inspectable dated entry list and same-day site search returned no results."},
+      {"sourceId":"hugging-face-trending-papers","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The public page did not expose a dated July 28 trending list through the available client."},
+      {"sourceId":"chips-and-cheese","status":"collected","itemsFetched":15,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"semianalysis","status":"empty","itemsFetched":10,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"the-batch","status":"empty","itemsFetched":3,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"alphasignal","status":"collected","itemsFetched":12,"itemsOnEditionDay":7,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"tldr-ai","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The public archive exposed no inspectable dated entry list."},
+      {"sourceId":"deepseek-official","status":"collected","itemsFetched":15,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
+      {"sourceId":"qwen-official","status":"collected","itemsFetched":15,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
+      {"sourceId":"bytedance-seed","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The live page exposed no dated July 28 entries; targeted search found no same-day item."},
+      {"sourceId":"zai-official","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"moonshot-ai","status":"collected","itemsFetched":15,"itemsOnEditionDay":4,"duplicatesRemoved":0,"selectedCount":2,"failureReason":""},
+      {"sourceId":"minimax-official","status":"empty","itemsFetched":1,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"modelscope-hub","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The model hub did not expose an inspectable dated newest-entry list."},
+      {"sourceId":"tencent-hunyuan","status":"collected","itemsFetched":15,"itemsOnEditionDay":3,"duplicatesRemoved":0,"selectedCount":2,"failureReason":""},
+      {"sourceId":"baidu-ernie-paddlepaddle","status":"collected","itemsFetched":15,"itemsOnEditionDay":4,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"huawei-ascend","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The official site exposed no inspectable dated newest-entry list."},
+      {"sourceId":"stepfun-official","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The official site exposed no inspectable dated newest-entry list; targeted search found no same-day item."},
+      {"sourceId":"china-cac","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The official site exposed no machine-readable newest-entry list; targeted same-day AI search found no July 28 item."},
+      {"sourceId":"china-miit","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The official site exposed no machine-readable newest-entry list; targeted same-day AI search found no July 28 item."},
+      {"sourceId":"machine-heart","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The discovery site exposed no inspectable dated newest-entry list through the available client."},
+      {"sourceId":"qbitai","status":"collected","itemsFetched":10,"itemsOnEditionDay":8,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"36kr-ai","status":"unavailable","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":"The discovery page exposed no inspectable newest-entry list; targeted search found no same-day primary candidate."}
+    ],
+    "collectedUrls": [
+      "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
+      "https://github.com/MoonshotAI/Kimi-K3",
+      "https://arxiv.org/abs/2607.24653",
+      "https://github.blog/changelog/2026-07-28-github-actions-holds-unproven-workflows-for-approval",
+      "https://arxiv.org/abs/2607.24625",
+      "https://github.com/Tencent-Hunyuan/Hy-Embodied-RxBrain-1.0/commit/b3db1712497982a4e354516eae67b5098bb0eaef",
+      "https://github.com/Tencent-Hunyuan/UniRL/commit/c1da41bdccd0c4c399772074b1dad034bdaca140",
+      "https://github.com/deepseek-ai/FlashMLA/commit/15f13e5030374295491c5ce31b02d7e63a7772c6",
+      "https://github.com/QwenLM/FlashQLA/commit/821fd9d37ede18fdc2a4e707fefe3770bfc32e58",
+      "https://github.com/QwenLM/FlashQLA/commit/6e5d2ea1536f50485746caf7ff7fb4b846a85040",
+      "https://github.com/MoonshotAI/PerceptionBench",
+      "https://arxiv.org/abs/2607.24692",
+      "https://arxiv.org/abs/2607.24717",
+      "https://arxiv.org/abs/2607.24604",
+      "https://arstechnica.com/ai/2026/07/chatgpt-stops-cloning-famous-writers-voices-but-may-capture-a-similar-feeling/",
+      "https://arstechnica.com/tech-policy/2026/07/google-wont-give-up-odd-war-against-ai-web-scraping-despite-court-loss/",
+      "https://blog.cloudflare.com/q2-2026-internet-disruption-summary/",
+      "https://github.com/ollama/ollama/releases/tag/v0.32.5",
+      "https://github.com/vercel/ai/releases/tag/ai%407.0.40",
+      "https://chipsandcheese.com/p/amd-advancing-ai-2026-talking-cdna5",
+      "https://news.ycombinator.com/item?id=49084497",
+      "https://alphasignal.ai/news/cursor-launches-india-only-7-plan-targeting-3-million-developers",
+      "https://alphasignal.ai/news/epoch-s-frontiermath-benchmark-cracks-a-40-year-old-math-problem-using-fable-5",
+      "https://alphasignal.ai/news/moonshot-ai-s-perceptionbench-reveals-no-frontier-model-sees-past-60",
+      "https://alphasignal.ai/news/moonshot-ai-s-kimi-k3-becomes-the-world-s-largest-open-model-at-2-8t-parameters",
+      "https://alphasignal.ai/news/microsoft-s-mai-cyber-1-flash-beats-every-ai-security-model-at-half-the-cost",
+      "https://alphasignal.ai/news/goodfire-s-silico-finds-human-cognitive-biases-geometrically-encoded-inside-llms",
+      "https://alphasignal.ai/news/lm-studio-bionic-adds-kimi-k3-the-biggest-open-weight-model-ever-built",
+      "https://arstechnica.com/security/2026/07/microsoft-unveils-ai-security-tools-it-says-outperform-competing-platforms/",
+      "https://arstechnica.com/ai/2026/07/verizon-seeks-ai-profits-with-mini-data-centers-1b-dark-fiber-deal-with-google/"
+    ],
+    "excludedCandidates": [
+      {"eventId":"cloudflare-q2-internet-disruptions","title":"Cloudflare reviews Q2 Internet disruption events","url":"https://blog.cloudflare.com/q2-2026-internet-disruption-summary/","reason":"low-relevance"},
+      {"eventId":"ollama-v0-32-5","title":"Ollama v0.32.5","url":"https://github.com/ollama/ollama/releases/tag/v0.32.5","reason":"stale"},
+      {"eventId":"vercel-ai-7-0-40","title":"Vercel AI SDK 7.0.40 patch","url":"https://github.com/vercel/ai/releases/tag/ai%407.0.40","reason":"low-relevance"},
+      {"eventId":"amd-cdna5-analysis","title":"AMD Advancing AI 2026 and CDNA5 analysis","url":"https://chipsandcheese.com/p/amd-advancing-ai-2026-talking-cdna5","reason":"stale"},
+      {"eventId":"hugging-face-agent-incident-discussion","title":"Hugging Face infrastructure rebuild after agent incident","url":"https://news.ycombinator.com/item?id=49084497","reason":"stale"},
+      {"eventId":"cursor-india-plan","title":"Cursor launches an India-only pricing plan","url":"https://alphasignal.ai/news/cursor-launches-india-only-7-plan-targeting-3-million-developers","reason":"marketing-only"},
+      {"eventId":"frontiermath-fable-claim","title":"FrontierMath claim about a forty-year-old problem","url":"https://alphasignal.ai/news/epoch-s-frontiermath-benchmark-cracks-a-40-year-old-math-problem-using-fable-5","reason":"weak-evidence"},
+      {"eventId":"perceptionbench-discovery-duplicate","title":"PerceptionBench reports frontier-model perception limits","url":"https://alphasignal.ai/news/moonshot-ai-s-perceptionbench-reveals-no-frontier-model-sees-past-60","reason":"duplicate"},
+      {"eventId":"kimi-k3-discovery-duplicate","title":"Kimi K3 open model release","url":"https://alphasignal.ai/news/moonshot-ai-s-kimi-k3-becomes-the-world-s-largest-open-model-at-2-8t-parameters","reason":"duplicate"},
+      {"eventId":"microsoft-mai-cyber-discovery-duplicate","title":"Microsoft MAI-Cyber-1-Flash benchmark claim","url":"https://alphasignal.ai/news/microsoft-s-mai-cyber-1-flash-beats-every-ai-security-model-at-half-the-cost","reason":"duplicate"},
+      {"eventId":"goodfire-silico-bias-geometry","title":"Silico claim about cognitive-bias geometry in language models","url":"https://alphasignal.ai/news/goodfire-s-silico-finds-human-cognitive-biases-geometrically-encoded-inside-llms","reason":"weak-evidence"},
+      {"eventId":"lm-studio-kimi-k3-support","title":"LM Studio adds Kimi K3 support","url":"https://alphasignal.ai/news/lm-studio-bionic-adds-kimi-k3-the-biggest-open-weight-model-ever-built","reason":"duplicate"},
+      {"eventId":"microsoft-mai-cyber-media-duplicate","title":"Microsoft unveils AI security tools","url":"https://arstechnica.com/security/2026/07/microsoft-unveils-ai-security-tools-it-says-outperform-competing-platforms/","reason":"duplicate"},
+      {"eventId":"verizon-google-dark-fiber","title":"Verizon announces Google dark-fiber agreement","url":"https://arstechnica.com/ai/2026/07/verizon-seeks-ai-profits-with-mini-data-centers-1b-dark-fiber-deal-with-google/","reason":"marketing-only"}
+    ],
+    "unavailableSources": [
+      "openai-news","anthropic-news","google-ai-blog","meta-ai-blog","nvidia-developer-blog","github-trending","hugging-face-papers","mit-tech-review-ai","reddit-localllama","x-curated-experts","phoronix","mcp-blog","langchain-blog","llamaindex-blog","dify-blog","hugging-face-trending-papers","tldr-ai","bytedance-seed","modelscope-hub","huawei-ascend","stepfun-official","china-cac","china-miit","machine-heart","36kr-ai"
+    ],
+    "warnings": [
+      "Twenty-five sources were attempted but could not provide a reliably inspectable dated entry list.",
+      "Reddit and X were unavailable for targeted community checks.",
+      "Vendor benchmarks are labeled as not independently verified.",
+      "The raw same-day scan produced 119 entries; exact URL deduplication removed 11, leaving 108 unique source entries before materiality screening."
+    ]
+  }
+}
