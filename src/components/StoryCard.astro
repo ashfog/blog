@@ -1,0 +1,236 @@
+---
+import type { DailyStory } from "../lib/daily";
+import { categoryLabels, evidenceLabels } from "../lib/daily";
+
+interface Props {
+  story: DailyStory;
+  editionDate: string;
+  featured?: boolean;
+}
+
+const { story, editionDate, featured = false } = Astro.props;
+const position = String(story.position).padStart(2, "0");
+---
+
+<article class:list={["story-card", { featured, community: story.kind === "community" }]}>
+  <a class="card-link" href={`/daily/${editionDate}#${story.id}`} aria-label={story.headline}></a>
+
+  <div class="card-top">
+    <span class="signal-no">{position}</span>
+    <div class="card-tags">
+      <span class="tag">{categoryLabels[story.category] ?? story.category}</span>
+      {story.openSource && <span class="tag open">OPEN</span>}
+    </div>
+  </div>
+
+  <div class="signal-art" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i>
+  </div>
+
+  <div class="card-content">
+    <p class="source">{story.source.name} · {evidenceLabels[story.source.evidenceLabel]}</p>
+    <h3>{story.headline}</h3>
+    <p class="summary">{story.summary}</p>
+  </div>
+
+  <div class="card-footer">
+    <span>{story.kind === "community" ? "COMMUNITY SIGNAL" : "DAILY SIGNAL"}</span>
+    <span aria-hidden="true">↗</span>
+  </div>
+</article>
+
+<style>
+  .story-card {
+    position: relative;
+    display: flex;
+    min-height: 430px;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+  }
+
+  .story-card:hover {
+    z-index: 2;
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow);
+    transform: translateY(-5px);
+  }
+
+  .card-link {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+  }
+
+  .card-top,
+  .card-footer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-top {
+    padding: 18px 20px;
+  }
+
+  .signal-no {
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 690;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tag.open {
+    border-color: color-mix(in srgb, var(--signal) 55%, var(--line));
+    background: color-mix(in srgb, var(--signal) 20%, transparent);
+    color: var(--ink);
+  }
+
+  .signal-art {
+    position: relative;
+    height: 130px;
+    margin: 0 20px 26px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(90deg, transparent 49.7%, var(--line) 50%, transparent 50.3%),
+      linear-gradient(0deg, transparent 49.7%, var(--line) 50%, transparent 50.3%),
+      radial-gradient(circle, color-mix(in srgb, var(--accent) 18%, transparent), transparent 58%);
+  }
+
+  .signal-art::before,
+  .signal-art::after,
+  .signal-art i {
+    position: absolute;
+    border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--line));
+    border-radius: 50%;
+    content: "";
+  }
+
+  .signal-art::before {
+    width: 92px;
+    height: 92px;
+    inset: 18px auto auto calc(50% - 46px);
+  }
+
+  .signal-art::after {
+    width: 54px;
+    height: 54px;
+    inset: 37px auto auto calc(50% - 27px);
+  }
+
+  .signal-art i {
+    width: 5px;
+    height: 5px;
+    border: 0;
+    background: var(--accent);
+  }
+
+  .signal-art i:nth-child(1) { top: 22px; left: 48%; }
+  .signal-art i:nth-child(2) { top: 62px; left: 22%; }
+  .signal-art i:nth-child(3) { top: 88px; left: 72%; }
+  .signal-art i:nth-child(4) { top: 30px; left: 80%; }
+  .signal-art i:nth-child(5) { top: 104px; left: 34%; }
+
+  .card-content {
+    padding: 0 20px 22px;
+  }
+
+  .source {
+    margin: 0 0 10px;
+    color: var(--faint);
+    font-size: 11px;
+    font-weight: 620;
+    letter-spacing: 0.04em;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: clamp(21px, 2vw, 28px);
+    font-weight: 570;
+    letter-spacing: -0.035em;
+    line-height: 1.18;
+  }
+
+  .summary {
+    display: -webkit-box;
+    margin: 14px 0 0;
+    overflow: hidden;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.65;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .card-footer {
+    margin-top: auto;
+    padding: 13px 20px;
+    border-top: 1px solid var(--line);
+    color: var(--faint);
+    font-size: 9px;
+    font-weight: 720;
+    letter-spacing: 0.13em;
+  }
+
+  .community {
+    background: var(--community);
+  }
+
+  .community .signal-art {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 15px, var(--line) 16px),
+      radial-gradient(circle at 34% 45%, color-mix(in srgb, var(--signal) 35%, transparent), transparent 35%);
+  }
+
+  .featured {
+    min-height: 560px;
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .featured .tag,
+  .featured .source,
+  .featured .summary,
+  .featured .card-footer {
+    color: color-mix(in srgb, var(--bg) 66%, transparent);
+  }
+
+  .featured .tag,
+  .featured .signal-art,
+  .featured .card-footer {
+    border-color: color-mix(in srgb, var(--bg) 18%, transparent);
+  }
+
+  .featured .signal-art {
+    height: 210px;
+    background:
+      linear-gradient(90deg, transparent 49.7%, rgba(255,255,255,.12) 50%, transparent 50.3%),
+      linear-gradient(0deg, transparent 49.7%, rgba(255,255,255,.12) 50%, transparent 50.3%),
+      radial-gradient(circle, color-mix(in srgb, var(--accent) 65%, transparent), transparent 58%);
+  }
+
+  .featured h3 {
+    font-size: clamp(30px, 4vw, 48px);
+  }
+
+  @media (max-width: 720px) {
+    .story-card,
+    .featured {
+      min-height: 410px;
+    }
+
+    .featured .signal-art {
+      height: 150px;
+    }
+  }
+</style>

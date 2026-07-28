@@ -1,0 +1,211 @@
+---
+import BrandMark from "./BrandMark.astro";
+
+const currentPath = Astro.url.pathname;
+const links = [
+  { href: "/", label: "今日" },
+  { href: "/daily", label: "归档" },
+  { href: "/topics", label: "主题" },
+  { href: "/about", label: "关于" }
+];
+---
+
+<header class="site-header">
+  <div class="page-shell header-inner">
+    <a class="brand" href="/" aria-label="AshFog 首页">
+      <BrandMark />
+      <span>ASHFOG</span>
+      <em>DAILY INTELLIGENCE</em>
+    </a>
+
+    <nav aria-label="主导航">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            aria-current={
+              currentPath === link.href ||
+              (link.href !== "/" && currentPath.startsWith(link.href))
+                ? "page"
+                : undefined
+            }
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="header-actions">
+      <a class="search-link" href="/search" aria-label="搜索">
+        <span aria-hidden="true">⌕</span>
+        <span>搜索</span>
+      </a>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深浅主题">
+        <span class="sun" aria-hidden="true">☼</span>
+        <span class="moon" aria-hidden="true">◐</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  const root = document.documentElement;
+  const storedTheme = localStorage.getItem("ashfog-theme");
+  const preferredDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = storedTheme || (preferredDark ? "dark" : "light");
+
+  document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    localStorage.setItem("ashfog-theme", next);
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    z-index: 20;
+    top: 0;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(18px);
+  }
+
+  .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    min-height: 70px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 780;
+    letter-spacing: 0.08em;
+  }
+
+  .brand em {
+    margin-left: 2px;
+    color: var(--faint);
+    font-size: 9px;
+    font-style: normal;
+    font-weight: 620;
+    letter-spacing: 0.14em;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  nav a {
+    position: relative;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 580;
+  }
+
+  nav a:hover,
+  nav a[aria-current="page"] {
+    color: var(--ink);
+  }
+
+  nav a[aria-current="page"]::after {
+    position: absolute;
+    right: 0;
+    bottom: -25px;
+    left: 0;
+    height: 2px;
+    background: var(--accent);
+    content: "";
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    justify-self: end;
+    gap: 10px;
+  }
+
+  .search-link,
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+  }
+
+  .search-link {
+    gap: 6px;
+    padding: 0 13px;
+    font-size: 12px;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .moon,
+  :global(:root[data-theme="dark"]) .sun {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .moon {
+    display: block;
+  }
+
+  @media (max-width: 840px) {
+    .site-header {
+      backdrop-filter: none;
+    }
+
+    .header-inner {
+      grid-template-columns: 1fr auto;
+    }
+
+    nav {
+      position: fixed;
+      right: 12px;
+      bottom: 12px;
+      left: 12px;
+      z-index: 30;
+      justify-content: space-around;
+      min-height: 58px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: color-mix(in srgb, var(--surface-raised) 92%, transparent);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    nav a[aria-current="page"]::after {
+      bottom: -10px;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .brand em,
+    .search-link span:last-child {
+      display: none;
+    }
+
+    .search-link {
+      width: 36px;
+      padding: 0;
+      font-size: 18px;
+    }
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="搜索"
+  description="搜索 AshFog 日报、主题与来源。"
+  noindex
+  breadcrumbs={[
+    { name: "AshFog", path: "/" },
+    { name: "搜索", path: "/search" }
+  ]}
+>
+  <section class="search-page page-shell">
+    <header>
+      <span class="eyebrow">Search the signals</span>
+      <h1>搜索 AshFog</h1>
+      <p>按公司、模型、主题、来源或关键词查找历史信号。</p>
+    </header>
+    <div id="search" class="search-box">
+      <p class="loading">正在加载搜索索引…</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+<script is:inline src="/pagefind/pagefind-ui.js"></script>
+<script is:inline>
+  const mount = document.querySelector("#search");
+  if (window.PagefindUI && mount) {
+    mount.innerHTML = "";
+    new window.PagefindUI({
+      element: "#search",
+      showSubResults: true,
+      showImages: false,
+      excerptLength: 22,
+      translations: {
+        placeholder: "输入关键词，例如：开放模型、Ollama、智能体安全",
+        zero_results: "没有找到 [SEARCH_TERM] 的相关信号",
+        clear_search: "清除",
+        load_more: "加载更多",
+        search_label: "搜索本站",
+        filters_label: "筛选",
+        many_results: "[COUNT] 条结果",
+        one_result: "1 条结果"
+      }
+    });
+  } else if (mount) {
+    mount.innerHTML = '<p class="loading">搜索索引会在正式构建后启用。</p>';
+  }
+</script>
+
+<style>
+  .search-page {
+    min-height: 700px;
+    padding-top: 130px;
+  }
+
+  header {
+    padding-bottom: 60px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  h1 {
+    margin: 28px 0 15px;
+    font-size: clamp(62px, 9vw, 112px);
+    font-weight: 510;
+    letter-spacing: -.07em;
+    line-height: .9;
+  }
+
+  header p,
+  .loading {
+    color: var(--muted);
+  }
+
+  .search-box {
+    max-width: 900px;
+    padding: 60px 0;
+  }
+
+  :global(.pagefind-ui__search-input) {
+    height: 64px !important;
+    border: 1px solid var(--line-strong) !important;
+    border-radius: 999px !important;
+    background: var(--surface) !important;
+    color: var(--ink) !important;
+    font-family: var(--font-sans) !important;
+    font-size: 16px !important;
+  }
+
+  :global(.pagefind-ui__result) {
+    border-color: var(--line) !important;
+  }
+</style>

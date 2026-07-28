@@ -1,0 +1,178 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  pageType?: "WebPage" | "CollectionPage" | "AboutPage";
+  noindex?: boolean;
+  breadcrumbs?: Array<{
+    name: string;
+    path: string;
+  }>;
+  article?: {
+    publishedTime: string;
+    modifiedTime?: string;
+    section?: string;
+    tags?: string[];
+    citations?: string[];
+  };
+}
+
+const {
+  title = "AshFog — 每日行业情报",
+  description = "每天一份经过来源核验的 AI、开源与开发者生态要点，帮你穿过噪音，看见真正重要的信号。",
+  image,
+  type = "website",
+  pageType = "WebPage",
+  noindex = false,
+  breadcrumbs = [],
+  article
+} = Astro.props;
+
+const site = Astro.site ?? new URL("https://ashfog.com");
+const canonical = new URL(Astro.url.pathname, site);
+const fullTitle = title.includes("AshFog") ? title : `${title} · AshFog`;
+const imageUrl = image ? new URL(image, site).href : undefined;
+const organizationId = new URL("/#organization", site).href;
+const websiteId = new URL("/#website", site).href;
+const webpageId = `${canonical.href}#webpage`;
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+
+const graph: Array<Record<string, unknown>> = [
+  {
+    "@type": "NewsMediaOrganization",
+    "@id": organizationId,
+    name: "AshFog",
+    url: new URL("/", site).href,
+    description:
+      "每天发布经过来源核验的 AI、开源与开发者生态行业情报。"
+  },
+  {
+    "@type": "WebSite",
+    "@id": websiteId,
+    url: new URL("/", site).href,
+    name: "AshFog",
+    description:
+      "每天一份经过来源核验的 AI、开源与开发者生态要点。",
+    inLanguage: "zh-CN",
+    publisher: { "@id": organizationId }
+  },
+  {
+    "@type": pageType,
+    "@id": webpageId,
+    url: canonical.href,
+    name: fullTitle,
+    description,
+    inLanguage: "zh-CN",
+    isPartOf: { "@id": websiteId },
+    ...(breadcrumbs.length > 1
+      ? { breadcrumb: { "@id": `${canonical.href}#breadcrumb` } }
+      : {})
+  }
+];
+
+if (breadcrumbs.length > 1) {
+  graph.push({
+    "@type": "BreadcrumbList",
+    "@id": `${canonical.href}#breadcrumb`,
+    itemListElement: breadcrumbs.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: new URL(item.path, site).href
+    }))
+  });
+}
+
+if (article) {
+  graph.push({
+    "@type": "NewsArticle",
+    "@id": `${canonical.href}#article`,
+    mainEntityOfPage: { "@id": webpageId },
+    headline: title,
+    description,
+    datePublished: article.publishedTime,
+    dateModified: article.modifiedTime ?? article.publishedTime,
+    inLanguage: "zh-CN",
+    isAccessibleForFree: true,
+    author: {
+      "@type": "Organization",
+      name: "AshFog",
+      url: new URL("/about", site).href
+    },
+    publisher: { "@id": organizationId },
+    ...(article.section ? { articleSection: article.section } : {}),
+    ...(article.tags?.length ? { keywords: article.tags } : {}),
+    ...(article.citations?.length ? { citation: article.citations } : {}),
+    ...(imageUrl ? { image: [imageUrl] } : {})
+  });
+}
+
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": graph
+}).replaceAll("<", "\\u003c");
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta
+      name="robots"
+      content={noindex
+        ? "noindex,follow"
+        : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"}
+    />
+    {googleSiteVerification && (
+      <meta name="google-site-verification" content={googleSiteVerification} />
+    )}
+    <meta name="theme-color" content="#f4f3ef" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="AshFog RSS" href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="AshFog" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {article && <meta property="article:published_time" content={article.publishedTime} />}
+    {article && (
+      <meta
+        property="article:modified_time"
+        content={article.modifiedTime ?? article.publishedTime}
+      />
+    )}
+    {article?.section && <meta property="article:section" content={article.section} />}
+    {article?.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+    <meta name="twitter:card" content={imageUrl ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+    <script type="application/ld+json" set:html={jsonLd}></script>
+    <script is:inline>
+      const saved = localStorage.getItem("ashfog-theme");
+      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = saved || (systemDark ? "dark" : "light");
+    </script>
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
