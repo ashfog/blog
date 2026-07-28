@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "timezone": "Asia/Shanghai",
+  "candidateWindowHours": 48,
+  "previousEditionLookback": 7,
+  "targets": {
+    "total": { "min": 12, "max": 20 },
+    "news": { "min": 8, "max": 14 },
+    "community": { "min": 4, "max": 8 },
+    "highlights": { "min": 3, "max": 5 },
+    "openSource": { "minWhenSupported": 4 }
+  },
+  "caps": {
+    "itemsPerCompany": 3,
+    "ecosystemShare": 0.3,
+    "mediaOnlyShare": 0.15
+  },
+  "analysis": {
+    "minSignalIds": 3,
+    "minChineseCharacters": 220,
+    "targetChineseCharacters": { "min": 350, "max": 700 },
+    "maxPriorSimilarity": 0.72
+  },
+  "links": {
+    "httpsOnly": true,
+    "timeoutMs": 12000,
+    "maxConcurrentChecks": 6
+  }
+}

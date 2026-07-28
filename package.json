@@ -1,0 +1,9 @@
+{
+  "name": "ashfog-blog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate:daily": "node scripts/validate-daily.mjs",
+    "test:editorial": "node --test tests/validate-daily.test.mjs"
+  }
+}
