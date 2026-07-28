@@ -1,7 +1,6 @@
 {
-  "version": 2,
+  "version": 3,
   "timezone": "Asia/Shanghai",
-  "candidateWindowHours": 48,
   "previousEditionLookback": 7,
   "selection": {
     "collectAllMaterialCandidates": true,
@@ -9,7 +8,7 @@
     "noRoutineStoryQuota": true,
     "publishEveryMaterialEvent": true,
     "neverPadToReachACount": true,
-    "safetyMaxStories": 30
+    "safetyMaxStories": 46
   },
   "contentLengths": {
     "news": {
@@ -58,5 +57,13 @@
     "httpsOnly": true,
     "timeoutMs": 12000,
     "maxConcurrentChecks": 6
+  },
+  "collection": {
+    "windowMode": "edition-day",
+    "timezone": "Asia/Shanghai",
+    "perSourceLatestLimit": 15,
+    "useAvailableWhenFewer": true,
+    "backfillPriorDays": false,
+    "requireAllRegisteredSourcesAttempted": true
   }
 }

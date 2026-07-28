@@ -26,7 +26,7 @@ formal editions are rendered.
 
 ## Image library
 
-The committed library contains 40 story artworks and 8 page artworks. The daily Schema keeps a 30-story anomaly guard, so one edition can never exhaust the non-repeating story pool. Each
+The committed library contains 40 category story artworks and 8 page artworks. Six page artworks are registered as overflow reserves, giving every valid edition 46 unique story-image slots. The daily Schema uses 46 only as an anomaly guard. Each
 artwork has 768 px and 1536 px WebP renditions. The canonical manifest is:
 
 ```text
@@ -35,7 +35,7 @@ editorial/image-library.json
 
 Daily JSON normally omits `imageId`. Astro then assigns images by category
 using `editionDate`, story ID, and category as a stable seed. Assignment is
-deterministic across rebuilds and globally unique within one edition. Image assignment therefore remains unique throughout every valid daily edition.
+deterministic across rebuilds and globally unique within one edition. Stories 41–46 use the six registered reserve artworks, so image assignment remains unique throughout every valid daily edition.
 
 Use a story `imageId` only for an intentional editorial override. It must exist
 in the manifest, match the story category, and not be used by another story in

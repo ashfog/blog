@@ -102,12 +102,45 @@ test("domain rules reject an unregistered source language", async () => {
   assert.ok(report.errors.some((error) => error.includes("sourceLanguage")));
 });
 
+test("production validation requires all registered source attempts", async () => {
+  const edition = clone();
+  const report = await validate(edition, {
+    file: path.join(root, "src", "content", "daily", "2026-07-28.json"),
+  });
+  assert.equal(report.status, "error");
+  assert.ok(report.errors.some((error) => error.includes("not-run is forbidden")));
+});
+
+test("source scan counts obey the per-source maximum", async () => {
+  const edition = clone();
+  edition.research.sourceScan[0].status = "collected";
+  edition.research.sourceScan[0].itemsFetched = 16;
+  edition.research.sourceScan[0].itemsOnEditionDay = 16;
+  const report = await validate(edition);
+  assert.equal(report.status, "error");
+  assert.ok(report.errors.some((error) => error.includes("itemsFetched")));
+});
+
+test("image pool provides 46 unique story slots", () => {
+  assert.equal(config.storyImageCount, 46);
+});
+
 test("domain rules reject a future publication time", async () => {
   const edition = clone();
   edition.stories[0].source.publishedAt = "2026-07-28T15:00:00+08:00";
   const report = await validate(edition);
   assert.equal(report.status, "error");
   assert.ok(report.errors.some((error) => error.includes("after cutoffAt")));
+});
+
+test("domain rules reject an unexceptional prior-day item", async () => {
+  const edition = clone();
+  edition.stories[0].source.publishedAt = "2026-07-27T10:00:00+08:00";
+  edition.stories[0].source.updatedAt = null;
+  edition.stories[0].windowException = "";
+  const report = await validate(edition);
+  assert.equal(report.status, "error");
+  assert.ok(report.errors.some((error) => error.includes("outside edition day")));
 });
 
 test("domain rules reject duplicate events", async () => {

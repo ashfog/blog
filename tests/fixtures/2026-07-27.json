@@ -84,7 +84,7 @@
         "total": 28
       },
       "materialUpdate": "",
-      "windowException": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -141,7 +141,7 @@
         "total": 25
       },
       "materialUpdate": "",
-      "windowException": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -196,7 +196,7 @@
         "total": 19
       },
       "materialUpdate": "",
-      "windowException": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -253,7 +253,7 @@
         "total": 17
       },
       "materialUpdate": "",
-      "windowException": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -312,7 +312,7 @@
         "total": 22
       },
       "materialUpdate": "",
-      "windowException": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -369,7 +369,7 @@
         "total": 20
       },
       "materialUpdate": "",
-      "windowException": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -445,7 +445,7 @@
         "total": 20
       },
       "materialUpdate": "",
-      "windowException": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -530,7 +530,7 @@
         "total": 25
       },
       "materialUpdate": "",
-      "windowException": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     }
   ],
@@ -590,6 +590,494 @@
       "Reddit and X authentication was unavailable; the run recorded both sources as unavailable without blocking Preview.",
       "When a source exposed only a publication date, publishedAt used 00:00:00Z for that date.",
       "Community entries preserve uncertainty; votes and comment counts were used for discovery, not as factual evidence."
+    ],
+    "sourceScan": [
+      {
+        "sourceId": "openai-news",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "anthropic-news",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "deepmind-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "google-ai-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "meta-ai-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "mistral-news",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "microsoft-ai-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "nvidia-developer-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "hugging-face-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "github-changelog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "cloudflare-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "github-trending",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "hacker-news",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "show-hn",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "hugging-face-papers",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "arxiv-cs-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "arxiv-cs-cl",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "arxiv-cs-lg",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "ars-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "mit-tech-review-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "ieee-spectrum-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "reddit-localllama",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "x-curated-experts",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "phoronix",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "mcp-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "mcp-spec-releases",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "vercel-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "ollama-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "ollama-releases",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "langchain-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "llamaindex-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "dify-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "hugging-face-trending-papers",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "chips-and-cheese",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "semianalysis",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "the-batch",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "alphasignal",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "tldr-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "deepseek-official",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "qwen-official",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "bytedance-seed",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "zai-official",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "moonshot-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "minimax-official",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "modelscope-hub",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "tencent-hunyuan",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "baidu-ernie-paddlepaddle",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "huawei-ascend",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "stepfun-official",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "china-cac",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "china-miit",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "machine-heart",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "qbitai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "36kr-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      }
     ]
   },
   "language": "en",

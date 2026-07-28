@@ -1,9 +1,7 @@
 {
-  "version": 3,
+  "version": 4,
   "last_reviewed": "2026-07-28",
   "timezone": "Asia/Shanghai",
-  "default_candidate_window_hours": 48,
-  "items_per_source_hint": 15,
   "tiers": {
     "A": "Primary facts: official announcements, repositories, releases, specifications, model cards, and papers.",
     "B": "Engineering evidence: reproducible benchmarks, practitioner reports, technical analysis, and community threads.",
@@ -18,9 +16,10 @@
     "tier_c_must_resolve_to_stronger_evidence": true,
     "do_not_bypass_authentication_or_paywalls": true,
     "candidate_collection_has_no_global_cap": true,
-    "items_per_source_is_a_discovery_hint": true,
-    "scan_all_enabled_sources_inside_the_candidate_window": true,
-    "regional_coverage_is_not_a_publication_quota": true
+    "regional_coverage_is_not_a_publication_quota": true,
+    "items_per_source_is_a_hard_maximum": true,
+    "scan_all_enabled_sources_each_edition_day": true,
+    "record_every_source_attempt": true
   },
   "access_profiles": {
     "official-web": {
@@ -1086,5 +1085,12 @@
     ],
     "language_format": "BCP 47",
     "rule": "Registry languages describe available source languages. Every published story must record the language of the exact page used in source.sourceLanguage."
+  },
+  "collection": {
+    "window_mode": "edition-day",
+    "timezone": "Asia/Shanghai",
+    "items_per_source_limit": 15,
+    "use_available_when_fewer": true,
+    "backfill_prior_days": false
   }
 }

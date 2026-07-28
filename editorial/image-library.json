@@ -300,5 +300,13 @@
       "variant": "dark",
       "alt": "Abstract collage of an interrupted information path and a lost signal"
     }
+  ],
+  "storyReservePageIds": [
+    "page-daily",
+    "page-archive",
+    "page-topics",
+    "page-about",
+    "page-search",
+    "page-404"
   ]
 }

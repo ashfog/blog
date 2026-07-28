@@ -30,6 +30,9 @@ export interface LibraryImage {
 
 const storyEntries = imageLibrary.storyImages as StoryImageEntry[];
 const pageEntries = imageLibrary.pageImages as PageImageEntry[];
+const reserveStoryPageIds = new Set(imageLibrary.storyReservePageIds as string[]);
+const reserveStoryEntries = pageEntries.filter((image) => reserveStoryPageIds.has(image.id));
+const storyPoolEntries = [...storyEntries, ...reserveStoryEntries];
 const allEntries = [...storyEntries, ...pageEntries];
 
 function hash(value: string) {
@@ -75,7 +78,7 @@ export function getPageImage(page: string) {
 }
 
 function choose(
-  candidates: StoryImageEntry[],
+  candidates: Array<StoryImageEntry | PageImageEntry>,
   story: DailyStory,
   editionDate: string
 ) {
@@ -98,7 +101,7 @@ export function getEditionStoryImages(edition: DailyEdition) {
     const categoryCandidates = storyEntries.filter(
       (image) => image.category === story.category && !used.has(image.id)
     );
-    const fallbackCandidates = storyEntries.filter(
+    const fallbackCandidates = storyPoolEntries.filter(
       (image) => !used.has(image.id)
     );
 

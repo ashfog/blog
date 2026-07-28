@@ -6,7 +6,8 @@ Publish one concise English-language global intelligence brief covering material
 
 ## Global coverage
 
-- Scan every enabled source inside the 48-hour candidate window, including all enabled China sources.
+- Attempt every enabled source on each edition date, including all enabled China sources.
+- From each source, collect at most the 15 newest entries published or materially updated on the edition date in `Asia/Shanghai`; when fewer exist, use the available number and never backfill merely to reach 15.
 - Treat China as a permanent part of global AI coverage, not as an occasional special section.
 - Write the final edition in English while preserving the original source URL.
 - Record each story's region and each primary source's language.
@@ -26,7 +27,7 @@ Publish one concise English-language global intelligence brief covering material
 - Funding-only stories, generic SaaS launches, marketing partnerships, trivial version bumps, listicles, and duplicated media rewrites.
 - Stories whose only relevance is that a product contains an AI feature.
 - Rumors without accountable sourcing.
-- Old items newly discovered outside the candidate window unless a documented material update makes them current.
+- Prior-day items without a documented material update on the edition date.
 - Community popularity, votes, stars, or repost counts presented as proof.
 
 ## Evidence hierarchy
@@ -41,13 +42,15 @@ Use the highest available evidence and link the primary source even when a lower
 ## Selection
 
 - Use an explicit `cutoffAt` in `Asia/Shanghai`.
-- Default to the 48 hours preceding the cutoff.
-- Collect every serious candidate; there is no global candidate-count cap.
+- The routine collection window begins at 00:00 on `editionDate` and ends at `cutoffAt`.
+- Attempt every registered source and record one `research.sourceScan` row per source.
+- Fetch no more than 15 edition-day entries per source; use fewer when fewer exist.
+- Collect every serious candidate; there is no global candidate-count cap before selection.
 - Merge coverage of the same event under one `eventId`.
 - Compare the previous seven editions and repeat an event only for a documented material update.
 - Publish every material event that passes the evidence and relevance standard.
 - Never add an item to satisfy a quota and never exclude a material event merely because a routine story target was reached.
-- The 30-story Schema maximum is an anomaly guard, not an editorial target. If more than 30 events qualify, publish the 30 most material and record the remainder as `lower-priority`.
+- The 46-story Schema maximum is an anomaly guard, not an editorial target. If more than 46 events qualify, publish the 46 most material and record the remainder as `lower-priority`.
 
 ## Writing
 

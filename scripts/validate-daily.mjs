@@ -346,7 +346,8 @@ export async function loadEditorialConfig(root = repoRoot) {
     imageIds: new Set(imageIds),
     storyImageCategories,
     pageImageIds,
-    storyImageCount: imageData.storyImages.length,
+    sourceIds: new Set(sourceData.sources.map((source) => source.id)),
+    storyImageCount: imageData.storyImages.length + imageData.storyReservePageIds.length,
   };
 }
 
@@ -373,6 +374,7 @@ export async function validateEdition(
     imageIds,
     storyImageCategories,
     storyImageCount,
+    sourceIds,
   } = config;
   const cutoff = parseDateTime(edition.cutoffAt);
   const generated = parseDateTime(edition.generatedAt);
@@ -393,6 +395,55 @@ export async function validateEdition(
   let openSource = 0;
   let mediaOnly = 0;
   const requestedImageIds = new Set();
+  const sourceScanIds = new Set();
+  let attemptedSources = 0;
+  let availableSources = 0;
+  let fetchedItems = 0;
+  let editionDayItems = 0;
+  let scannedDuplicates = 0;
+  const isThemeFixture = file.includes(`${path.sep}tests${path.sep}fixtures${path.sep}`);
+
+  for (const [scanIndex, scan] of edition.research.sourceScan.entries()) {
+    const at = `$.research.sourceScan[${scanIndex}]`;
+    if (!sourceIds.has(scan.sourceId)) errors.push(`${at}.sourceId: unknown source`);
+    if (sourceScanIds.has(scan.sourceId)) errors.push(`${at}.sourceId: duplicate source`);
+    sourceScanIds.add(scan.sourceId);
+    if (scan.itemsFetched > rules.collection.perSourceLatestLimit) {
+      errors.push(`${at}.itemsFetched: exceeds per-source limit ${rules.collection.perSourceLatestLimit}`);
+    }
+    if (scan.itemsOnEditionDay > scan.itemsFetched) {
+      errors.push(`${at}.itemsOnEditionDay: cannot exceed itemsFetched`);
+    }
+    if (scan.duplicatesRemoved > scan.itemsOnEditionDay) {
+      errors.push(`${at}.duplicatesRemoved: cannot exceed itemsOnEditionDay`);
+    }
+    if (scan.selectedCount > scan.itemsOnEditionDay - scan.duplicatesRemoved) {
+      errors.push(`${at}.selectedCount: exceeds available deduplicated items`);
+    }
+    if (scan.status === "not-run" && !isThemeFixture) {
+      errors.push(`${at}.status: not-run is forbidden outside theme fixtures`);
+    }
+    if (scan.status === "unavailable" && !scan.failureReason) {
+      errors.push(`${at}.failureReason: required when source is unavailable`);
+    }
+    if (scan.status !== "not-run") attemptedSources += 1;
+    if (scan.status === "collected" || scan.status === "empty") availableSources += 1;
+    fetchedItems += scan.itemsFetched;
+    editionDayItems += scan.itemsOnEditionDay;
+    scannedDuplicates += scan.duplicatesRemoved;
+  }
+  if (!isThemeFixture) {
+    for (const sourceId of sourceIds) {
+      if (!sourceScanIds.has(sourceId)) {
+        errors.push(`$.research.sourceScan: missing registered source ${sourceId}`);
+      }
+    }
+    if (sourceScanIds.size !== sourceIds.size) {
+      errors.push(
+        `$.research.sourceScan: expected exactly ${sourceIds.size} registered sources; received ${sourceScanIds.size}`,
+      );
+    }
+  }
 
   if (edition.heroImageId && !imageIds.has(edition.heroImageId)) {
     errors.push("$.heroImageId: unknown image ID");
@@ -462,13 +513,16 @@ export async function validateEdition(
 
     const publishedAt = parseDateTime(story.source.publishedAt);
     if (publishedAt > cutoff) errors.push(`${at}.source.publishedAt: after cutoffAt`);
-    const windowStart = new Date(cutoff.getTime() - rules.candidateWindowHours * 3600000);
-    if (publishedAt < windowStart && !story.windowException) {
-      errors.push(`${at}.source.publishedAt: outside candidate window without windowException`);
-    }
+    const editionDayStart = new Date(`${edition.editionDate}T00:00:00+08:00`);
+    let updatedAt = null;
     if (story.source.updatedAt) {
-      const updatedAt = parseDateTime(story.source.updatedAt);
+      updatedAt = parseDateTime(story.source.updatedAt);
       if (updatedAt > cutoff) errors.push(`${at}.source.updatedAt: after cutoffAt`);
+    }
+    const currentByPublication = publishedAt >= editionDayStart && publishedAt <= cutoff;
+    const currentByUpdate = updatedAt && updatedAt >= editionDayStart && updatedAt <= cutoff;
+    if (!currentByPublication && !currentByUpdate && !story.windowException) {
+      errors.push(`${at}.source.publishedAt: outside edition day without windowException`);
     }
 
     story.factualClaims.forEach((claim, claimIndex) => {
@@ -634,6 +688,11 @@ export async function validateEdition(
       mediaOnly,
       collectedUrls: collected.size,
       checkedLinks: linkResults.length,
+      attemptedSources,
+      availableSources,
+      fetchedItems,
+      editionDayItems,
+      scannedDuplicates,
     },
     errors,
     warnings,
