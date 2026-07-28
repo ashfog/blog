@@ -1,11 +1,11 @@
 ---
 name: ashfog-daily-publisher
-description: Research, draft, validate, and publish the Chinese-language ASHFOG daily AI, open-source, developer-tool, infrastructure, research, and community intelligence brief. Use for scheduled ASHFOG daily research, Preview runs, Publish runs, source verification, daily JSON generation, publication retries, or validation of src/content/daily/YYYY-MM-DD.json in ashfog/blog.
+description: Research, draft, validate, and publish the English-language ASHFOG global daily AI, open-source, developer-tool, infrastructure, research, policy, and community intelligence brief. Use for scheduled ASHFOG daily research, Preview runs, Publish runs, source verification, daily JSON generation, publication retries, or validation of src/content/daily/YYYY-MM-DD.json in ashfog/blog.
 ---
 
 # ASHFOG Daily Publisher
 
-Produce one evidence-backed daily edition as a single validated JSON file. Treat discovery, verification, writing, validation, and publication as one fail-closed transaction.
+Produce one evidence-backed global daily edition as a single validated JSON file. Treat discovery, verification, writing, validation, and publication as one fail-closed transaction.
 
 ## Select a mode
 
@@ -29,17 +29,20 @@ Treat repository files as the current source of truth. Do not copy their content
 
 ## Run the pipeline
 
-1. Determine `editionDate` and `cutoffAt` in `Asia/Shanghai`.
+1. Determine `editionDate` and `cutoffAt` in `Asia/Shanghai`. The routine collection window is 00:00 through `cutoffAt` on that edition date.
 2. Check whether `src/content/daily/YYYY-MM-DD.json` already exists and validates. Return `already_valid` without writing when it does.
-3. Discover candidates from enabled sources, beginning with Tier A primary evidence. Use Tier C only to find stronger evidence.
-4. Record every serious candidate URL in `research.collectedUrls` before drafting.
-5. Merge coverage of one event under one `eventId`. Compare the previous seven editions and require `materialUpdate` for repeated events.
-6. Score and select according to repository policy. Never pad an edition.
-7. Perform targeted community checks according to `editorial/community-policy.md`.
-8. Lock one ordered fact ledger before writing. Do not introduce facts or URLs absent from the ledger.
-9. Generate one JSON document that conforms to `schemas/daily.schema.json`.
-10. Count every `summary` and `whyItMatters` value and confirm each is within the schema's current minimum and maximum before validation. Do not pad text with repetition to satisfy a length limit.
-11. Write the candidate to a temporary path and run:
+3. Attempt every enabled source, including every enabled China source. For each source, collect at most the 15 newest entries published or materially updated on the edition date. If fewer exist, use the available number and do not backfill prior dates.
+4. Record exactly one `research.sourceScan` row for every registered source, including access status, fetched count, edition-day count, duplicates removed, selected count, and failure reason. A missing source row or `not-run` status blocks Preview and Publish.
+5. Begin verification with Tier A primary evidence and use Tier C only to discover stronger evidence. Do not impose a global candidate-count cap before selection.
+6. Record every serious candidate URL in `research.collectedUrls` before drafting.
+7. Merge coverage of one event under one `eventId`. Compare the previous seven editions and require `materialUpdate` for repeated events.
+8. Score and select according to repository policy. Publish every material event, never pad an edition, and treat the 46-story maximum only as an anomaly guard.
+9. Perform targeted community checks according to `editorial/community-policy.md`.
+10. Lock one ordered fact ledger before writing. Do not introduce facts or URLs absent from the ledger.
+11. Generate one English JSON document with `language: "en"` and `edition: "global"` that conforms to `schemas/daily.schema.json`.
+12. Record `region` for every story and `sourceLanguage` for every primary source. Preserve the original source URL but do not retain an original-language headline.
+13. Count English words in every `summary`, `whyItMatters`, and daily analysis value. Confirm the kind-specific limits in `editorial/publishing-rules.json` before validation and never pad with repetition.
+14. Write the candidate to a temporary path and run:
 
 ```text
 npm run validate:daily -- <candidate.json> --content-dir src/content/daily --check-links
@@ -49,11 +52,11 @@ Treat exit code `1` as blocking. Do not weaken validation, remove evidence, inve
 
 ## Assign images
 
-Omit `imageId` and `heroImageId` by default. Astro assigns category-matched story images deterministically and guarantees that one edition does not repeat an image. Set `imageId` only for an intentional editorial override after reading `editorial/image-library.json`; the ID must be a story image in the same category and must be unique in the edition. `heroImageId` may reference any story or page image. Never invent an image ID or reuse one within a daily edition.
+Omit `imageId` and `heroImageId` by default. Astro assigns unique images deterministically. The first 40 stories use category artwork; positions 41–46 can use the six registered reserve artworks without repeating an image. Set `imageId` only for an intentional editorial override after reading `editorial/image-library.json`; the ID must be a category story image and unique in the edition. Never invent or reuse an image ID.
 
 ## Preview
 
-Return the candidate path, counts, source-tier distribution, exclusions, unavailable sources, warnings, and validation report. Do not mutate GitHub.
+Return the candidate path, attempted-source count, available and unavailable sources, total fetched entries, edition-day entries, duplicate count, candidate count, selected count, regional and tier distributions, exclusions, warnings, and validation report. Do not mutate GitHub.
 
 ## Publish
 
@@ -61,7 +64,7 @@ Return the candidate path, counts, source-tier distribution, exclusions, unavail
 2. Publish exactly one file: `src/content/daily/YYYY-MM-DD.json`.
 3. Create one commit. Never force-push or overwrite unrelated work.
 4. If the target appeared after validation, re-read it. Return `already_valid` when valid; otherwise stop with `conflict`.
-5. Re-read the file from the resulting commit and validate its date, IDs, URLs, and content hash.
+5. Re-read the file from the resulting commit and validate its date, IDs, URLs, language, region, source languages, source-scan ledger, and content hash.
 6. Allow Cloudflare Pages to build Astro and Pagefind from the commit.
 7. When deployment exists, verify the public edition URL before reporting `published`.
 

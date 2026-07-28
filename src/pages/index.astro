@@ -21,19 +21,20 @@ const seoImage = getEditionHeroImage(edition, storyImages);
 const featured = edition.stories.find((story) => story.highlight) ?? edition.stories[0];
 const news = edition.stories.filter((story) => story.kind === "news" && story.id !== featured.id);
 const community = edition.stories.filter((story) => story.kind === "community");
+const newsCount = edition.stories.filter((story) => story.kind === "news").length;
 const categories = [...new Set(edition.stories.map((story) => story.category))];
 const sourceCount = new Set(edition.stories.map((story) => story.source.id)).size;
 ---
 
-<BaseLayout title="ASHFOG — 每日行业情报" description={edition.description} image={seoImage?.largeSrc ?? homeImage?.largeSrc}>
+<BaseLayout title="ASHFOG — Daily AI Intelligence" description={edition.description} image={seoImage?.largeSrc ?? homeImage?.largeSrc}>
   <section class="hero page-shell">
     <div class="hero-copy">
       <span class="eyebrow">Daily intelligence · {edition.editionDate}</span>
-      <h1>穿过噪音<br /><em>看见今天</em></h1>
+      <h1>Cut Through the Noise<br /><em>See What Matters Today</em></h1>
       <p>{edition.description}</p>
       <div class="hero-actions">
-        <a class="primary" href={`/daily/${edition.editionDate}`}>阅读完整日报 <span>↗</span></a>
-        <a class="secondary" href="#signals">浏览今日信号 ↓</a>
+        <a class="primary" href={`/daily/${edition.editionDate}`}>Read the full edition <span>↗</span></a>
+        <a class="secondary" href="#signals">Explore today’s signals ↓</a>
       </div>
     </div>
 
@@ -55,15 +56,15 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
       <div class="status">
         <span class="pulse"></span>
         <div>
-          <strong>今日版已更新</strong>
-          <small>{formatDate(edition.editionDate)} · {readingMinutes(edition)} 分钟</small>
+          <strong>Today’s edition is live</strong>
+          <small>{formatDate(edition.editionDate)} · {readingMinutes(edition)} min read</small>
         </div>
       </div>
       <dl>
-        <div><dt>{edition.stories.length}</dt><dd>条行业信号</dd></div>
-        <div><dt>{sourceCount}</dt><dd>个独立来源</dd></div>
-        <div><dt>{edition.stories.filter((story) => story.openSource).length}</dt><dd>条开源动态</dd></div>
-        <div><dt>{edition.stories.filter((story) => story.kind === "community").length}</dt><dd>条社区证据</dd></div>
+        <div><dt>{newsCount}</dt><dd> verified news stories</dd></div>
+        <div><dt>{sourceCount}</dt><dd> independent sources</dd></div>
+        <div><dt>{edition.stories.filter((story) => story.openSource).length}</dt><dd> open-source updates</dd></div>
+        <div><dt>{edition.stories.filter((story) => story.kind === "community").length}</dt><dd> community findings</dd></div>
       </dl>
       <div class="topic-row">
         {categories.slice(0, 6).map((category) => (
@@ -98,7 +99,7 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
           decoding="async"
         />
       )}
-      <a class="text-link" href={`/daily/${edition.editionDate}#analysis`}>阅读全文</a>
+      <a class="text-link" href={`/daily/${edition.editionDate}#analysis`}>Read the full synthesis</a>
       <div class="analysis-line" aria-hidden="true"><i></i><i></i><i></i></div>
     </div>
   </section>
@@ -107,9 +108,10 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
     <div class="section-heading">
       <div>
         <span class="eyebrow">Verified signals</span>
-        <h2>今天真正发生的事</h2>
+        <span class="section-count">{newsCount} news stories · {community.length} community reports</span>
+        <h2>What Actually Changed Today</h2>
       </div>
-      <p>每条事实都回到原始来源<br />每条判断都保留证据边界</p>
+      <p>Every fact returns to its source<br />Every judgment keeps its evidence boundary</p>
     </div>
     <div class="signal-grid">
       {news.map((story) => (
@@ -127,9 +129,9 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
       <div class="section-heading">
         <div>
           <span class="eyebrow">Community layer</span>
-          <h2>官方叙事之外，<br />社区正在验证什么</h2>
+          <h2>Beyond Official Narratives,<br />What Is the Community Testing?</h2>
         </div>
-        <p>不把热度当证据<br />只收录会改变采用判断的信号</p>
+        <p>Popularity is not evidence<br />Only signals that can change adoption decisions</p>
       </div>
       <div class="community-grid">
         {community.map((story) => (
@@ -145,8 +147,8 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
 
   <section class="archive-cta page-shell">
     <p class="issue">ASHFOG ARCHIVE / DAILY</p>
-    <h2>一天一页，<br />建立自己的行业时间线。</h2>
-    <a class="primary" href="/daily">进入日报归档 <span>→</span></a>
+    <h2>One Page a Day.<br />Build Your Own Industry Timeline.</h2>
+    <a class="primary" href="/daily">Open the daily archive <span>→</span></a>
   </section>
 </BaseLayout>
 

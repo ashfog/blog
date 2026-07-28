@@ -9,19 +9,19 @@ const pageImage = getPageImage("topics");
 ---
 
 <BaseLayout
-  title="主题索引"
-  description="按主题浏览 ASHFOG 每日行业情报。"
+  title="Topic Index"
+  description="Browse ASHFOG daily intelligence by topic."
   image={pageImage?.largeSrc}
   pageType="CollectionPage"
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
-    { name: "主题索引", path: "/topics" }
+    { name: "Topic Index", path: "/topics" }
   ]}
 >
   <section class="topics page-shell">
     <header>
       <span class="eyebrow">Topic index</span>
-      <h1>主题不是栏目<br />是持续变化的<strong>信号场</strong></h1>
+      <h1>Topics Are Not Sections<br />They Are Evolving <strong>Signal Fields</strong></h1>
     </header>
     {pageImage && <PageArtwork image={pageImage} priority />}
 
@@ -32,7 +32,7 @@ const pageImage = getPageImage("topics");
           <a href={`/topics/${topic}`}>
             <span>{String(index + 1).padStart(2, "0")}</span>
             <h2>{categoryLabels[topic] ?? topic}</h2>
-            <p>{count} 条已归档信号</p>
+            <p>{count} archived signals</p>
             <i>↗</i>
           </a>
         );

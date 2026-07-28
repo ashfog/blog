@@ -1,8 +1,18 @@
-# AshFog Daily editorial policy
+# ASHFOG Daily editorial policy
 
 ## Mission
 
-Publish one concise Chinese-language daily intelligence brief covering material AI, open-source, developer-tool, infrastructure, research, and policy developments. Reduce noise, link every publishable claim to collected evidence, and explain practical consequences.
+Publish one concise English-language global intelligence brief covering material AI, open-source, developer-tool, infrastructure, research, policy, and community developments. Reduce noise, link every publishable claim to collected evidence, and explain practical consequences.
+
+## Global coverage
+
+- Attempt every enabled source on each edition date, including all enabled China sources.
+- From each source, collect at most the 15 newest entries published or materially updated on the edition date in `Asia/Shanghai`; when fewer exist, use the available number and never backfill merely to reach 15.
+- Treat China as a permanent part of global AI coverage, not as an occasional special section.
+- Write the final edition in English while preserving the original source URL.
+- Record each story's region and each primary source's language.
+- Do not retain or publish a separate original-language headline.
+- Apply the same materiality and evidence standards to every region; regional coverage is never a reason to pad an edition.
 
 ## Include
 
@@ -17,36 +27,41 @@ Publish one concise Chinese-language daily intelligence brief covering material 
 - Funding-only stories, generic SaaS launches, marketing partnerships, trivial version bumps, listicles, and duplicated media rewrites.
 - Stories whose only relevance is that a product contains an AI feature.
 - Rumors without accountable sourcing.
-- Old items newly discovered outside the candidate window unless a documented material update makes them current.
+- Prior-day items without a documented material update on the edition date.
 - Community popularity, votes, stars, or repost counts presented as proof.
 
 ## Evidence hierarchy
 
-1. Official announcement, repository, release, specification, model card, paper, or maintainer statement.
+1. Official announcement, repository, release, specification, model card, paper, policy text, or maintainer statement.
 2. Reproducible benchmark, issue thread, practitioner report, or respected technical analysis.
 3. Media report with original reporting.
 4. Aggregator, newsletter, social post, or community discussion used only to discover stronger evidence.
 
-Use the highest available evidence and link the primary source even when a lower-tier source discovered it.
+Use the highest available evidence and link the primary source even when a lower-tier source discovered it. A vendor benchmark must be identified as vendor-reported unless independently reproduced.
 
 ## Selection
 
 - Use an explicit `cutoffAt` in `Asia/Shanghai`.
-- Default to the 48 hours preceding the cutoff.
+- The routine collection window begins at 00:00 on `editionDate` and ends at `cutoffAt`.
+- Attempt every registered source and record one `research.sourceScan` row per source.
+- Fetch no more than 15 edition-day entries per source; use fewer when fewer exist.
+- Collect every serious candidate; there is no global candidate-count cap before selection.
 - Merge coverage of the same event under one `eventId`.
 - Compare the previous seven editions and repeat an event only for a documented material update.
-- Prefer quality over quota and provide `qualityShortfallReason` whenever minimum targets are not met.
-- Apply the numeric limits in `editorial/publishing-rules.json`.
+- Publish every material event that passes the evidence and relevance standard.
+- Never add an item to satisfy a quota and never exclude a material event merely because a routine story target was reached.
+- The 46-story Schema maximum is an anomaly guard, not an editorial target. If more than 46 events qualify, publish the 46 most material and record the remainder as `lower-priority`.
 
 ## Writing
 
 For every selected item:
 
 - State what changed without marketing language.
-- Write an original, self-contained summary that meets the exact `summary` length limits in `schemas/daily.schema.json`.
-- Explain why it matters to developers, researchers, operators, founders, or open-source users within the exact `whyItMatters` length limits in the schema.
+- Write an original, self-contained English summary within the exact word limits in `editorial/publishing-rules.json`.
+- Explain why it matters to developers, researchers, operators, founders, or open-source users without repeating the summary.
 - Preserve uncertainty and configuration-specific caveats.
 - Attribute benchmarks and community findings with their conditions.
+- Use `could`, `may`, `suggests`, or equivalent wording for inference.
 - Keep all published URLs inside `research.collectedUrls`.
 
 Write the daily analysis only after the final story order is locked. Synthesize at least three current story IDs into one edition-specific thesis with a practical implication. Do not reuse prior analysis.

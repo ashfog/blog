@@ -2,57 +2,132 @@
   "schemaVersion": 1,
   "editionDate": "2026-07-27",
   "timezone": "Asia/Shanghai",
-  "cutoffAt": "2026-07-27T09:00:00+08:00",
-  "generatedAt": "2026-07-27T09:18:00+08:00",
-  "runId": "fixture-2026-07-27-editorial-foundation",
-  "title": "AshFog Daily｜AI 工具链正在走向可验证的工程系统",
-  "description": "一份用于验证 AshFog 日报 Schema、来源约束、事实账本和发布门禁的结构化示例。",
-  "qualityShortfallReason": "这是基础设施测试夹具，只保留四条具有代表性的项目。",
+  "cutoffAt": "2026-07-27T14:00:00+08:00",
+  "generatedAt": "2026-07-27T14:24:00+08:00",
+  "runId": "preview-global-2026-07-27",
+  "title": "Policy thresholds, security agents, and runtime correctness",
+  "description": "Today’s verified signals track open-weight policy, agent security, AI work patterns, runtime correctness, developer tooling, and community evidence on model reliability.",
+  "qualityShortfallReason": "",
   "heroImageId": null,
   "dailyAnalysis": {
-    "title": "从模型能力竞争转向系统可靠性竞争",
-    "body": "今天的几个信号指向同一个变化：AI 工具的竞争重点正在从单次演示中的模型能力，转向可以长期运行、能够被检查并且方便维护的工程系统。模型厂商开始提供更明确的能力边界，开源运行时把兼容性与部署体验放在更重要的位置，协议项目则尝试减少工具与智能体之间的连接成本。与此同时，社区讨论持续提醒开发者，官方发布只是判断的起点，真实环境中的版本差异、硬件配置、失败恢复和维护节奏同样决定产品是否可靠。对小团队来说，更实际的做法不是追逐每个新功能，而是建立固定的验证清单：记录模型与运行时版本，保存关键来源，测量延迟与成本，检查权限边界，并为失败准备可回退路径。当这些步骤被标准化之后，团队才能把新的模型、协议和开源组件快速接入现有系统，同时避免把未经验证的宣传结论带入生产环境。",
+    "title": "Capability is expanding faster than the control plane",
+    "body": "The day’s evidence points to a widening gap between model capability and operational readiness. Anthropic’s open-weight proposal turns that gap into a governance question: capability thresholds may help target oversight, but testing access, compliance cost, and accountability will determine whether smaller builders can compete. Microsoft’s Project Perception exposes the same problem inside enterprises. An agent that discovers and repairs security issues also needs narrow permissions, visible approval gates, reversible actions, and durable audit records. Runtime details add another layer. Ollama’s MLX correction demonstrates that a single implementation path can change output quality even when the advertised model is unchanged. Community reports about Claude availability and open-model coding performance reinforce the need to test complete systems under realistic workloads. Teams should therefore version model, runtime, hardware, prompts, tools, and routing together; run repeatable task suites; and rehearse provider fallback before incidents. The useful competitive advantage is no longer access to a model alone. It is the ability to operate that model with evidence, controls, observability, and recovery procedures that remain dependable when components fail or policies change.",
     "signalIds": [
-      "openai-platform-update",
-      "ollama-runtime-release",
-      "mcp-spec-release"
+      "anthropic-open-weights-position",
+      "microsoft-project-perception",
+      "ollama-0325-mlx-quality-fix",
+      "hn-claude-opus5-errors"
     ]
   },
   "stories": [
     {
-      "id": "openai-platform-update",
-      "eventId": "openai-platform-2026-07-26",
+      "id": "anthropic-open-weights-position",
+      "eventId": "anthropic-open-weights-policy-2026-07-27-previous",
       "position": 1,
       "kind": "news",
       "highlight": true,
-      "category": "models",
-      "topics": ["models", "agents"],
-      "company": "OpenAI",
-      "ecosystem": "openai",
+      "category": "policy",
+      "topics": [
+        "open-models",
+        "safety",
+        "governance"
+      ],
+      "company": "Anthropic",
+      "ecosystem": "anthropic",
       "openSource": false,
       "mediaOnly": false,
-      "headline": "OpenAI 更新模型与智能体平台能力",
-      "summary": "官方更新说明了模型和智能体平台的最新能力、适用范围与开发者接入方式。",
-      "whyItMatters": "更明确的能力边界有助于团队评估升级成本，并减少仅凭演示结果做技术决策的风险。",
+      "headline": "Anthropic opposes a blanket open-weight ban while backing capability-based safety tests",
+      "summary": "Anthropic CEO Dario Amodei said the company is not seeking a categorical ban on open-weight models and does not believe openness alone should trigger regulation. The company’s proposal instead focuses on the movement of advanced chips, industrial-scale distillation, and mandatory safety evaluations for models that cross defined capability thresholds, regardless of whether their weights are open or closed. That makes Anthropic’s position a case for risk-based controls rather than deregulation. The unresolved question is how those controls would work in practice. Community discussion around the statement argued that expensive evaluations, a limited set of approved testing providers, or centralized certification could still create a de facto entry barrier for open developers. That concern is currently a policy-design risk, not evidence that such a restriction already exists, and the final impact would depend on the thresholds, costs, appeals process, and access to testing.",
+      "whyItMatters": "The policy debate is shifting from whether open weights should exist to who defines capability thresholds, who performs evaluations, and who pays for compliance. Open-model teams may need to plan for testing records, distribution controls, and certification costs alongside licensing and release engineering, even if regulation remains formally neutral between open and closed systems.",
       "source": {
-        "id": "openai-news",
-        "name": "OpenAI News",
+        "id": "anthropic-news",
+        "name": "Anthropic Newsroom",
         "tier": "A",
-        "url": "https://openai.com/news/",
+        "url": "https://www.anthropic.com/news/position-open-weights-models",
         "publishedAt": "2026-07-26T08:00:00Z",
         "updatedAt": null,
-        "evidenceLabel": "officially_stated"
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "en"
       },
       "factualClaims": [
         {
-          "text": "OpenAI 官方新闻页面发布了平台更新信息。",
-          "evidenceUrl": "https://openai.com/news/",
+          "text": "Anthropic said it does not support a blanket ban on open-weight models and favors mandatory testing for sufficiently capable open and closed models.",
+          "evidenceUrl": "https://www.anthropic.com/news/position-open-weights-models",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": [
+          "Hacker News"
+        ],
+        "platformsUnavailable": [],
+        "signals": [
+          {
+            "url": "https://news.ycombinator.com/item?id=49076261",
+            "retrievedAt": "2026-07-27T06:14:36Z",
+            "authorRole": "Hacker News participant",
+            "evidenceLabel": "community_discussion_suggests",
+            "finding": "Participants argued that mandatory testing could become an entry barrier for open-weight models if access is controlled or evaluation costs are high.",
+            "configuration": "Policy interpretation discussion; not an industry consensus.",
+            "adopted": true
+          }
+        ]
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 5,
+        "novelty": 4,
+        "practicalUtility": 4,
+        "impact": 5,
+        "communitySignal": 5,
+        "total": 28
+      },
+      "materialUpdate": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
+      "region": "global"
+    },
+    {
+      "id": "microsoft-project-perception",
+      "eventId": "microsoft-project-perception-preview-2026-07-previous",
+      "position": 2,
+      "kind": "news",
+      "highlight": true,
+      "category": "security",
+      "topics": [
+        "agent-security",
+        "cybersecurity",
+        "multi-model"
+      ],
+      "company": "Microsoft",
+      "ecosystem": "microsoft-security",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "Microsoft introduces Project Perception, a multi-agent security system entering preview August 3",
+      "summary": "Microsoft announced Project Perception, which it describes as a closed-loop defense system built around cooperating red-team, blue-team, and green-team agents. The roles are intended to continuously find risks, assess them, support remediation, and improve the defensive process, moving beyond one-time scanning or isolated alerts. Microsoft says the first implementation will focus on software vulnerabilities, use a multi-model architecture, and enter public preview on August 3. The official announcement establishes the proposed architecture, initial use case, and preview date, but it does not yet demonstrate production performance. False-positive rates, remediation quality, permission boundaries, escalation behavior, and the effect of model choice will need to be tested after preview access opens. The design should therefore be read as a product and research direction rather than proof that a collection of specialized agents can safely repair software without human review.",
+      "whyItMatters": "Security agents are moving from producing alerts toward participating in remediation. Enterprises evaluating the preview should inspect context provenance, allowed actions, human approval points, rollback behavior, audit logs, and evaluation conditions. A closed feedback loop can improve response speed, but it should not be treated as reliable autonomous repair until those operational controls are verified.",
+      "source": {
+        "id": "microsoft-ai-blog",
+        "name": "Microsoft AI Blog",
+        "tier": "A",
+        "url": "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
+        "publishedAt": "2026-07-26T08:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "en"
+      },
+      "factualClaims": [
+        {
+          "text": "Microsoft said Project Perception uses red, blue, and green agents in a continuous security loop and is scheduled for public preview on August 3.",
+          "evidenceUrl": "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
           "evidenceLabel": "officially_stated"
         }
       ],
       "communityCheck": {
         "status": "no_relevant_signal",
-        "platformsAttempted": ["hacker-news"],
+        "platformsAttempted": [
+          "Hacker News"
+        ],
         "platformsUnavailable": [],
         "signals": []
       },
@@ -61,176 +136,950 @@
         "relevance": 5,
         "novelty": 4,
         "practicalUtility": 4,
-        "impact": 4,
-        "communitySignal": 1,
-        "total": 23
-      },
-      "materialUpdate": "",
-      "windowException": "",
-      "imageId": null
-    },
-    {
-      "id": "ollama-runtime-release",
-      "eventId": "ollama-runtime-2026-07-26",
-      "position": 2,
-      "kind": "news",
-      "highlight": true,
-      "category": "open-source",
-      "topics": ["open-source", "local-ai"],
-      "company": "Ollama",
-      "ecosystem": "local-ai",
-      "openSource": true,
-      "mediaOnly": false,
-      "headline": "Ollama 发布新的本地模型运行时版本",
-      "summary": "项目发布页记录了新的运行时版本，为本地模型部署带来兼容性和运行体验方面的更新。",
-      "whyItMatters": "本地运行时的版本变化会直接影响模型兼容性、硬件利用率以及个人和小团队的部署成本。",
-      "source": {
-        "id": "ollama-releases",
-        "name": "Ollama Releases",
-        "tier": "A",
-        "url": "https://github.com/ollama/ollama/releases",
-        "publishedAt": "2026-07-26T10:00:00Z",
-        "updatedAt": null,
-        "evidenceLabel": "officially_stated"
-      },
-      "factualClaims": [
-        {
-          "text": "Ollama 官方仓库发布页包含新的运行时版本。",
-          "evidenceUrl": "https://github.com/ollama/ollama/releases",
-          "evidenceLabel": "officially_stated"
-        }
-      ],
-      "communityCheck": {
-        "status": "checked",
-        "platformsAttempted": ["github"],
-        "platformsUnavailable": [],
-        "signals": []
-      },
-      "score": {
-        "evidenceStrength": 5,
-        "relevance": 5,
-        "novelty": 4,
-        "practicalUtility": 5,
-        "impact": 3,
-        "communitySignal": 2,
-        "total": 24
-      },
-      "materialUpdate": "",
-      "windowException": "",
-      "imageId": null
-    },
-    {
-      "id": "mcp-spec-release",
-      "eventId": "mcp-spec-2026-07-26",
-      "position": 3,
-      "kind": "news",
-      "highlight": true,
-      "category": "developer-tools",
-      "topics": ["agents", "protocol"],
-      "company": null,
-      "ecosystem": "mcp",
-      "openSource": true,
-      "mediaOnly": false,
-      "headline": "MCP 规范发布新的协议版本",
-      "summary": "MCP 规范仓库发布页记录了新的协议版本，重点涉及工具连接、互操作和安全边界。",
-      "whyItMatters": "协议层趋于稳定后，开发者可以减少重复集成工作，并更清楚地评估智能体工具调用的风险。",
-      "source": {
-        "id": "mcp-spec-releases",
-        "name": "MCP Specification Releases",
-        "tier": "A",
-        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases",
-        "publishedAt": "2026-07-26T12:00:00Z",
-        "updatedAt": null,
-        "evidenceLabel": "officially_stated"
-      },
-      "factualClaims": [
-        {
-          "text": "MCP 规范仓库发布页记录了新的协议版本。",
-          "evidenceUrl": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases",
-          "evidenceLabel": "officially_stated"
-        }
-      ],
-      "communityCheck": {
-        "status": "checked",
-        "platformsAttempted": ["github"],
-        "platformsUnavailable": [],
-        "signals": []
-      },
-      "score": {
-        "evidenceStrength": 5,
-        "relevance": 5,
-        "novelty": 4,
-        "practicalUtility": 5,
-        "impact": 4,
+        "impact": 5,
         "communitySignal": 2,
         "total": 25
       },
       "materialUpdate": "",
-      "windowException": "",
-      "imageId": null
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
+      "region": "global"
     },
     {
-      "id": "hacker-news-community",
-      "eventId": "hn-ai-engineering-2026-07-26",
+      "id": "openai-work-task-crossover",
+      "eventId": "openai-work-at-frontier-task-crossover-2026-previous",
+      "position": 3,
+      "kind": "news",
+      "highlight": false,
+      "category": "research",
+      "topics": [
+        "work",
+        "ai-adoption",
+        "economic-research"
+      ],
+      "company": "OpenAI",
+      "ecosystem": "openai",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "OpenAI finds 43.5% of occupation-linked AI conversations cross traditional job boundaries",
+      "summary": "OpenAI Economic Research analyzed more than 800,000 messages from United States ChatGPT users and introduced “task crossover” to describe people using AI for work traditionally associated with another occupation. The report says 16.8% of work-related messages in the sample involved crossover. When researchers narrowed the sample to messages that could be mapped to a specific occupation, the share rose to 43.5%. These figures describe the distribution of tasks inside a conversation dataset; they are not direct evidence that jobs have already been replaced, and they do not establish the quality of the resulting work or who remains accountable for it. The analysis instead suggests that AI’s near-term labor impact may appear as tasks moving across role boundaries before entire occupations disappear. That distinction matters when organizations measure adoption, redesign responsibilities, or interpret headline automation estimates.",
+      "whyItMatters": "Organizations should measure more than time saved. They also need to track how task ownership, review responsibility, and required expertise move between roles. Training, access controls, quality assurance, and performance expectations may need to follow those new task boundaries; otherwise apparent efficiency gains can create accountability gaps that conventional job-level metrics will miss.",
+      "source": {
+        "id": "openai-news",
+        "name": "OpenAI News",
+        "tier": "A",
+        "url": "https://openai.com/index/how-ai-is-expanding-what-people-do-at-work/",
+        "publishedAt": "2026-07-26T08:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "en"
+      },
+      "factualClaims": [
+        {
+          "text": "OpenAI reported task crossover in 16.8% of work-related messages and 43.5% of messages mapped to a specific occupation in its sample.",
+          "evidenceUrl": "https://openai.com/index/how-ai-is-expanding-what-people-do-at-work/",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "not_applicable",
+        "platformsAttempted": [],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 4,
+        "relevance": 4,
+        "novelty": 4,
+        "practicalUtility": 3,
+        "impact": 4,
+        "communitySignal": 0,
+        "total": 19
+      },
+      "materialUpdate": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
+      "region": "global"
+    },
+    {
+      "id": "vercel-ai-sdk-repairtext-stable",
+      "eventId": "vercel-ai-sdk-7-0-39-repairtext-previous",
       "position": 4,
+      "kind": "news",
+      "highlight": false,
+      "category": "developer-tools",
+      "topics": [
+        "ai-sdk",
+        "structured-output",
+        "typescript"
+      ],
+      "company": "Vercel",
+      "ecosystem": "vercel-ai-sdk",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "Vercel AI SDK 7.0.39 promotes repairText to a stable structured-output option",
+      "summary": "Vercel AI SDK 7.0.39 moved repairText, used by generateObject and streamObject, from an experimental option to a stable API. The previous experimental_repairText name remains available as a backward-compatible alias, allowing applications already using the experimental interface to migrate gradually rather than changing every call during the version upgrade. The option lets developers insert a text-repair step when model output does not match the expected structured format. This release changes the API’s stability status and naming; it does not announce a new repair algorithm or demonstrate higher repair accuracy. Teams upgrading should continue testing with their own JSON Schemas, malformed-output samples, provider combinations, and retry policies. A stable interface means Vercel intends to preserve the contract, but it does not mean every invalid model response can be repaired correctly or that repaired content should bypass final validation.",
+      "whyItMatters": "Applications that depend on structured-output repair can move to a supported interface while using the compatibility alias to reduce migration risk. Schema validation, fail-closed behavior, and regression samples are still required because API stability does not guarantee that a model response—or the repaired version of that response—is semantically correct.",
+      "source": {
+        "id": "vercel-ai",
+        "name": "Vercel AI SDK",
+        "tier": "A",
+        "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.39",
+        "publishedAt": "2026-07-26T08:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "maintainer_confirmed",
+        "sourceLanguage": "en"
+      },
+      "factualClaims": [
+        {
+          "text": "AI SDK 7.0.39 made repairText a stable option for generateObject and streamObject while retaining the experimental name as an alias.",
+          "evidenceUrl": "https://github.com/vercel/ai/releases/tag/ai%407.0.39",
+          "evidenceLabel": "maintainer_confirmed"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": [
+          "Hacker News"
+        ],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 4,
+        "novelty": 2,
+        "practicalUtility": 4,
+        "impact": 2,
+        "communitySignal": 0,
+        "total": 17
+      },
+      "materialUpdate": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
+      "region": "global"
+    },
+    {
+      "id": "ollama-0325-mlx-quality-fix",
+      "eventId": "ollama-v0-32-5-mlx-nvfp4-fix-previous",
+      "position": 5,
+      "kind": "news",
+      "highlight": true,
+      "category": "infrastructure",
+      "topics": [
+        "local-ai",
+        "mlx",
+        "nvfp4"
+      ],
+      "company": "Ollama",
+      "ecosystem": "ollama",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "Ollama 0.32.5 fixes an MLX Metal issue that could reduce NVFP4 output quality",
+      "summary": "Ollama v0.32.5 lists a single change: a fix for an MLX Metal execution-path issue that could reduce output quality for NVFP4 models, with the release note calling out a stronger effect on Laguna models. This is not a new model integration, interface feature, or general performance optimization. It is a runtime correction that can affect the quality of generated results. The announcement does not quantify the error, identify every affected task, or provide a before-and-after benchmark, so users cannot infer from the release note alone whether historical outputs were materially degraded. Teams running Apple Silicon with the MLX Metal and NVFP4 combination should treat the update as a correctness release and repeat representative prompts from critical workflows. Versioned regression tests are especially important when a low-level runtime path can change model behavior without an obvious application-level error.",
+      "whyItMatters": "This is a correctness fix rather than a routine speed improvement. Teams using Apple Silicon, MLX Metal, NVFP4, or Laguna models should prioritize the upgrade and rerun critical task suites. Without regression checks, an apparently successful request may continue producing subtly degraded results that ordinary availability monitoring will not detect.",
+      "source": {
+        "id": "ollama-releases",
+        "name": "Ollama Releases",
+        "tier": "A",
+        "url": "https://github.com/ollama/ollama/releases/tag/v0.32.5",
+        "publishedAt": "2026-07-26T08:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "maintainer_confirmed",
+        "sourceLanguage": "en"
+      },
+      "factualClaims": [
+        {
+          "text": "Ollama v0.32.5 fixed an MLX Metal issue that could reduce output quality for NVFP4 models.",
+          "evidenceUrl": "https://github.com/ollama/ollama/releases/tag/v0.32.5",
+          "evidenceLabel": "maintainer_confirmed"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": [
+          "Hacker News"
+        ],
+        "platformsUnavailable": [
+          "Reddit"
+        ],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 5,
+        "novelty": 3,
+        "practicalUtility": 5,
+        "impact": 4,
+        "communitySignal": 0,
+        "total": 22
+      },
+      "materialUpdate": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
+      "region": "global"
+    },
+    {
+      "id": "cloudflare-pvcli-open-source",
+      "eventId": "cloudflare-pvcli-open-source-2026-previous",
+      "position": 6,
+      "kind": "news",
+      "highlight": false,
+      "category": "developer-tools",
+      "topics": [
+        "privacy",
+        "ohttp",
+        "rust"
+      ],
+      "company": "Cloudflare",
+      "ecosystem": "cloudflare",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "Cloudflare open-sources pvcli to debug OHTTP privacy-proxy chains from one command line",
+      "summary": "Cloudflare released pvcli as an Apache-2.0-licensed Rust command-line tool intended to provide a curl-like debugging experience for privacy protocols. Its current focus is constructing, sending, and inspecting Oblivious HTTP requests so developers can trace failures across the client, relay, gateway, and destination components of an OHTTP chain without manually assembling each binary layer. The project roadmap also mentions MASQUE, Privacy Pass, and post-quantum cryptography, but those entries describe planned directions rather than functionality that should be assumed to exist today. The immediate value is a reusable diagnostic surface and an open contribution path for implementations that otherwise require protocol-specific tooling. Developers considering pvcli still need to verify the exact protocol coverage, supported message formats, interoperability with their deployment, and the maturity of current releases instead of treating roadmap items as completed features.",
+      "whyItMatters": "OHTTP failures can span several roles and encoding layers, making diagnosis unusually expensive. pvcli gives privacy-proxy implementers a shared end-to-end inspection tool that can shorten that loop. Adoption decisions should still distinguish current commands from roadmap commitments and test interoperability against the exact relay and gateway implementation used in production.",
+      "source": {
+        "id": "cloudflare-blog",
+        "name": "Cloudflare Blog",
+        "tier": "A",
+        "url": "https://blog.cloudflare.com/open-sourcing-our-privacy-proxy-cli/",
+        "publishedAt": "2026-07-26T08:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "en"
+      },
+      "factualClaims": [
+        {
+          "text": "Cloudflare released pvcli under the Apache-2.0 license to test and debug OHTTP and related privacy-protocol flows.",
+          "evidenceUrl": "https://blog.cloudflare.com/open-sourcing-our-privacy-proxy-cli/",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": [
+          "Hacker News"
+        ],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 4,
+        "novelty": 4,
+        "practicalUtility": 4,
+        "impact": 3,
+        "communitySignal": 0,
+        "total": 20
+      },
+      "materialUpdate": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
+      "region": "global"
+    },
+    {
+      "id": "hn-open-model-practical-use",
+      "eventId": "hn-open-model-practical-coding-experience-2026-07-28-previous",
+      "position": 7,
       "kind": "community",
       "highlight": false,
       "category": "community",
-      "topics": ["community", "developer-tools"],
+      "topics": [
+        "open-models",
+        "coding-agents",
+        "cost"
+      ],
       "company": null,
-      "ecosystem": "hacker-news",
-      "openSource": false,
+      "ecosystem": "open-models",
+      "openSource": true,
       "mediaOnly": false,
-      "headline": "Hacker News 讨论 AI 工具的生产可靠性",
-      "summary": "社区讨论集中在版本固定、失败恢复、权限控制和成本测量等生产环境问题。",
-      "whyItMatters": "这些讨论不能替代官方证据，但可以帮助团队发现发布说明中没有覆盖的实际运维约束。",
+      "headline": "Developers find smaller open models competitive for iterative coding, but cost and tool use remain unclear",
+      "summary": "A Hacker News discussion offers an early practitioner signal about open models in software work. Several participants argued that smaller open models can be competitive on narrowly defined tasks with clear boundaries and short iteration loops, but that experience should not be generalized to one-shot application generation or every coding workflow. The thread also noted that the original article promoted the author’s own product, that private endpoints and subsidized closed services were not compared on a consistent cost basis, and that tool-calling behavior lacked a reproducible evaluation. These observations are useful for designing an internal benchmark, not for making a procurement decision. The evidence remains a community discussion without fixed model versions, hardware details, or an independently reproduced comparison.",
+      "whyItMatters": "Model selection should use a representative task suite rather than one application demo. Teams should separately measure correctness, tool calling, latency, throughput, and total cost, while treating promotional incentives and missing reproduction details as evidence limits.",
       "source": {
         "id": "hacker-news",
         "name": "Hacker News",
         "tier": "C",
-        "url": "https://news.ycombinator.com/",
-        "publishedAt": "2026-07-26T14:00:00Z",
+        "url": "https://news.ycombinator.com/item?id=49078583",
+        "publishedAt": "2026-07-26T08:00:00Z",
         "updatedAt": null,
-        "evidenceLabel": "community_discussion_suggests"
+        "evidenceLabel": "community_discussion_suggests",
+        "sourceLanguage": "en"
       },
       "factualClaims": [
         {
-          "text": "Hacker News 当天存在关于 AI 工具生产可靠性的讨论。",
-          "evidenceUrl": "https://news.ycombinator.com/",
+          "text": "Participants reported that smaller open models can work well for narrow iterative coding tasks while calling for better cost and tool-use comparisons.",
+          "evidenceUrl": "https://news.ycombinator.com/item?id=49078583",
           "evidenceLabel": "community_discussion_suggests"
         }
       ],
       "communityCheck": {
         "status": "checked",
-        "platformsAttempted": ["hacker-news"],
+        "platformsAttempted": [
+          "Hacker News"
+        ],
         "platformsUnavailable": [],
-        "signals": []
+        "signals": [
+          {
+            "url": "https://news.ycombinator.com/item?id=49079002",
+            "retrievedAt": "2026-07-27T06:14:36Z",
+            "authorRole": "Developer community participant",
+            "evidenceLabel": "single_community_test",
+            "finding": "A participant reported that smaller open models were useful for traditional iterative development but did not treat that as evidence for complete application generation.",
+            "configuration": "Qualitative development experience without fixed model versions, hardware, or a reproducible test.",
+            "adopted": true
+          },
+          {
+            "url": "https://news.ycombinator.com/item?id=49078892",
+            "retrievedAt": "2026-07-27T06:14:36Z",
+            "authorRole": "Developer community participant",
+            "evidenceLabel": "community_discussion_suggests",
+            "finding": "A participant noted the original author’s promotional incentive and requested a real cost comparison between private endpoints and subsidized closed services.",
+            "configuration": "No consistent cost dataset was provided.",
+            "adopted": true
+          }
+        ]
       },
       "score": {
         "evidenceStrength": 2,
         "relevance": 4,
         "novelty": 3,
         "practicalUtility": 4,
-        "impact": 2,
+        "impact": 3,
         "communitySignal": 4,
-        "total": 19
+        "total": 20
       },
       "materialUpdate": "",
-      "windowException": "",
-      "imageId": null
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
+      "region": "global"
+    },
+    {
+      "id": "hn-claude-opus5-errors",
+      "eventId": "claude-opus5-elevated-errors-2026-07-27-previous",
+      "position": 8,
+      "kind": "community",
+      "highlight": true,
+      "category": "community",
+      "topics": [
+        "reliability",
+        "coding-agents",
+        "incident"
+      ],
+      "company": "Anthropic",
+      "ecosystem": "anthropic",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "Claude error reports push some agent workflows toward multi-provider fallback paths",
+      "summary": "A Hacker News discussion linked to a Claude status incident contains multiple reports of elevated Opus 5 errors and blocked tool workflows. One participant said an automatic mode could not decide whether a Bash action was safe while the model was unavailable, although read-only operations could continue. Another team reported better qualitative stability when accessing Claude through AWS Bedrock than through Anthropic directly, while other users said outages had led them to keep smaller subscriptions with several providers. Together, the reports show how an endpoint failure can interrupt an agent workflow, but they do not establish a controlled comparison of model quality, Bedrock reliability, or the best fallback design. Request volume, region, client versions, and routing conditions were not consistently disclosed, so the signal is useful but remains provisional.",
+      "whyItMatters": "Production agents should not assume one model endpoint will always be available. Critical workflows need risk-aware action classes, bounded retries, tested provider fallback, and human takeover during incidents. Backup routes must preserve the same permission boundaries instead of restoring availability by silently weakening controls.",
+      "source": {
+        "id": "hacker-news",
+        "name": "Hacker News",
+        "tier": "C",
+        "url": "https://news.ycombinator.com/item?id=49068029",
+        "publishedAt": "2026-07-26T08:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "multiple_users_report",
+        "sourceLanguage": "en"
+      },
+      "factualClaims": [
+        {
+          "text": "Multiple participants reported Claude errors or blocked tool workflows and described multi-provider or Bedrock access as operational mitigations.",
+          "evidenceUrl": "https://news.ycombinator.com/item?id=49068029",
+          "evidenceLabel": "multiple_users_report"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": [
+          "Hacker News"
+        ],
+        "platformsUnavailable": [],
+        "signals": [
+          {
+            "url": "https://news.ycombinator.com/item?id=49069015",
+            "retrievedAt": "2026-07-27T06:14:36Z",
+            "authorRole": "Service user",
+            "evidenceLabel": "single_community_test",
+            "finding": "A user said outages led them to maintain smaller subscriptions across multiple providers to reduce workday interruption risk.",
+            "configuration": "Qualitative operational report without request volume or region.",
+            "adopted": true
+          },
+          {
+            "url": "https://news.ycombinator.com/item?id=49074597",
+            "retrievedAt": "2026-07-27T06:14:36Z",
+            "authorRole": "Coding-agent user",
+            "evidenceLabel": "single_community_test",
+            "finding": "A user reported that automatic mode could not assess Bash safety while Opus 5 was unavailable, although read-only operations continued.",
+            "configuration": "Claude coding workflow in automatic mode; client version and incident duration were not provided.",
+            "adopted": true
+          },
+          {
+            "url": "https://news.ycombinator.com/item?id=49069366",
+            "retrievedAt": "2026-07-27T06:14:36Z",
+            "authorRole": "Engineering team member",
+            "evidenceLabel": "single_community_test",
+            "finding": "One participant said their team observed better Claude stability through AWS Bedrock than through direct Anthropic access.",
+            "configuration": "Qualitative team observation without region, request volume, or routing details.",
+            "adopted": true
+          }
+        ]
+      },
+      "score": {
+        "evidenceStrength": 3,
+        "relevance": 5,
+        "novelty": 3,
+        "practicalUtility": 5,
+        "impact": 4,
+        "communitySignal": 5,
+        "total": 25
+      },
+      "materialUpdate": "",
+      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
+      "region": "global"
     }
   ],
   "research": {
     "collectedUrls": [
-      "https://openai.com/news/",
-      "https://github.com/ollama/ollama/releases",
-      "https://github.com/modelcontextprotocol/modelcontextprotocol/releases",
-      "https://news.ycombinator.com/"
+      "https://www.anthropic.com/news/position-open-weights-models",
+      "https://news.ycombinator.com/item?id=49076261",
+      "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
+      "https://openai.com/index/how-ai-is-expanding-what-people-do-at-work/",
+      "https://github.blog/changelog/2026-07-27-github-copilot-for-jetbrains-adds-improvved-opentelemetry-configuration-and-model-management/",
+      "https://github.blog/changelog/2026-07-27-manage-github-copilot-app-access-with-a-dedicated-policy/",
+      "https://github.blog/changelog/2026-07-27-enterprise-managed-settings-now-apply-to-the-github-copilot-app/",
+      "https://github.com/vercel/ai/releases/tag/ai%407.0.39",
+      "https://github.com/ollama/ollama/releases/tag/v0.32.5",
+      "https://blog.cloudflare.com/open-sourcing-our-privacy-proxy-cli/",
+      "https://news.ycombinator.com/item?id=49078583",
+      "https://news.ycombinator.com/item?id=49079002",
+      "https://news.ycombinator.com/item?id=49078892",
+      "https://news.ycombinator.com/item?id=49078454",
+      "https://news.ycombinator.com/item?id=49079249",
+      "https://news.ycombinator.com/item?id=49072462",
+      "https://news.ycombinator.com/item?id=49074829",
+      "https://news.ycombinator.com/item?id=49073444",
+      "https://news.ycombinator.com/item?id=49068029",
+      "https://news.ycombinator.com/item?id=49069015",
+      "https://news.ycombinator.com/item?id=49074597",
+      "https://news.ycombinator.com/item?id=49069366",
+      "https://github.com/vercel/ai/releases/tag/ai%407.0.40",
+      "https://github.com/langchain-ai/langchain/releases/tag/langchain-fireworks%3D%3D1.5.2",
+      "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28-RC"
     ],
-    "excludedCandidates": [],
-    "unavailableSources": [],
+    "excludedCandidates": [
+      {
+        "eventId": "vercel-ai-sdk-7-0-40-generatedfile",
+        "title": "AI SDK 7.0.40 deprecates Experimental_GeneratedImage",
+        "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.40",
+        "reason": "low-relevance"
+      },
+      {
+        "eventId": "langchain-fireworks-1-5-2",
+        "title": "langchain-fireworks 1.5.2",
+        "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-fireworks%3D%3D1.5.2",
+        "reason": "low-relevance"
+      },
+      {
+        "eventId": "mcp-2026-07-28-rc",
+        "title": "MCP 2026-07-28 RC",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28-RC",
+        "reason": "stale"
+      }
+    ],
+    "unavailableSources": [
+      "reddit-localllama",
+      "x-curated-experts"
+    ],
     "warnings": [
-      "测试夹具不代表真实日报内容，也不执行实时链接检查。"
+      "Reddit and X authentication was unavailable; the run recorded both sources as unavailable without blocking Preview.",
+      "When a source exposed only a publication date, publishedAt used 00:00:00Z for that date.",
+      "Community entries preserve uncertainty; votes and comment counts were used for discovery, not as factual evidence."
+    ],
+    "sourceScan": [
+      {
+        "sourceId": "openai-news",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "anthropic-news",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "deepmind-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "google-ai-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "meta-ai-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "mistral-news",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "microsoft-ai-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "nvidia-developer-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "hugging-face-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "github-changelog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "cloudflare-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "github-trending",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "hacker-news",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "show-hn",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "hugging-face-papers",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "arxiv-cs-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "arxiv-cs-cl",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "arxiv-cs-lg",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "ars-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "mit-tech-review-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "ieee-spectrum-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "reddit-localllama",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "x-curated-experts",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "phoronix",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "mcp-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "mcp-spec-releases",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "vercel-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "ollama-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "ollama-releases",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "langchain-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "llamaindex-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "dify-blog",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "hugging-face-trending-papers",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "chips-and-cheese",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "semianalysis",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "the-batch",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "alphasignal",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "tldr-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "deepseek-official",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "qwen-official",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "bytedance-seed",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "zai-official",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "moonshot-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "minimax-official",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "modelscope-hub",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "tencent-hunyuan",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "baidu-ernie-paddlepaddle",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "huawei-ascend",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "stepfun-official",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "china-cac",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "china-miit",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "machine-heart",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "qbitai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      },
+      {
+        "sourceId": "36kr-ai",
+        "status": "not-run",
+        "itemsFetched": 0,
+        "itemsOnEditionDay": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Theme fixture does not execute network collection."
+      }
     ]
-  }
+  },
+  "language": "en",
+  "edition": "global"
 }

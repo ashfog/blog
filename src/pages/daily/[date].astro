@@ -51,13 +51,13 @@ const citations = [
   type="article"
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
-    { name: "日报归档", path: "/daily" },
+    { name: "Daily Archive", path: "/daily" },
     { name: edition.editionDate, path: `/daily/${edition.editionDate}` }
   ]}
   article={{
     publishedTime: edition.generatedAt,
     modifiedTime: edition.generatedAt,
-    section: "AI 与开发者行业情报",
+    section: "AI and developer intelligence",
     tags: articleTags,
     citations
   }}
@@ -68,13 +68,13 @@ const citations = [
         <span class="eyebrow">ASHFOG Daily</span>
         <span>ISSUE / {edition.editionDate.replaceAll("-", "")}</span>
       </div>
-      <h1>{edition.title.replace("ASHFOG Daily：", "")}</h1>
+      <h1>{edition.title}</h1>
       <p>{edition.description}</p>
       <div class="edition-meta">
         <span>{formatDate(edition.editionDate)}</span>
-        <span>{readingMinutes(edition)} 分钟信号</span>
-        <span>{edition.stories.length} 条动态</span>
-        <span>{edition.research.collectedUrls.length} 个核验链接</span>
+        <span>{readingMinutes(edition)} min read</span>
+        <span>{edition.stories.length} signals</span>
+        <span>{edition.research.collectedUrls.length} verified links</span>
       </div>
     </header>
     {heroImage && (
@@ -93,12 +93,12 @@ const citations = [
       </figure>
     )}
 
-    <aside class="edition-nav" aria-label="本期目录">
-      <span>本期目录</span>
-      <a href="#analysis">编辑综述</a>
-      <a href="#news">要点新闻 <em>{news.length}</em></a>
-      <a href="#community">社区动态 <em>{community.length}</em></a>
-      <a href="#method">来源说明</a>
+    <aside class="edition-nav" aria-label="Edition contents">
+      <span>CONTENTS</span>
+      <a href="#analysis">Synthesis</a>
+      <a href="#news">Verified news <em>{news.length}</em></a>
+      <a href="#community">Community findings <em>{community.length}</em></a>
+      <a href="#method">Method</a>
     </aside>
 
     <section class="analysis" id="analysis" data-pagefind-meta="section:analysis">
@@ -126,8 +126,8 @@ const citations = [
     <section class="story-section" id="news">
       <div class="story-section-header">
         <span>01 / VERIFIED NEWS</span>
-        <h2>要点新闻</h2>
-        <p>官方发布、仓库版本与一手研究</p>
+        <h2>Verified News</h2>
+        <p>Official releases, repositories, policy texts, and primary research</p>
       </div>
 
       <div class="story-list">
@@ -149,6 +149,7 @@ const citations = [
                 />
               )}              <div class="story-tags">
                 <span class="tag">{categoryLabels[story.category] ?? story.category}</span>
+                {story.region !== "global" && <span class="tag">{story.region.toUpperCase()}</span>}
                 {story.openSource && <span class="tag open">OPEN SOURCE</span>}
                 {story.highlight && <span class="tag accent">HIGHLIGHT</span>}
               </div>
@@ -163,7 +164,7 @@ const citations = [
                   <small>{evidenceLabels[story.source.evidenceLabel]}</small>
                   <strong>{story.source.name}</strong>
                 </span>
-                <span>查看原始来源 ↗</span>
+                <span>View original source ↗</span>
               </a>
             </div>
           </section>
@@ -174,8 +175,8 @@ const citations = [
     <section class="story-section community" id="community">
       <div class="story-section-header">
         <span>02 / COMMUNITY LAYER</span>
-        <h2>社区动态</h2>
-        <p>只收录会改变采用与判断的信号</p>
+        <h2>Community Findings</h2>
+        <p>Only signals that can change confidence or adoption decisions</p>
       </div>
 
       <div class="story-list">
@@ -197,6 +198,7 @@ const citations = [
                 />
               )}              <div class="story-tags">
                 <span class="tag">COMMUNITY</span>
+                {story.region !== "global" && <span class="tag">{story.region.toUpperCase()}</span>}
                 {story.openSource && <span class="tag open">OPEN SOURCE</span>}
               </div>
               <h3>{story.headline}</h3>
@@ -210,7 +212,7 @@ const citations = [
                   <small>{evidenceLabels[story.source.evidenceLabel]}</small>
                   <strong>{story.source.name}</strong>
                 </span>
-                <span>查看讨论现场 ↗</span>
+                <span>View discussion ↗</span>
               </a>
             </div>
           </section>
@@ -220,12 +222,12 @@ const citations = [
 
     <section class="method" id="method">
       <span class="eyebrow">Method & evidence</span>
-      <h2>这份日报如何生成</h2>
+      <h2>How This Edition Is Made</h2>
       <div class="method-grid">
-        <div><b>01</b><strong>48 小时时间窗</strong><p>只收录截止时间前两天内的实质更新，旧闻必须注明重大变化。</p></div>
-        <div><b>02</b><strong>回到原始来源</strong><p>聚合器只用于发现，事实优先链接官方公告、仓库、论文和维护者说明。</p></div>
-        <div><b>03</b><strong>社区证据分级</strong><p>单次测试、多用户报告与维护者确认不会混为一谈。</p></div>
-        <div><b>04</b><strong>发布前验证</strong><p>检查字段、日期、重复项、来源数量、链接与最近七期事件。</p></div>
+        <div><b>01</b><strong>Edition-day window</strong><p>Every source is checked for up to 15 items published or materially updated today; prior days are not used as routine backfill.</p></div>
+        <div><b>02</b><strong>Primary sources first</strong><p>Aggregators aid discovery; facts link to official releases, repositories, papers, policy texts, and maintainers.</p></div>
+        <div><b>03</b><strong>Community evidence labeled</strong><p>Single tests, multiple-user reports, and maintainer confirmations remain distinct.</p></div>
+        <div><b>04</b><strong>Validated before publication</strong><p>We check fields, word counts, dates, duplicates, sources, links, and the previous seven editions.</p></div>
       </div>
     </section>
   </article>

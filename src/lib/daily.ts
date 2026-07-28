@@ -15,6 +15,7 @@ export interface DailySource {
   url: string;
   publishedAt: string;
   updatedAt: string | null;
+  sourceLanguage: string;
   evidenceLabel: EvidenceLabel;
 }
 
@@ -24,6 +25,7 @@ export interface DailyStory {
   position: number;
   kind: "news" | "community";
   highlight: boolean;
+  region: "global" | "china" | "north-america" | "europe" | "asia-pacific" | "other";
   category: string;
   topics: string[];
   company: string | null;
@@ -40,6 +42,8 @@ export interface DailyStory {
 
 export interface DailyEdition {
   schemaVersion: number;
+  language: "en";
+  edition: "global";
   editionDate: string;
   timezone: "Asia/Shanghai";
   cutoffAt: string;
@@ -104,7 +108,7 @@ export function getStoriesByTopic(topic: string) {
 }
 
 export function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {
-  return new Intl.DateTimeFormat("zh-CN", {
+  return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -113,34 +117,34 @@ export function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {
 }
 
 export function readingMinutes(edition: DailyEdition) {
-  const characters = [
+  const words = [
     edition.dailyAnalysis.body,
     ...edition.stories.flatMap((story) => [
       story.summary,
       story.whyItMatters
     ])
-  ].join("").length;
-  return Math.max(4, Math.round(characters / 420));
+  ].join(" ").trim().split(/\s+/u).filter(Boolean).length;
+  return Math.max(3, Math.ceil(words / 220));
 }
 
 export const categoryLabels: Record<string, string> = {
-  models: "模型",
-  agents: "智能体",
-  "open-source": "开源",
-  "developer-tools": "开发工具",
-  infrastructure: "基础设施",
-  research: "研究",
-  hardware: "硬件",
-  security: "安全",
-  policy: "政策",
-  community: "社区"
+  models: "Models",
+  agents: "Agents",
+  "open-source": "Open Source",
+  "developer-tools": "Developer Tools",
+  infrastructure: "Infrastructure",
+  research: "Research",
+  hardware: "Hardware",
+  security: "Security",
+  policy: "Policy",
+  community: "Community"
 };
 
 export const evidenceLabels: Record<EvidenceLabel, string> = {
-  officially_stated: "官方发布",
-  maintainer_confirmed: "维护者确认",
-  multiple_users_report: "多位用户报告",
-  single_community_test: "单次社区测试",
-  community_discussion_suggests: "社区早期信号",
-  not_independently_verified: "尚未独立验证"
+  officially_stated: "Official statement",
+  maintainer_confirmed: "Maintainer confirmed",
+  multiple_users_report: "Multiple user reports",
+  single_community_test: "Single community test",
+  community_discussion_suggests: "Early community signal",
+  not_independently_verified: "Not independently verified"
 };

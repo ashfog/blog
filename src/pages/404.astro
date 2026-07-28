@@ -5,13 +5,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 const pageImage = getPageImage("404");
 ---
 
-<BaseLayout image={pageImage?.largeSrc} title="页面未找到" noindex>
+<BaseLayout image={pageImage?.largeSrc} title="Page Not Found" noindex>
   <section class="not-found page-shell">
     <span>404 / SIGNAL LOST</span>
-    <h1>这条信号消失在雾里。</h1>
-    <p>页面可能已移动，或者这个地址从未存在。</p>
+    <h1>This Signal Disappeared Into the Fog</h1>
+    <p>The page may have moved, or this address may never have existed.</p>
     {pageImage && <PageArtwork image={pageImage} compact />}
-    <a href="/">返回今日 ASHFOG →</a>
+    <a href="/">Return to today’s ASHFOG →</a>
   </section>
 </BaseLayout>
 

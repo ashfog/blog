@@ -6,49 +6,49 @@ const pageImage = getPageImage("about");
 ---
 
 <BaseLayout
-  title="关于 ASHFOG"
-  description="ASHFOG 的编辑原则、证据标准与自动发布方式。"
+  title="About ASHFOG"
+  description="ASHFOG’s editorial principles, evidence standards, and automated publishing method."
   image={pageImage?.largeSrc}
   pageType="AboutPage"
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
-    { name: "关于", path: "/about" }
+    { name: "About", path: "/about" }
   ]}
 >
   <section class="about page-shell">
     <header>
       <span class="eyebrow">About ASHFOG</span>
-      <h1>不是更多新闻<br /><em>是更少噪音</em></h1>
-      <p>ASHFOG 每天整理 AI、开源、开发工具和基础设施的重要变化，让每一条事实都能回到来源，让每一个判断都看得见证据边界。</p>
+      <h1>Not More News<br /><em>Less Noise</em></h1>
+      <p>ASHFOG tracks material changes across AI, open source, developer tools, infrastructure, research, and policy. Every fact returns to a source, and every judgment keeps its evidence boundary visible.</p>
     </header>
     {pageImage && <PageArtwork image={pageImage} priority />}
 
     <div class="principles">
       <article>
         <span>01</span>
-        <h2>来源优先</h2>
-        <p>官方公告、仓库 Release、论文和维护者说明优先。媒体与社区用于发现，而不是替代原始证据。</p>
+        <h2>Sources First</h2>
+        <p>Official announcements, releases, papers, policy texts, and maintainer statements come first. Media and communities help discovery; they do not replace primary evidence.</p>
       </article>
       <article>
         <span>02</span>
-        <h2>质量优先</h2>
-        <p>没有足够高质量内容时，日报会明确说明数量不足，不用旧闻、融资新闻或营销发布凑满配额。</p>
+        <h2>Quality Before Quota</h2>
+        <p>There is no routine story quota. Quiet days stay concise, while busy days expand only when additional events meet the same materiality and evidence standards.</p>
       </article>
       <article>
         <span>03</span>
-        <h2>社区分级</h2>
-        <p>单次测试、多用户报告、维护者确认各自标注。热度、票数和转发量永远不会被写成事实证明。</p>
+        <h2>Community Evidence Is Labeled</h2>
+        <p>Single tests, multiple-user reports, and maintainer confirmations are labeled separately. Popularity, votes, and reposts are never presented as proof.</p>
       </article>
       <article>
         <span>04</span>
-        <h2>机器校验</h2>
-        <p>发布前检查严格 JSON、日期窗口、重复事件、来源身份、链接状态、栏目比例和最近七期重复。</p>
+        <h2>Machine Validated</h2>
+        <p>Before publication, validation checks strict JSON, language, word counts, dates, duplicate events, source identity, links, balance, and the previous seven editions.</p>
       </article>
     </div>
 
     <section class="manifesto">
       <p>“Not everything worth seeing is visible.”</p>
-      <h2>灰雾不是遮挡，<br />而是提醒我们：<br /><strong>真正重要的东西，需要被辨认。</strong></h2>
+      <h2>Fog is not an obstacle.<br />It is a reminder:<br /><strong>what matters must be recognized.</strong></h2>
     </section>
   </section>
 </BaseLayout>

@@ -1,9 +1,7 @@
 {
-  "version": 2,
-  "last_reviewed": "2026-07-26",
+  "version": 4,
+  "last_reviewed": "2026-07-28",
   "timezone": "Asia/Shanghai",
-  "default_candidate_window_hours": 48,
-  "items_per_source_hint": 15,
   "tiers": {
     "A": "Primary facts: official announcements, repositories, releases, specifications, model cards, and papers.",
     "B": "Engineering evidence: reproducible benchmarks, practitioner reports, technical analysis, and community threads.",
@@ -16,7 +14,12 @@
     "community_access_is_best_effort": true,
     "community_outage_is_blocking": false,
     "tier_c_must_resolve_to_stronger_evidence": true,
-    "do_not_bypass_authentication_or_paywalls": true
+    "do_not_bypass_authentication_or_paywalls": true,
+    "candidate_collection_has_no_global_cap": true,
+    "regional_coverage_is_not_a_publication_quota": true,
+    "items_per_source_is_a_hard_maximum": true,
+    "scan_all_enabled_sources_each_edition_day": true,
+    "record_every_source_attempt": true
   },
   "access_profiles": {
     "official-web": {
@@ -96,7 +99,16 @@
       "tier": "A",
       "kind": "official",
       "url": "https://openai.com/news/",
-      "topics": ["models", "agents", "research", "safety"]
+      "topics": [
+        "models",
+        "agents",
+        "research",
+        "safety"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "anthropic-news",
@@ -104,7 +116,16 @@
       "tier": "A",
       "kind": "official",
       "url": "https://www.anthropic.com/news",
-      "topics": ["models", "agents", "safety", "research"]
+      "topics": [
+        "models",
+        "agents",
+        "safety",
+        "research"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "deepmind-blog",
@@ -112,7 +133,16 @@
       "tier": "A",
       "kind": "official",
       "url": "https://deepmind.google/discover/blog/",
-      "topics": ["models", "research", "science", "safety"]
+      "topics": [
+        "models",
+        "research",
+        "science",
+        "safety"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "google-ai-blog",
@@ -120,7 +150,15 @@
       "tier": "A",
       "kind": "official",
       "url": "https://blog.google/technology/ai/",
-      "topics": ["models", "products", "developer-tools"]
+      "topics": [
+        "models",
+        "products",
+        "developer-tools"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "meta-ai-blog",
@@ -128,7 +166,15 @@
       "tier": "A",
       "kind": "official",
       "url": "https://ai.meta.com/blog/",
-      "topics": ["open-models", "research", "infrastructure"]
+      "topics": [
+        "open-models",
+        "research",
+        "infrastructure"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "mistral-news",
@@ -136,7 +182,15 @@
       "tier": "A",
       "kind": "official",
       "url": "https://mistral.ai/news",
-      "topics": ["models", "open-models", "api"]
+      "topics": [
+        "models",
+        "open-models",
+        "api"
+      ],
+      "region": "europe",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "microsoft-ai-blog",
@@ -144,7 +198,15 @@
       "tier": "A",
       "kind": "official",
       "url": "https://blogs.microsoft.com/ai/",
-      "topics": ["agents", "enterprise-ai", "research"]
+      "topics": [
+        "agents",
+        "enterprise-ai",
+        "research"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "nvidia-developer-blog",
@@ -152,7 +214,17 @@
       "tier": "A",
       "kind": "official",
       "url": "https://developer.nvidia.com/blog/",
-      "topics": ["inference", "gpu", "cuda", "robotics", "deployment"]
+      "topics": [
+        "inference",
+        "gpu",
+        "cuda",
+        "robotics",
+        "deployment"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "hugging-face-blog",
@@ -160,7 +232,16 @@
       "tier": "A",
       "kind": "official-community",
       "url": "https://huggingface.co/blog",
-      "topics": ["open-models", "training", "inference", "community"]
+      "topics": [
+        "open-models",
+        "training",
+        "inference",
+        "community"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "github-changelog",
@@ -168,7 +249,16 @@
       "tier": "A",
       "kind": "changelog",
       "url": "https://github.blog/changelog/",
-      "topics": ["coding-agents", "copilot", "actions", "developer-tools"]
+      "topics": [
+        "coding-agents",
+        "copilot",
+        "actions",
+        "developer-tools"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "cloudflare-blog",
@@ -176,7 +266,16 @@
       "tier": "A",
       "kind": "official",
       "url": "https://blog.cloudflare.com/",
-      "topics": ["ai-infrastructure", "security", "edge", "developer-platform"]
+      "topics": [
+        "ai-infrastructure",
+        "security",
+        "edge",
+        "developer-platform"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "github-trending",
@@ -184,8 +283,15 @@
       "tier": "C",
       "kind": "discovery",
       "url": "https://github.com/trending",
-      "topics": ["open-source", "repositories"],
-      "use": "Discover candidates, then verify repository activity, license, releases, and maintainer history."
+      "topics": [
+        "open-source",
+        "repositories"
+      ],
+      "use": "Discover candidates, then verify repository activity, license, releases, and maintainer history.",
+      "region": "global",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "hacker-news",
@@ -195,7 +301,15 @@
       "url": "https://news.ycombinator.com/",
       "api": "https://hacker-news.firebaseio.com/v0/",
       "cadence": "continuous",
-      "topics": ["engineering", "open-source", "research"]
+      "topics": [
+        "engineering",
+        "open-source",
+        "research"
+      ],
+      "region": "global",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "show-hn",
@@ -205,7 +319,15 @@
       "url": "https://news.ycombinator.com/show",
       "api": "https://hacker-news.firebaseio.com/v0/showstories.json",
       "cadence": "continuous",
-      "topics": ["open-source", "independent-tools", "developer-tools"]
+      "topics": [
+        "open-source",
+        "independent-tools",
+        "developer-tools"
+      ],
+      "region": "global",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "hugging-face-papers",
@@ -215,7 +337,15 @@
       "url": "https://huggingface.co/papers",
       "structured_access": "hf papers ls --date YYYY-MM-DD --format json",
       "cadence": "daily",
-      "topics": ["papers", "code", "community-interest"]
+      "topics": [
+        "papers",
+        "code",
+        "community-interest"
+      ],
+      "region": "global",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "arxiv-cs-ai",
@@ -225,7 +355,15 @@
       "url": "https://arxiv.org/list/cs.AI/recent",
       "api": "https://export.arxiv.org/api/query?search_query=cat:cs.AI",
       "cadence": "daily",
-      "topics": ["agents", "reasoning", "planning"]
+      "topics": [
+        "agents",
+        "reasoning",
+        "planning"
+      ],
+      "region": "global",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "arxiv-cs-cl",
@@ -235,7 +373,15 @@
       "url": "https://arxiv.org/list/cs.CL/recent",
       "api": "https://export.arxiv.org/api/query?search_query=cat:cs.CL",
       "cadence": "daily",
-      "topics": ["llm", "nlp", "evaluation"]
+      "topics": [
+        "llm",
+        "nlp",
+        "evaluation"
+      ],
+      "region": "global",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "arxiv-cs-lg",
@@ -245,7 +391,15 @@
       "url": "https://arxiv.org/list/cs.LG/recent",
       "api": "https://export.arxiv.org/api/query?search_query=cat:cs.LG",
       "cadence": "daily",
-      "topics": ["machine-learning", "training", "evaluation"]
+      "topics": [
+        "machine-learning",
+        "training",
+        "evaluation"
+      ],
+      "region": "global",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "ars-ai",
@@ -253,7 +407,15 @@
       "tier": "B",
       "kind": "media",
       "url": "https://arstechnica.com/ai/",
-      "topics": ["technology", "industry", "policy"]
+      "topics": [
+        "technology",
+        "industry",
+        "policy"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "mit-tech-review-ai",
@@ -261,7 +423,15 @@
       "tier": "B",
       "kind": "media",
       "url": "https://www.technologyreview.com/topic/artificial-intelligence/",
-      "topics": ["research", "governance", "industry"]
+      "topics": [
+        "research",
+        "governance",
+        "industry"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "ieee-spectrum-ai",
@@ -269,7 +439,15 @@
       "tier": "B",
       "kind": "media",
       "url": "https://spectrum.ieee.org/artificial-intelligence",
-      "topics": ["engineering", "robotics", "hardware"]
+      "topics": [
+        "engineering",
+        "robotics",
+        "hardware"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "reddit-localllama",
@@ -277,8 +455,19 @@
       "tier": "B",
       "kind": "community",
       "url": "https://www.reddit.com/r/LocalLLaMA/",
-      "topics": ["local-ai", "ollama", "vllm", "gguf", "quantization", "benchmarks"],
-      "use": "Targeted checks only; label reports and seek reproducible configurations."
+      "topics": [
+        "local-ai",
+        "ollama",
+        "vllm",
+        "gguf",
+        "quantization",
+        "benchmarks"
+      ],
+      "use": "Targeted checks only; label reports and seek reproducible configurations.",
+      "region": "global",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "x-curated-experts",
@@ -286,8 +475,16 @@
       "tier": "C",
       "kind": "curated-social-list",
       "url": "https://x.com/",
-      "topics": ["researchers", "maintainers", "founders"],
-      "use": "Search selected people around final stories; never scan the general feed or use a post as the sole release source."
+      "topics": [
+        "researchers",
+        "maintainers",
+        "founders"
+      ],
+      "use": "Search selected people around final stories; never scan the general feed or use a post as the sole release source.",
+      "region": "global",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "phoronix",
@@ -295,7 +492,18 @@
       "tier": "B",
       "kind": "independent-benchmark",
       "url": "https://www.phoronix.com/",
-      "topics": ["linux", "gpu", "cuda", "rocm", "drivers", "benchmarks"]
+      "topics": [
+        "linux",
+        "gpu",
+        "cuda",
+        "rocm",
+        "drivers",
+        "benchmarks"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "mcp-blog",
@@ -303,7 +511,15 @@
       "tier": "A",
       "kind": "official",
       "url": "https://blog.modelcontextprotocol.io/",
-      "topics": ["mcp", "agents", "protocol"]
+      "topics": [
+        "mcp",
+        "agents",
+        "protocol"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "mcp-spec-releases",
@@ -312,7 +528,16 @@
       "kind": "repository-releases",
       "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases",
       "api": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/releases",
-      "topics": ["mcp", "specification", "security", "interoperability"]
+      "topics": [
+        "mcp",
+        "specification",
+        "security",
+        "interoperability"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "vercel-ai",
@@ -322,7 +547,17 @@
       "url": "https://vercel.com/blog",
       "repository": "https://github.com/vercel/ai",
       "releases_api": "https://api.github.com/repos/vercel/ai/releases",
-      "topics": ["ai-sdk", "agents", "tool-calling", "frontend", "deployment"]
+      "topics": [
+        "ai-sdk",
+        "agents",
+        "tool-calling",
+        "frontend",
+        "deployment"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "ollama-blog",
@@ -330,7 +565,15 @@
       "tier": "A",
       "kind": "official",
       "url": "https://ollama.com/blog",
-      "topics": ["local-ai", "models", "deployment"]
+      "topics": [
+        "local-ai",
+        "models",
+        "deployment"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "ollama-releases",
@@ -339,7 +582,15 @@
       "kind": "repository-releases",
       "url": "https://github.com/ollama/ollama/releases",
       "api": "https://api.github.com/repos/ollama/ollama/releases",
-      "topics": ["local-ai", "runtime", "compatibility"]
+      "topics": [
+        "local-ai",
+        "runtime",
+        "compatibility"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "langchain-blog",
@@ -347,7 +598,16 @@
       "tier": "A",
       "kind": "official",
       "url": "https://www.langchain.com/blog",
-      "topics": ["agents", "langgraph", "evaluation", "observability"]
+      "topics": [
+        "agents",
+        "langgraph",
+        "evaluation",
+        "observability"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "llamaindex-blog",
@@ -355,7 +615,16 @@
       "tier": "A",
       "kind": "official",
       "url": "https://www.llamaindex.ai/blog",
-      "topics": ["rag", "agents", "data", "workflows"]
+      "topics": [
+        "rag",
+        "agents",
+        "data",
+        "workflows"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "dify-blog",
@@ -363,7 +632,16 @@
       "tier": "A",
       "kind": "official",
       "url": "https://dify.ai/blog",
-      "topics": ["agent-workflows", "rag", "self-hosting", "releases"]
+      "topics": [
+        "agent-workflows",
+        "rag",
+        "self-hosting",
+        "releases"
+      ],
+      "region": "asia-pacific",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "hugging-face-trending-papers",
@@ -373,7 +651,15 @@
       "url": "https://huggingface.co/papers/trending",
       "structured_access": "hf papers ls --sort trending --format json",
       "cadence": "daily",
-      "topics": ["papers", "code", "trending-research"]
+      "topics": [
+        "papers",
+        "code",
+        "trending-research"
+      ],
+      "region": "global",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "chips-and-cheese",
@@ -382,7 +668,16 @@
       "kind": "deep-technical-analysis",
       "url": "https://chipsandcheese.com/",
       "cadence": "event-driven",
-      "topics": ["microarchitecture", "cache", "memory-bandwidth", "accelerators"]
+      "topics": [
+        "microarchitecture",
+        "cache",
+        "memory-bandwidth",
+        "accelerators"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "semianalysis",
@@ -391,8 +686,17 @@
       "kind": "industry-analysis",
       "url": "https://semianalysis.com/",
       "cadence": "event-driven",
-      "topics": ["chips", "datacenters", "inference-economics", "supply-chain"],
-      "use": "Background and cost analysis; do not replace official specifications or reproducible benchmarks."
+      "topics": [
+        "chips",
+        "datacenters",
+        "inference-economics",
+        "supply-chain"
+      ],
+      "use": "Background and cost analysis; do not replace official specifications or reproducible benchmarks.",
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "the-batch",
@@ -401,7 +705,15 @@
       "kind": "newsletter-radar",
       "url": "https://www.deeplearning.ai/the-batch/",
       "cadence": "weekly",
-      "topics": ["weekly-ai", "research", "industry"]
+      "topics": [
+        "weekly-ai",
+        "research",
+        "industry"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "alphasignal",
@@ -410,7 +722,16 @@
       "kind": "newsletter-radar",
       "url": "https://alphasignal.ai/",
       "cadence": "daily",
-      "topics": ["ai-news", "papers", "models", "repositories"]
+      "topics": [
+        "ai-news",
+        "papers",
+        "models",
+        "repositories"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
     },
     {
       "id": "tldr-ai",
@@ -419,7 +740,357 @@
       "kind": "newsletter-radar",
       "url": "https://tldr.tech/ai",
       "cadence": "weekdays",
-      "topics": ["ai-news", "papers", "developer-tools"]
+      "topics": [
+        "ai-news",
+        "papers",
+        "developer-tools"
+      ],
+      "region": "north-america",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "id": "deepseek-official",
+      "name": "DeepSeek",
+      "tier": "A",
+      "kind": "official-and-repository",
+      "url": "https://api-docs.deepseek.com/news/",
+      "repository": "https://github.com/deepseek-ai",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "models",
+        "open-models",
+        "research",
+        "inference",
+        "developer-tools"
+      ]
+    },
+    {
+      "id": "qwen-official",
+      "name": "Qwen",
+      "tier": "A",
+      "kind": "official-and-repository",
+      "url": "https://qwenlm.github.io/blog/",
+      "repository": "https://github.com/QwenLM",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "models",
+        "open-models",
+        "coding-agents",
+        "multimodal",
+        "developer-tools"
+      ]
+    },
+    {
+      "id": "bytedance-seed",
+      "name": "ByteDance Seed",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://seed.bytedance.com/blog",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "models",
+        "agents",
+        "research",
+        "image",
+        "video",
+        "multimodal"
+      ]
+    },
+    {
+      "id": "zai-official",
+      "name": "Z.ai",
+      "tier": "A",
+      "kind": "official-and-repository",
+      "url": "https://z.ai/blog",
+      "repository": "https://github.com/zai-org",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "glm",
+        "models",
+        "agents",
+        "open-models",
+        "developer-tools"
+      ]
+    },
+    {
+      "id": "moonshot-ai",
+      "name": "Moonshot AI",
+      "tier": "A",
+      "kind": "official-and-repository",
+      "url": "https://www.moonshot.ai/",
+      "repository": "https://github.com/MoonshotAI",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "kimi",
+        "models",
+        "coding-agents",
+        "open-models",
+        "inference"
+      ]
+    },
+    {
+      "id": "minimax-official",
+      "name": "MiniMax",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://www.minimax.io/news",
+      "api": "https://platform.minimax.io/docs/release-notes/models",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "models",
+        "agents",
+        "video",
+        "audio",
+        "multimodal",
+        "api"
+      ]
+    },
+    {
+      "id": "modelscope-hub",
+      "name": "ModelScope",
+      "tier": "A",
+      "kind": "official-community",
+      "url": "https://www.modelscope.cn/models",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "open-models",
+        "datasets",
+        "model-cards",
+        "repositories",
+        "community"
+      ],
+      "use": "Treat model cards and maintainer artifacts as primary evidence; community posts remain discovery signals."
+    },
+    {
+      "id": "tencent-hunyuan",
+      "name": "Tencent Hunyuan",
+      "tier": "A",
+      "kind": "official-and-repository",
+      "url": "https://github.com/Tencent-Hunyuan",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "models",
+        "image",
+        "video",
+        "3d",
+        "open-models"
+      ]
+    },
+    {
+      "id": "baidu-ernie-paddlepaddle",
+      "name": "Baidu ERNIE and PaddlePaddle",
+      "tier": "A",
+      "kind": "official-and-repository",
+      "url": "https://github.com/PaddlePaddle/PaddleNLP",
+      "repository": "https://github.com/PaddlePaddle",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "ernie",
+        "models",
+        "training",
+        "frameworks",
+        "open-source"
+      ]
+    },
+    {
+      "id": "huawei-ascend",
+      "name": "Huawei Ascend",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://www.hiascend.com/en/",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "accelerators",
+        "cann",
+        "inference",
+        "training",
+        "deployment"
+      ]
+    },
+    {
+      "id": "stepfun-official",
+      "name": "StepFun",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://www.stepfun.com/",
+      "region": "china",
+      "languages": [
+        "zh-CN",
+        "en"
+      ],
+      "topics": [
+        "models",
+        "multimodal",
+        "audio",
+        "video",
+        "open-models"
+      ]
+    },
+    {
+      "id": "china-cac",
+      "name": "Cyberspace Administration of China",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://www.cac.gov.cn/",
+      "region": "china",
+      "languages": [
+        "zh-CN"
+      ],
+      "topics": [
+        "policy",
+        "governance",
+        "algorithm-filing",
+        "content-labeling",
+        "data-security"
+      ]
+    },
+    {
+      "id": "china-miit",
+      "name": "Ministry of Industry and Information Technology of China",
+      "tier": "A",
+      "kind": "official",
+      "url": "https://www.miit.gov.cn/",
+      "region": "china",
+      "languages": [
+        "zh-CN"
+      ],
+      "topics": [
+        "policy",
+        "industry",
+        "chips",
+        "compute",
+        "standards",
+        "ai-ethics"
+      ],
+      "endpoint": "https://jxca.miit.gov.cn/"
+    },
+    {
+      "id": "machine-heart",
+      "name": "Synced",
+      "tier": "C",
+      "kind": "discovery",
+      "url": "https://www.jiqizhixin.com/",
+      "region": "china",
+      "languages": [
+        "zh-CN"
+      ],
+      "topics": [
+        "models",
+        "research",
+        "companies",
+        "papers"
+      ],
+      "use": "Discovery only; resolve every selected event to a primary source."
+    },
+    {
+      "id": "qbitai",
+      "name": "QbitAI",
+      "tier": "C",
+      "kind": "discovery",
+      "url": "https://www.qbitai.com/",
+      "region": "china",
+      "languages": [
+        "zh-CN"
+      ],
+      "topics": [
+        "models",
+        "products",
+        "companies",
+        "developer-ecosystem"
+      ],
+      "use": "Discovery only; resolve every selected event to a primary source."
+    },
+    {
+      "id": "36kr-ai",
+      "name": "36Kr AI",
+      "tier": "C",
+      "kind": "discovery",
+      "url": "https://36kr.com/",
+      "region": "china",
+      "languages": [
+        "zh-CN"
+      ],
+      "topics": [
+        "startups",
+        "industry-adoption",
+        "companies",
+        "products"
+      ],
+      "use": "Discovery only; funding alone is not publishable and selected events require primary evidence."
     }
-  ]
+  ],
+  "regional_coverage": {
+    "edition": "global",
+    "required_scan_regions": [
+      "global",
+      "china"
+    ],
+    "china": {
+      "policy": "Scan every enabled China source, then publish only material events that pass the same evidence and relevance standards as every other region.",
+      "preserve_original_source_url": true,
+      "retain_original_title": false,
+      "output_language": "en"
+    }
+  },
+  "source_metadata": {
+    "region_values": [
+      "global",
+      "china",
+      "north-america",
+      "europe",
+      "asia-pacific",
+      "other"
+    ],
+    "language_format": "BCP 47",
+    "rule": "Registry languages describe available source languages. Every published story must record the language of the exact page used in source.sourceLanguage."
+  },
+  "collection": {
+    "window_mode": "edition-day",
+    "timezone": "Asia/Shanghai",
+    "items_per_source_limit": 15,
+    "use_available_when_fewer": true,
+    "backfill_prior_days": false
+  }
 }

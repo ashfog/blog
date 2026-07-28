@@ -164,6 +164,11 @@ const similarity = (left, right) => {
   return intersection / (a.size + b.size - intersection);
 };
 
+const countEnglishWords = (text) => {
+  const segmenter = new Intl.Segmenter("en", { granularity: "word" });
+  return [...segmenter.segment(text)].filter((segment) => segment.isWordLike).length;
+};
+
 const scoreTotal = (score) =>
   [
     "evidenceStrength",
@@ -195,7 +200,7 @@ const checkOneLink = async (url, timeoutMs) => {
       redirect: "follow",
       signal: AbortSignal.timeout(timeoutMs),
       headers: {
-        "user-agent": "AshFog-Editorial-Validator/1.0",
+        "user-agent": "ASHFOG-Editorial-Validator/1.0",
         accept: "text/html,application/json,application/xml;q=0.9,*/*;q=0.8",
       },
     });
@@ -341,7 +346,8 @@ export async function loadEditorialConfig(root = repoRoot) {
     imageIds: new Set(imageIds),
     storyImageCategories,
     pageImageIds,
-    storyImageCount: imageData.storyImages.length,
+    sourceIds: new Set(sourceData.sources.map((source) => source.id)),
+    storyImageCount: imageData.storyImages.length + imageData.storyReservePageIds.length,
   };
 }
 
@@ -368,6 +374,7 @@ export async function validateEdition(
     imageIds,
     storyImageCategories,
     storyImageCount,
+    sourceIds,
   } = config;
   const cutoff = parseDateTime(edition.cutoffAt);
   const generated = parseDateTime(edition.generatedAt);
@@ -388,6 +395,55 @@ export async function validateEdition(
   let openSource = 0;
   let mediaOnly = 0;
   const requestedImageIds = new Set();
+  const sourceScanIds = new Set();
+  let attemptedSources = 0;
+  let availableSources = 0;
+  let fetchedItems = 0;
+  let editionDayItems = 0;
+  let scannedDuplicates = 0;
+  const isThemeFixture = file.includes(`${path.sep}tests${path.sep}fixtures${path.sep}`);
+
+  for (const [scanIndex, scan] of edition.research.sourceScan.entries()) {
+    const at = `$.research.sourceScan[${scanIndex}]`;
+    if (!sourceIds.has(scan.sourceId)) errors.push(`${at}.sourceId: unknown source`);
+    if (sourceScanIds.has(scan.sourceId)) errors.push(`${at}.sourceId: duplicate source`);
+    sourceScanIds.add(scan.sourceId);
+    if (scan.itemsFetched > rules.collection.perSourceLatestLimit) {
+      errors.push(`${at}.itemsFetched: exceeds per-source limit ${rules.collection.perSourceLatestLimit}`);
+    }
+    if (scan.itemsOnEditionDay > scan.itemsFetched) {
+      errors.push(`${at}.itemsOnEditionDay: cannot exceed itemsFetched`);
+    }
+    if (scan.duplicatesRemoved > scan.itemsOnEditionDay) {
+      errors.push(`${at}.duplicatesRemoved: cannot exceed itemsOnEditionDay`);
+    }
+    if (scan.selectedCount > scan.itemsOnEditionDay - scan.duplicatesRemoved) {
+      errors.push(`${at}.selectedCount: exceeds available deduplicated items`);
+    }
+    if (scan.status === "not-run" && !isThemeFixture) {
+      errors.push(`${at}.status: not-run is forbidden outside theme fixtures`);
+    }
+    if (scan.status === "unavailable" && !scan.failureReason) {
+      errors.push(`${at}.failureReason: required when source is unavailable`);
+    }
+    if (scan.status !== "not-run") attemptedSources += 1;
+    if (scan.status === "collected" || scan.status === "empty") availableSources += 1;
+    fetchedItems += scan.itemsFetched;
+    editionDayItems += scan.itemsOnEditionDay;
+    scannedDuplicates += scan.duplicatesRemoved;
+  }
+  if (!isThemeFixture) {
+    for (const sourceId of sourceIds) {
+      if (!sourceScanIds.has(sourceId)) {
+        errors.push(`$.research.sourceScan: missing registered source ${sourceId}`);
+      }
+    }
+    if (sourceScanIds.size !== sourceIds.size) {
+      errors.push(
+        `$.research.sourceScan: expected exactly ${sourceIds.size} registered sources; received ${sourceScanIds.size}`,
+      );
+    }
+  }
 
   if (edition.heroImageId && !imageIds.has(edition.heroImageId)) {
     errors.push("$.heroImageId: unknown image ID");
@@ -435,6 +491,11 @@ export async function validateEdition(
       if (registered.name !== story.source.name) {
         errors.push(`${at}.source.name: expected ${registered.name}`);
       }
+      if (!registered.languages?.includes(story.source.sourceLanguage)) {
+        errors.push(
+          `${at}.source.sourceLanguage: ${story.source.sourceLanguage} is not registered for ${story.source.id}`,
+        );
+      }
       const sourceHost = new URL(story.source.url).hostname.toLowerCase();
       if (!sourceHosts.get(story.source.id)?.has(sourceHost)) {
         errors.push(`${at}.source.url: host does not match registered source ${story.source.id}`);
@@ -452,13 +513,16 @@ export async function validateEdition(
 
     const publishedAt = parseDateTime(story.source.publishedAt);
     if (publishedAt > cutoff) errors.push(`${at}.source.publishedAt: after cutoffAt`);
-    const windowStart = new Date(cutoff.getTime() - rules.candidateWindowHours * 3600000);
-    if (publishedAt < windowStart && !story.windowException) {
-      errors.push(`${at}.source.publishedAt: outside candidate window without windowException`);
-    }
+    const editionDayStart = new Date(`${edition.editionDate}T00:00:00+08:00`);
+    let updatedAt = null;
     if (story.source.updatedAt) {
-      const updatedAt = parseDateTime(story.source.updatedAt);
+      updatedAt = parseDateTime(story.source.updatedAt);
       if (updatedAt > cutoff) errors.push(`${at}.source.updatedAt: after cutoffAt`);
+    }
+    const currentByPublication = publishedAt >= editionDayStart && publishedAt <= cutoff;
+    const currentByUpdate = updatedAt && updatedAt >= editionDayStart && updatedAt <= cutoff;
+    if (!currentByPublication && !currentByUpdate && !story.windowException) {
+      errors.push(`${at}.source.publishedAt: outside edition day without windowException`);
     }
 
     story.factualClaims.forEach((claim, claimIndex) => {
@@ -504,6 +568,26 @@ export async function validateEdition(
       }
     });
 
+    const lengths = rules.contentLengths[story.kind];
+    const summaryWords = countEnglishWords(story.summary);
+    const whyWords = countEnglishWords(story.whyItMatters);
+    if (
+      summaryWords < lengths.summaryWords.min ||
+      summaryWords > lengths.summaryWords.max
+    ) {
+      errors.push(
+        `${at}.summary: ${summaryWords} words; expected ${lengths.summaryWords.min}-${lengths.summaryWords.max} for ${story.kind}`,
+      );
+    }
+    if (
+      whyWords < lengths.whyItMattersWords.min ||
+      whyWords > lengths.whyItMattersWords.max
+    ) {
+      errors.push(
+        `${at}.whyItMatters: ${whyWords} words; expected ${lengths.whyItMattersWords.min}-${lengths.whyItMattersWords.max} for ${story.kind}`,
+      );
+    }
+
     const total = scoreTotal(story.score);
     if (story.score.total !== total) errors.push(`${at}.score.total: expected ${total}`);
     if (story.highlight) highlights += 1;
@@ -525,22 +609,13 @@ export async function validateEdition(
     }
   }
 
-  const checkTarget = (label, value, target) => {
-    if (value > target.max) errors.push(`$.stories: ${label} count ${value} exceeds ${target.max}`);
-    if (value < target.min) {
-      if (!edition.qualityShortfallReason) {
-        errors.push(
-          `$.qualityShortfallReason: required because ${label} count ${value} is below ${target.min}`,
-        );
-      } else {
-        warnings.push(`${label} count ${value} is below target ${target.min}`);
-      }
-    }
-  };
-  checkTarget("total", edition.stories.length, rules.targets.total);
-  checkTarget("news", kinds.news, rules.targets.news);
-  checkTarget("community", kinds.community, rules.targets.community);
-  checkTarget("highlight", highlights, rules.targets.highlights);
+  const highlightTarget = rules.presentation.highlights;
+  if (highlights > highlightTarget.max) {
+    errors.push(`$.stories: highlight count ${highlights} exceeds ${highlightTarget.max}`);
+  }
+  if (highlights < highlightTarget.min) {
+    errors.push(`$.stories: at least ${highlightTarget.min} highlight is required`);
+  }
 
   if (edition.stories.length && mediaOnly / edition.stories.length > rules.caps.mediaOnlyShare) {
     errors.push("$.stories: media-only share exceeds configured cap");
@@ -550,38 +625,28 @@ export async function validateEdition(
       errors.push(`$.stories: company ${company} exceeds ${rules.caps.itemsPerCompany} items`);
     }
   }
-  if (edition.stories.length >= rules.targets.total.min) {
+  if (edition.stories.length >= rules.caps.applyEcosystemShareAt) {
     for (const [ecosystem, count] of ecosystems) {
       if (count / edition.stories.length > rules.caps.ecosystemShare) {
         errors.push(`$.stories: ecosystem ${ecosystem} exceeds configured share cap`);
       }
     }
   }
-  if (
-    edition.stories.length >= rules.targets.total.min &&
-    openSource < rules.targets.openSource.minWhenSupported
-  ) {
-    warnings.push(
-      `open-source count ${openSource} is below target ${rules.targets.openSource.minWhenSupported}`,
-    );
-  }
 
   const analysisIds = new Set(edition.dailyAnalysis.signalIds);
   for (const signalId of analysisIds) {
     if (!ids.has(signalId)) errors.push(`$.dailyAnalysis.signalIds: unknown story ID ${signalId}`);
   }
-  const cjkCount = [...edition.dailyAnalysis.body].filter((char) =>
-    /[\u3400-\u9fff]/u.test(char),
-  ).length;
-  if (cjkCount < rules.analysis.minChineseCharacters) {
+  const analysisWords = countEnglishWords(edition.dailyAnalysis.body);
+  if (analysisWords < rules.analysis.minWords) {
     errors.push(
-      `$.dailyAnalysis.body: ${cjkCount} Chinese characters is below ${rules.analysis.minChineseCharacters}`,
+      `$.dailyAnalysis.body: ${analysisWords} words is below ${rules.analysis.minWords}`,
     );
   } else if (
-    cjkCount < rules.analysis.targetChineseCharacters.min ||
-    cjkCount > rules.analysis.targetChineseCharacters.max
+    analysisWords < rules.analysis.targetWords.min ||
+    analysisWords > rules.analysis.targetWords.max
   ) {
-    warnings.push(`daily analysis has ${cjkCount} Chinese characters`);
+    warnings.push(`daily analysis has ${analysisWords} words`);
   }
 
   const previousEvents = new Set();
@@ -623,6 +688,11 @@ export async function validateEdition(
       mediaOnly,
       collectedUrls: collected.size,
       checkedLinks: linkResults.length,
+      attemptedSources,
+      availableSources,
+      fetchedItems,
+      editionDayItems,
+      scannedDuplicates,
     },
     errors,
     warnings,
