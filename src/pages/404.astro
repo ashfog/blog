@@ -1,12 +1,16 @@
 ---
+import PageArtwork from "../components/PageArtwork.astro";
+import { getPageImage } from "../lib/images";
 import BaseLayout from "../layouts/BaseLayout.astro";
+const pageImage = getPageImage("404");
 ---
 
-<BaseLayout title="页面未找到" noindex>
+<BaseLayout image={pageImage?.largeSrc} title="页面未找到" noindex>
   <section class="not-found page-shell">
     <span>404 / SIGNAL LOST</span>
     <h1>这条信号消失在雾里。</h1>
     <p>页面可能已移动，或者这个地址从未存在。</p>
+    {pageImage && <PageArtwork image={pageImage} compact />}
     <a href="/">返回今日 ASHFOG →</a>
   </section>
 </BaseLayout>

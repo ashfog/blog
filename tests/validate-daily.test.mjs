@@ -100,6 +100,40 @@ test("domain rules reject duplicate events", async () => {
   assert.ok(report.errors.some((error) => error.includes("eventId: duplicate")));
 });
 
+test("valid manual image IDs pass", async () => {
+  const edition = clone();
+  edition.stories[0].imageId = "policy-main-a";
+  edition.stories[1].imageId = "security-main-a";
+  const report = await validate(edition);
+  assert.equal(report.status, "ok");
+});
+
+test("image rules reject unknown, mismatched, and duplicate story images", async () => {
+  const unknown = clone();
+  unknown.stories[0].imageId = "invented-image";
+  const unknownReport = await validate(unknown);
+  assert.ok(unknownReport.errors.some((error) => error.includes("unknown story image ID")));
+
+  const mismatched = clone();
+  mismatched.stories[0].imageId = "agents-main-a";
+  const mismatchedReport = await validate(mismatched);
+  assert.ok(mismatchedReport.errors.some((error) => error.includes("image category must match")));
+
+  const duplicate = clone();
+  duplicate.stories[0].imageId = "models-main-a";
+  duplicate.stories[1].category = "models";
+  duplicate.stories[1].imageId = "models-main-a";
+  const duplicateReport = await validate(duplicate);
+  assert.ok(duplicateReport.errors.some((error) => error.includes("duplicate image ID")));
+});
+
+test("image rules reject an unknown hero image", async () => {
+  const edition = clone();
+  edition.heroImageId = "invented-image";
+  const report = await validate(edition);
+  assert.ok(report.errors.some((error) => error.includes("heroImageId: unknown image ID")));
+});
+
 test("domain rules reject evidence URLs absent from the collected ledger", async () => {
   const edition = clone();
   edition.stories[0].factualClaims[0].evidenceUrl = "https://example.com/invented";

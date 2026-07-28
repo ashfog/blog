@@ -1,13 +1,17 @@
 ---
+import PageArtwork from "../../components/PageArtwork.astro";
+import { getPageImage } from "../../lib/images";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatDate, getEditions, readingMinutes } from "../../lib/daily";
 
 const editions = getEditions();
+const pageImage = getPageImage("archive");
 ---
 
 <BaseLayout
   title="日报归档"
   description="ASHFOG 每日行业情报归档。"
+  image={pageImage?.largeSrc}
   pageType="CollectionPage"
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
@@ -20,6 +24,7 @@ const editions = getEditions();
       <h1>每天一页<br /><em>看见变化</em></h1>
       <p>按日期回看 AI、开源与开发者生态的重要信号。每一期都保留来源、证据等级与社区反馈。</p>
     </header>
+    {pageImage && <PageArtwork image={pageImage} priority />}
 
     <div class="archive-list">
       {editions.map((edition, index) => (

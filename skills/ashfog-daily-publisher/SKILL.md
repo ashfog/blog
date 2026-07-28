@@ -1,9 +1,9 @@
 ---
 name: ashfog-daily-publisher
-description: Research, draft, validate, and publish the Chinese-language AshFog daily AI, open-source, developer-tool, infrastructure, research, and community intelligence brief. Use for scheduled AshFog daily research, Preview runs, Publish runs, source verification, daily JSON generation, publication retries, or validation of src/content/daily/YYYY-MM-DD.json in ashfog/blog.
+description: Research, draft, validate, and publish the Chinese-language ASHFOG daily AI, open-source, developer-tool, infrastructure, research, and community intelligence brief. Use for scheduled ASHFOG daily research, Preview runs, Publish runs, source verification, daily JSON generation, publication retries, or validation of src/content/daily/YYYY-MM-DD.json in ashfog/blog.
 ---
 
-# AshFog Daily Publisher
+# ASHFOG Daily Publisher
 
 Produce one evidence-backed daily edition as a single validated JSON file. Treat discovery, verification, writing, validation, and publication as one fail-closed transaction.
 
@@ -22,7 +22,8 @@ Read these files before research:
 4. `editorial/community-policy.md`
 5. `editorial/categories.json`
 6. `editorial/evidence-labels.json`
-7. `schemas/daily.schema.json`
+7. `editorial/image-library.json`
+8. `schemas/daily.schema.json`
 
 Treat repository files as the current source of truth. Do not copy their contents into the automation prompt or duplicate them inside this skill.
 
@@ -45,6 +46,10 @@ npm run validate:daily -- <candidate.json> --content-dir src/content/daily --che
 ```
 
 Treat exit code `1` as blocking. Do not weaken validation, remove evidence, invent replacement URLs, or publish a partial edition to make a run pass.
+
+## Assign images
+
+Omit `imageId` and `heroImageId` by default. Astro assigns category-matched story images deterministically and guarantees that one edition does not repeat an image. Set `imageId` only for an intentional editorial override after reading `editorial/image-library.json`; the ID must be a story image in the same category and must be unique in the edition. `heroImageId` may reference any story or page image. Never invent an image ID or reuse one within a daily edition.
 
 ## Preview
 

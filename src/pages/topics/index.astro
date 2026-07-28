@@ -1,13 +1,17 @@
 ---
+import PageArtwork from "../../components/PageArtwork.astro";
+import { getPageImage } from "../../lib/images";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { categoryLabels, getAllTopics, getStoriesByTopic } from "../../lib/daily";
 
 const topics = getAllTopics();
+const pageImage = getPageImage("topics");
 ---
 
 <BaseLayout
   title="主题索引"
   description="按主题浏览 ASHFOG 每日行业情报。"
+  image={pageImage?.largeSrc}
   pageType="CollectionPage"
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
@@ -19,6 +23,7 @@ const topics = getAllTopics();
       <span class="eyebrow">Topic index</span>
       <h1>主题不是栏目<br />是持续变化的<strong>信号场</strong></h1>
     </header>
+    {pageImage && <PageArtwork image={pageImage} priority />}
 
     <div class="topic-grid">
       {topics.map((topic, index) => {

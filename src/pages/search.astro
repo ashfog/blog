@@ -1,10 +1,14 @@
 ---
+import PageArtwork from "../components/PageArtwork.astro";
+import { getPageImage } from "../lib/images";
 import BaseLayout from "../layouts/BaseLayout.astro";
+const pageImage = getPageImage("search");
 ---
 
 <BaseLayout
   title="搜索"
   description="搜索 ASHFOG 日报、主题与来源。"
+  image={pageImage?.largeSrc}
   noindex
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
@@ -17,6 +21,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <h1>搜索 ASHFOG</h1>
       <p>按公司、模型、主题、来源或关键词查找历史信号。</p>
     </header>
+    {pageImage && <PageArtwork image={pageImage} />}
     <div id="search" class="search-box">
       <p class="loading">正在加载搜索索引…</p>
     </div>

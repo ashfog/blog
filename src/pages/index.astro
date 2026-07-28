@@ -7,8 +7,17 @@ import {
   getLatestEdition,
   readingMinutes
 } from "../lib/daily";
+import {
+  getEditionHeroImage,
+  getEditionStoryImages,
+  getPageImage
+} from "../lib/images";
 
 const edition = getLatestEdition();
+const storyImages = getEditionStoryImages(edition);
+const homeImage = getPageImage("home");
+const analysisImage = getPageImage("analysis");
+const seoImage = getEditionHeroImage(edition, storyImages);
 const featured = edition.stories.find((story) => story.highlight) ?? edition.stories[0];
 const news = edition.stories.filter((story) => story.kind === "news" && story.id !== featured.id);
 const community = edition.stories.filter((story) => story.kind === "community");
@@ -16,7 +25,7 @@ const categories = [...new Set(edition.stories.map((story) => story.category))];
 const sourceCount = new Set(edition.stories.map((story) => story.source.id)).size;
 ---
 
-<BaseLayout title="ASHFOG — 每日行业情报" description={edition.description}>
+<BaseLayout title="ASHFOG — 每日行业情报" description={edition.description} image={seoImage?.largeSrc ?? homeImage?.largeSrc}>
   <section class="hero page-shell">
     <div class="hero-copy">
       <span class="eyebrow">Daily intelligence · {edition.editionDate}</span>
@@ -29,6 +38,20 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
     </div>
 
     <aside class="hero-meta">
+      {homeImage && (
+        <img
+          class="hero-meta-art"
+          src={homeImage.src}
+          srcset={homeImage.srcset}
+          sizes="(max-width: 960px) 100vw, 32vw"
+          width={homeImage.width}
+          height={homeImage.height}
+          alt={homeImage.alt}
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      )}
       <div class="status">
         <span class="pulse"></span>
         <div>
@@ -51,12 +74,30 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
   </section>
 
   <section class="lead page-shell">
-    <StoryCard story={featured} editionDate={edition.editionDate} featured />
+    <StoryCard
+      story={featured}
+      editionDate={edition.editionDate}
+      image={storyImages.get(featured.id)!}
+      featured
+    />
     <div class="analysis-panel">
       <span class="eyebrow">Editor’s synthesis</span>
       <p class="issue">ISSUE / {edition.editionDate.replaceAll("-", "")}</p>
       <h2>{edition.dailyAnalysis.title}</h2>
       <p>{edition.dailyAnalysis.body}</p>
+      {analysisImage && (
+        <img
+          class="analysis-art"
+          src={analysisImage.src}
+          srcset={analysisImage.srcset}
+          sizes="(max-width: 960px) 100vw, 48vw"
+          width={analysisImage.width}
+          height={analysisImage.height}
+          alt={analysisImage.alt}
+          loading="lazy"
+          decoding="async"
+        />
+      )}
       <a class="text-link" href={`/daily/${edition.editionDate}#analysis`}>阅读全文</a>
       <div class="analysis-line" aria-hidden="true"><i></i><i></i><i></i></div>
     </div>
@@ -71,7 +112,13 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
       <p>每条事实都回到原始来源<br />每条判断都保留证据边界</p>
     </div>
     <div class="signal-grid">
-      {news.map((story) => <StoryCard story={story} editionDate={edition.editionDate} />)}
+      {news.map((story) => (
+        <StoryCard
+          story={story}
+          editionDate={edition.editionDate}
+          image={storyImages.get(story.id)!}
+        />
+      ))}
     </div>
   </section>
 
@@ -85,7 +132,13 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
         <p>不把热度当证据<br />只收录会改变采用判断的信号</p>
       </div>
       <div class="community-grid">
-        {community.map((story) => <StoryCard story={story} editionDate={edition.editionDate} />)}
+        {community.map((story) => (
+          <StoryCard
+            story={story}
+            editionDate={edition.editionDate}
+            image={storyImages.get(story.id)!}
+          />
+        ))}
       </div>
     </div>
   </section>
@@ -170,6 +223,16 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
   .hero-meta {
     padding: 24px 0 6px 28px;
     border-left: 1px solid var(--line-strong);
+  }
+
+  .hero-meta-art {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 0 26px;
+    aspect-ratio: 3 / 2;
+    border: 1px solid var(--line);
+    object-fit: cover;
   }
 
   .status {
@@ -282,6 +345,20 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
     -webkit-line-clamp: 6;
   }
 
+  .analysis-art {
+    position: absolute;
+    right: 38px;
+    bottom: 30px;
+    width: min(42%, 300px);
+    height: auto;
+    aspect-ratio: 3 / 2;
+    border: 1px solid var(--line);
+    opacity: .32;
+    object-fit: cover;
+    filter: saturate(.72);
+    mask-image: linear-gradient(135deg, transparent 0, black 25%);
+  }
+
   .analysis-panel .text-link {
     position: absolute;
     bottom: 42px;
@@ -363,6 +440,10 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
 
     .lead {
       grid-template-columns: 1fr;
+    }
+
+    .analysis-art {
+      opacity: .22;
     }
 
     .signal-grid {

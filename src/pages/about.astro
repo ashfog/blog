@@ -1,10 +1,14 @@
 ---
+import PageArtwork from "../components/PageArtwork.astro";
+import { getPageImage } from "../lib/images";
 import BaseLayout from "../layouts/BaseLayout.astro";
+const pageImage = getPageImage("about");
 ---
 
 <BaseLayout
   title="关于 ASHFOG"
   description="ASHFOG 的编辑原则、证据标准与自动发布方式。"
+  image={pageImage?.largeSrc}
   pageType="AboutPage"
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
@@ -17,6 +21,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <h1>不是更多新闻<br /><em>是更少噪音</em></h1>
       <p>ASHFOG 每天整理 AI、开源、开发工具和基础设施的重要变化，让每一条事实都能回到来源，让每一个判断都看得见证据边界。</p>
     </header>
+    {pageImage && <PageArtwork image={pageImage} priority />}
 
     <div class="principles">
       <article>
