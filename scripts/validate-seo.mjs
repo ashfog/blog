@@ -64,6 +64,7 @@ const htmlFiles = await listHtml();
 for (const file of htmlFiles) {
   const html = await readFile(file, "utf8");
   const label = path.relative(dist, file);
+  assert.match(html, /<html lang="en"/, `${label}: English language declaration`);
   assert.match(html, /<meta name="description" content="[^"]+"/, `${label}: description`);
   assert.match(html, /<link rel="canonical" href="https:\/\/ashfog\.com/, `${label}: canonical`);
   assert.match(html, /<meta name="robots" content="[^"]+"/, `${label}: robots`);
@@ -75,6 +76,7 @@ const homeGraph = getJsonLd(home, "home")["@graph"];
 assert.ok(homeGraph.some((item) => item["@type"] === "NewsMediaOrganization"));
 assert.ok(homeGraph.some((item) => item["@type"] === "WebSite"));
 assert.ok(homeGraph.some((item) => item["@type"] === "WebPage"));
+assert.ok(homeGraph.every((item) => !("inLanguage" in item) || item.inLanguage === "en"));
 
 const dailyGraph = getJsonLd(daily, "daily")["@graph"];
 const article = dailyGraph.find((item) => item["@type"] === "NewsArticle");

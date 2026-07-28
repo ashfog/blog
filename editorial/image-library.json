@@ -1,61 +1,304 @@
 {
-  "version": 1,
+  "version": 2,
   "dimensions": {
     "width": 1536,
     "height": 1024,
     "aspectRatio": "3:2",
-    "renditions": [768, 1536]
+    "renditions": [
+      768,
+      1536
+    ]
   },
   "storyImages": [
-    { "id": "models-main-a", "category": "models", "variant": "main", "alt": "抽象模型层与推理路径的纸张拼贴" },
-    { "id": "models-main-b", "category": "models", "variant": "main", "alt": "抽象模型层与信息网格的纸张拼贴" },
-    { "id": "models-light", "category": "models", "variant": "light", "alt": "留白中的模型轮廓与信息层" },
-    { "id": "models-dark", "category": "models", "variant": "dark", "alt": "暗色背景上的模型层与信号轨迹" },
-    { "id": "agents-main-a", "category": "agents", "variant": "main", "alt": "智能体任务节点与决策路线的纸张拼贴" },
-    { "id": "agents-main-b", "category": "agents", "variant": "main", "alt": "智能体编排节点与工具路径的纸张拼贴" },
-    { "id": "agents-light", "category": "agents", "variant": "light", "alt": "留白中的智能体循环与任务分支" },
-    { "id": "agents-dark", "category": "agents", "variant": "dark", "alt": "暗色背景上的智能体循环与工具节点" },
-    { "id": "open-source-main-a", "category": "open-source", "variant": "main", "alt": "开源模块与共享分支的纸张拼贴" },
-    { "id": "open-source-main-b", "category": "open-source", "variant": "main", "alt": "开源组件与分叉路径的纸张拼贴" },
-    { "id": "open-source-light", "category": "open-source", "variant": "light", "alt": "留白中的开源模块与连接路径" },
-    { "id": "open-source-dark", "category": "open-source", "variant": "dark", "alt": "暗色背景上的开源组件与连接线" },
-    { "id": "developer-tools-main-a", "category": "developer-tools", "variant": "main", "alt": "开发工具界面片段与构建流程的纸张拼贴" },
-    { "id": "developer-tools-main-b", "category": "developer-tools", "variant": "main", "alt": "开发工具窗口与代码结构的纸张拼贴" },
-    { "id": "developer-tools-light", "category": "developer-tools", "variant": "light", "alt": "留白中的开发工具窗口与构建节点" },
-    { "id": "developer-tools-dark", "category": "developer-tools", "variant": "dark", "alt": "暗色背景上的开发工具窗口与流程图" },
-    { "id": "infrastructure-main-a", "category": "infrastructure", "variant": "main", "alt": "基础设施计算层与网络节点的纸张拼贴" },
-    { "id": "infrastructure-main-b", "category": "infrastructure", "variant": "main", "alt": "基础设施堆栈与分布式路径的纸张拼贴" },
-    { "id": "infrastructure-light", "category": "infrastructure", "variant": "light", "alt": "留白中的基础设施节点与数据路径" },
-    { "id": "infrastructure-dark", "category": "infrastructure", "variant": "dark", "alt": "暗色背景上的基础设施堆栈与网络拓扑" },
-    { "id": "research-main-a", "category": "research", "variant": "main", "alt": "研究图表与实验记录的纸张拼贴" },
-    { "id": "research-main-b", "category": "research", "variant": "main", "alt": "研究曲线与注释纸片的纸张拼贴" },
-    { "id": "research-light", "category": "research", "variant": "light", "alt": "留白中的研究曲线与测量标记" },
-    { "id": "research-dark", "category": "research", "variant": "dark", "alt": "暗色背景上的研究图表与实验纸片" },
-    { "id": "hardware-main-a", "category": "hardware", "variant": "main", "alt": "芯片结构与电路路径的纸张拼贴" },
-    { "id": "hardware-main-b", "category": "hardware", "variant": "main", "alt": "芯片晶粒与信号路径的纸张拼贴" },
-    { "id": "hardware-light", "category": "hardware", "variant": "light", "alt": "留白中的芯片晶粒与电路轨迹" },
-    { "id": "hardware-dark", "category": "hardware", "variant": "dark", "alt": "暗色背景上的芯片结构与电路层" },
-    { "id": "security-main-a", "category": "security", "variant": "main", "alt": "安全边界与扫描标记的纸张拼贴" },
-    { "id": "security-main-b", "category": "security", "variant": "main", "alt": "安全区域与异常轨迹的纸张拼贴" },
-    { "id": "security-light", "category": "security", "variant": "light", "alt": "留白中的安全边界与遮蔽标记" },
-    { "id": "security-dark", "category": "security", "variant": "dark", "alt": "暗色背景上的安全扫描与异常标记" },
-    { "id": "policy-main-a", "category": "policy", "variant": "main", "alt": "政策文件与程序路径的纸张拼贴" },
-    { "id": "policy-main-b", "category": "policy", "variant": "main", "alt": "制度文件与审议结构的纸张拼贴" },
-    { "id": "policy-light", "category": "policy", "variant": "light", "alt": "留白中的政策文件与程序标记" },
-    { "id": "policy-dark", "category": "policy", "variant": "dark", "alt": "暗色背景上的政策文件与编辑标记" },
-    { "id": "community-main-a", "category": "community", "variant": "main", "alt": "社区讨论节点与回应网络的纸张拼贴" },
-    { "id": "community-main-b", "category": "community", "variant": "main", "alt": "社区对话片段与连接网络的纸张拼贴" },
-    { "id": "community-light", "category": "community", "variant": "light", "alt": "留白中的社区对话与回应节点" },
-    { "id": "community-dark", "category": "community", "variant": "dark", "alt": "暗色背景上的社区讨论与信号网络" }
+    {
+      "id": "models-main-a",
+      "category": "models",
+      "variant": "main",
+      "alt": "Paper collage of abstract model structures and signal paths"
+    },
+    {
+      "id": "models-main-b",
+      "category": "models",
+      "variant": "main",
+      "alt": "Paper collage of layered model components and branching paths"
+    },
+    {
+      "id": "models-light",
+      "category": "models",
+      "variant": "light",
+      "alt": "Abstract model forms and signal paths on a light field"
+    },
+    {
+      "id": "models-dark",
+      "category": "models",
+      "variant": "dark",
+      "alt": "Abstract model forms and signal paths on a dark field"
+    },
+    {
+      "id": "agents-main-a",
+      "category": "agents",
+      "variant": "main",
+      "alt": "Paper collage of abstract agent structures and signal paths"
+    },
+    {
+      "id": "agents-main-b",
+      "category": "agents",
+      "variant": "main",
+      "alt": "Paper collage of layered agent components and branching paths"
+    },
+    {
+      "id": "agents-light",
+      "category": "agents",
+      "variant": "light",
+      "alt": "Abstract agent forms and signal paths on a light field"
+    },
+    {
+      "id": "agents-dark",
+      "category": "agents",
+      "variant": "dark",
+      "alt": "Abstract agent forms and signal paths on a dark field"
+    },
+    {
+      "id": "open-source-main-a",
+      "category": "open-source",
+      "variant": "main",
+      "alt": "Paper collage of abstract open-source structures and signal paths"
+    },
+    {
+      "id": "open-source-main-b",
+      "category": "open-source",
+      "variant": "main",
+      "alt": "Paper collage of layered open-source components and branching paths"
+    },
+    {
+      "id": "open-source-light",
+      "category": "open-source",
+      "variant": "light",
+      "alt": "Abstract open-source forms and signal paths on a light field"
+    },
+    {
+      "id": "open-source-dark",
+      "category": "open-source",
+      "variant": "dark",
+      "alt": "Abstract open-source forms and signal paths on a dark field"
+    },
+    {
+      "id": "developer-tools-main-a",
+      "category": "developer-tools",
+      "variant": "main",
+      "alt": "Paper collage of abstract developer-tool structures and signal paths"
+    },
+    {
+      "id": "developer-tools-main-b",
+      "category": "developer-tools",
+      "variant": "main",
+      "alt": "Paper collage of layered developer-tool components and branching paths"
+    },
+    {
+      "id": "developer-tools-light",
+      "category": "developer-tools",
+      "variant": "light",
+      "alt": "Abstract developer-tool forms and signal paths on a light field"
+    },
+    {
+      "id": "developer-tools-dark",
+      "category": "developer-tools",
+      "variant": "dark",
+      "alt": "Abstract developer-tool forms and signal paths on a dark field"
+    },
+    {
+      "id": "infrastructure-main-a",
+      "category": "infrastructure",
+      "variant": "main",
+      "alt": "Paper collage of abstract infrastructure structures and signal paths"
+    },
+    {
+      "id": "infrastructure-main-b",
+      "category": "infrastructure",
+      "variant": "main",
+      "alt": "Paper collage of layered infrastructure components and branching paths"
+    },
+    {
+      "id": "infrastructure-light",
+      "category": "infrastructure",
+      "variant": "light",
+      "alt": "Abstract infrastructure forms and signal paths on a light field"
+    },
+    {
+      "id": "infrastructure-dark",
+      "category": "infrastructure",
+      "variant": "dark",
+      "alt": "Abstract infrastructure forms and signal paths on a dark field"
+    },
+    {
+      "id": "research-main-a",
+      "category": "research",
+      "variant": "main",
+      "alt": "Paper collage of abstract research structures and signal paths"
+    },
+    {
+      "id": "research-main-b",
+      "category": "research",
+      "variant": "main",
+      "alt": "Paper collage of layered research components and branching paths"
+    },
+    {
+      "id": "research-light",
+      "category": "research",
+      "variant": "light",
+      "alt": "Abstract research forms and signal paths on a light field"
+    },
+    {
+      "id": "research-dark",
+      "category": "research",
+      "variant": "dark",
+      "alt": "Abstract research forms and signal paths on a dark field"
+    },
+    {
+      "id": "hardware-main-a",
+      "category": "hardware",
+      "variant": "main",
+      "alt": "Paper collage of abstract hardware structures and signal paths"
+    },
+    {
+      "id": "hardware-main-b",
+      "category": "hardware",
+      "variant": "main",
+      "alt": "Paper collage of layered hardware components and branching paths"
+    },
+    {
+      "id": "hardware-light",
+      "category": "hardware",
+      "variant": "light",
+      "alt": "Abstract hardware forms and signal paths on a light field"
+    },
+    {
+      "id": "hardware-dark",
+      "category": "hardware",
+      "variant": "dark",
+      "alt": "Abstract hardware forms and signal paths on a dark field"
+    },
+    {
+      "id": "security-main-a",
+      "category": "security",
+      "variant": "main",
+      "alt": "Paper collage of abstract security structures and signal paths"
+    },
+    {
+      "id": "security-main-b",
+      "category": "security",
+      "variant": "main",
+      "alt": "Paper collage of layered security components and branching paths"
+    },
+    {
+      "id": "security-light",
+      "category": "security",
+      "variant": "light",
+      "alt": "Abstract security forms and signal paths on a light field"
+    },
+    {
+      "id": "security-dark",
+      "category": "security",
+      "variant": "dark",
+      "alt": "Abstract security forms and signal paths on a dark field"
+    },
+    {
+      "id": "policy-main-a",
+      "category": "policy",
+      "variant": "main",
+      "alt": "Paper collage of abstract policy structures and signal paths"
+    },
+    {
+      "id": "policy-main-b",
+      "category": "policy",
+      "variant": "main",
+      "alt": "Paper collage of layered policy components and branching paths"
+    },
+    {
+      "id": "policy-light",
+      "category": "policy",
+      "variant": "light",
+      "alt": "Abstract policy forms and signal paths on a light field"
+    },
+    {
+      "id": "policy-dark",
+      "category": "policy",
+      "variant": "dark",
+      "alt": "Abstract policy forms and signal paths on a dark field"
+    },
+    {
+      "id": "community-main-a",
+      "category": "community",
+      "variant": "main",
+      "alt": "Paper collage of abstract community structures and signal paths"
+    },
+    {
+      "id": "community-main-b",
+      "category": "community",
+      "variant": "main",
+      "alt": "Paper collage of layered community components and branching paths"
+    },
+    {
+      "id": "community-light",
+      "category": "community",
+      "variant": "light",
+      "alt": "Abstract community forms and signal paths on a light field"
+    },
+    {
+      "id": "community-dark",
+      "category": "community",
+      "variant": "dark",
+      "alt": "Abstract community forms and signal paths on a dark field"
+    }
   ],
   "pageImages": [
-    { "id": "page-home", "page": "home", "variant": "main", "alt": "多层行业信号汇聚成清晰路径的抽象拼贴" },
-    { "id": "page-daily", "page": "daily", "variant": "main", "alt": "每日信息片段被整理成一份简报的抽象拼贴" },
-    { "id": "page-analysis", "page": "analysis", "variant": "main", "alt": "多条证据汇聚为分析结论的抽象拼贴" },
-    { "id": "page-archive", "page": "archive", "variant": "light", "alt": "日报页面沿时间线连续排列的抽象拼贴" },
-    { "id": "page-topics", "page": "topics", "variant": "main", "alt": "多个行业主题构成信号地图的抽象拼贴" },
-    { "id": "page-about", "page": "about", "variant": "dark", "alt": "证据、边界与编辑判断交叠的抽象拼贴" },
-    { "id": "page-search", "page": "search", "variant": "light", "alt": "从留白中发现单一有效信号的抽象拼贴" },
-    { "id": "page-404", "page": "404", "variant": "dark", "alt": "中断的信息路径与失联信号的抽象拼贴" }
+    {
+      "id": "page-home",
+      "page": "home",
+      "variant": "main",
+      "alt": "Abstract collage of layered industry signals converging into a clear path"
+    },
+    {
+      "id": "page-daily",
+      "page": "daily",
+      "variant": "main",
+      "alt": "Abstract collage of daily information fragments arranged into a briefing"
+    },
+    {
+      "id": "page-analysis",
+      "page": "analysis",
+      "variant": "main",
+      "alt": "Abstract collage of multiple evidence trails converging into analysis"
+    },
+    {
+      "id": "page-archive",
+      "page": "archive",
+      "variant": "light",
+      "alt": "Abstract collage of daily editions arranged along a timeline"
+    },
+    {
+      "id": "page-topics",
+      "page": "topics",
+      "variant": "main",
+      "alt": "Abstract collage of industry topics forming a signal map"
+    },
+    {
+      "id": "page-about",
+      "page": "about",
+      "variant": "dark",
+      "alt": "Abstract collage of evidence, boundaries, and editorial judgment"
+    },
+    {
+      "id": "page-search",
+      "page": "search",
+      "variant": "light",
+      "alt": "Abstract collage of one useful signal emerging from open space"
+    },
+    {
+      "id": "page-404",
+      "page": "404",
+      "variant": "dark",
+      "alt": "Abstract collage of an interrupted information path and a lost signal"
+    }
   ]
 }

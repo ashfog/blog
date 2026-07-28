@@ -6,24 +6,24 @@ const pageImage = getPageImage("search");
 ---
 
 <BaseLayout
-  title="搜索"
-  description="搜索 ASHFOG 日报、主题与来源。"
+  title="Search"
+  description="Search ASHFOG editions, topics, companies, models, and sources."
   image={pageImage?.largeSrc}
   noindex
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
-    { name: "搜索", path: "/search" }
+    { name: "Search", path: "/search" }
   ]}
 >
   <section class="search-page page-shell">
     <header>
       <span class="eyebrow">Search the signals</span>
-      <h1>搜索 ASHFOG</h1>
-      <p>按公司、模型、主题、来源或关键词查找历史信号。</p>
+      <h1>Search ASHFOG</h1>
+      <p>Find archived signals by company, model, topic, source, or keyword.</p>
     </header>
     {pageImage && <PageArtwork image={pageImage} />}
     <div id="search" class="search-box">
-      <p class="loading">正在加载搜索索引…</p>
+      <p class="loading">Loading the search index…</p>
     </div>
   </section>
 </BaseLayout>
@@ -40,18 +40,18 @@ const pageImage = getPageImage("search");
       showImages: false,
       excerptLength: 22,
       translations: {
-        placeholder: "输入关键词，例如：开放模型、Ollama、智能体安全",
-        zero_results: "没有找到 [SEARCH_TERM] 的相关信号",
-        clear_search: "清除",
-        load_more: "加载更多",
-        search_label: "搜索本站",
-        filters_label: "筛选",
-        many_results: "[COUNT] 条结果",
-        one_result: "1 条结果"
+        placeholder: "Search open models, Ollama, agent security…",
+        zero_results: "No signals found for [SEARCH_TERM]",
+        clear_search: "Clear",
+        load_more: "Load more",
+        search_label: "Search this site",
+        filters_label: "Filters",
+        many_results: "[COUNT] results",
+        one_result: "1 result"
       }
     });
   } else if (mount) {
-    mount.innerHTML = '<p class="loading">搜索索引会在正式构建后启用。</p>';
+    mount.innerHTML = '<p class="loading">Search becomes available after the production index is built.</p>';
   }
 </script>
 

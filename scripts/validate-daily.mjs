@@ -164,6 +164,11 @@ const similarity = (left, right) => {
   return intersection / (a.size + b.size - intersection);
 };
 
+const countEnglishWords = (text) => {
+  const segmenter = new Intl.Segmenter("en", { granularity: "word" });
+  return [...segmenter.segment(text)].filter((segment) => segment.isWordLike).length;
+};
+
 const scoreTotal = (score) =>
   [
     "evidenceStrength",
@@ -195,7 +200,7 @@ const checkOneLink = async (url, timeoutMs) => {
       redirect: "follow",
       signal: AbortSignal.timeout(timeoutMs),
       headers: {
-        "user-agent": "AshFog-Editorial-Validator/1.0",
+        "user-agent": "ASHFOG-Editorial-Validator/1.0",
         accept: "text/html,application/json,application/xml;q=0.9,*/*;q=0.8",
       },
     });
@@ -435,6 +440,11 @@ export async function validateEdition(
       if (registered.name !== story.source.name) {
         errors.push(`${at}.source.name: expected ${registered.name}`);
       }
+      if (!registered.languages?.includes(story.source.sourceLanguage)) {
+        errors.push(
+          `${at}.source.sourceLanguage: ${story.source.sourceLanguage} is not registered for ${story.source.id}`,
+        );
+      }
       const sourceHost = new URL(story.source.url).hostname.toLowerCase();
       if (!sourceHosts.get(story.source.id)?.has(sourceHost)) {
         errors.push(`${at}.source.url: host does not match registered source ${story.source.id}`);
@@ -504,6 +514,26 @@ export async function validateEdition(
       }
     });
 
+    const lengths = rules.contentLengths[story.kind];
+    const summaryWords = countEnglishWords(story.summary);
+    const whyWords = countEnglishWords(story.whyItMatters);
+    if (
+      summaryWords < lengths.summaryWords.min ||
+      summaryWords > lengths.summaryWords.max
+    ) {
+      errors.push(
+        `${at}.summary: ${summaryWords} words; expected ${lengths.summaryWords.min}-${lengths.summaryWords.max} for ${story.kind}`,
+      );
+    }
+    if (
+      whyWords < lengths.whyItMattersWords.min ||
+      whyWords > lengths.whyItMattersWords.max
+    ) {
+      errors.push(
+        `${at}.whyItMatters: ${whyWords} words; expected ${lengths.whyItMattersWords.min}-${lengths.whyItMattersWords.max} for ${story.kind}`,
+      );
+    }
+
     const total = scoreTotal(story.score);
     if (story.score.total !== total) errors.push(`${at}.score.total: expected ${total}`);
     if (story.highlight) highlights += 1;
@@ -525,22 +555,13 @@ export async function validateEdition(
     }
   }
 
-  const checkTarget = (label, value, target) => {
-    if (value > target.max) errors.push(`$.stories: ${label} count ${value} exceeds ${target.max}`);
-    if (value < target.min) {
-      if (!edition.qualityShortfallReason) {
-        errors.push(
-          `$.qualityShortfallReason: required because ${label} count ${value} is below ${target.min}`,
-        );
-      } else {
-        warnings.push(`${label} count ${value} is below target ${target.min}`);
-      }
-    }
-  };
-  checkTarget("total", edition.stories.length, rules.targets.total);
-  checkTarget("news", kinds.news, rules.targets.news);
-  checkTarget("community", kinds.community, rules.targets.community);
-  checkTarget("highlight", highlights, rules.targets.highlights);
+  const highlightTarget = rules.presentation.highlights;
+  if (highlights > highlightTarget.max) {
+    errors.push(`$.stories: highlight count ${highlights} exceeds ${highlightTarget.max}`);
+  }
+  if (highlights < highlightTarget.min) {
+    errors.push(`$.stories: at least ${highlightTarget.min} highlight is required`);
+  }
 
   if (edition.stories.length && mediaOnly / edition.stories.length > rules.caps.mediaOnlyShare) {
     errors.push("$.stories: media-only share exceeds configured cap");
@@ -550,38 +571,28 @@ export async function validateEdition(
       errors.push(`$.stories: company ${company} exceeds ${rules.caps.itemsPerCompany} items`);
     }
   }
-  if (edition.stories.length >= rules.targets.total.min) {
+  if (edition.stories.length >= rules.caps.applyEcosystemShareAt) {
     for (const [ecosystem, count] of ecosystems) {
       if (count / edition.stories.length > rules.caps.ecosystemShare) {
         errors.push(`$.stories: ecosystem ${ecosystem} exceeds configured share cap`);
       }
     }
   }
-  if (
-    edition.stories.length >= rules.targets.total.min &&
-    openSource < rules.targets.openSource.minWhenSupported
-  ) {
-    warnings.push(
-      `open-source count ${openSource} is below target ${rules.targets.openSource.minWhenSupported}`,
-    );
-  }
 
   const analysisIds = new Set(edition.dailyAnalysis.signalIds);
   for (const signalId of analysisIds) {
     if (!ids.has(signalId)) errors.push(`$.dailyAnalysis.signalIds: unknown story ID ${signalId}`);
   }
-  const cjkCount = [...edition.dailyAnalysis.body].filter((char) =>
-    /[\u3400-\u9fff]/u.test(char),
-  ).length;
-  if (cjkCount < rules.analysis.minChineseCharacters) {
+  const analysisWords = countEnglishWords(edition.dailyAnalysis.body);
+  if (analysisWords < rules.analysis.minWords) {
     errors.push(
-      `$.dailyAnalysis.body: ${cjkCount} Chinese characters is below ${rules.analysis.minChineseCharacters}`,
+      `$.dailyAnalysis.body: ${analysisWords} words is below ${rules.analysis.minWords}`,
     );
   } else if (
-    cjkCount < rules.analysis.targetChineseCharacters.min ||
-    cjkCount > rules.analysis.targetChineseCharacters.max
+    analysisWords < rules.analysis.targetWords.min ||
+    analysisWords > rules.analysis.targetWords.max
   ) {
-    warnings.push(`daily analysis has ${cjkCount} Chinese characters`);
+    warnings.push(`daily analysis has ${analysisWords} words`);
   }
 
   const previousEvents = new Set();

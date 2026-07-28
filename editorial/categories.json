@@ -1,15 +1,55 @@
 {
-  "version": 1,
+  "version": 2,
   "categories": [
-    { "id": "models", "label": "模型", "slug": "models" },
-    { "id": "agents", "label": "智能体", "slug": "agents" },
-    { "id": "open-source", "label": "开源", "slug": "open-source" },
-    { "id": "developer-tools", "label": "开发工具", "slug": "developer-tools" },
-    { "id": "infrastructure", "label": "基础设施", "slug": "infrastructure" },
-    { "id": "research", "label": "研究", "slug": "research" },
-    { "id": "hardware", "label": "硬件", "slug": "hardware" },
-    { "id": "security", "label": "安全", "slug": "security" },
-    { "id": "policy", "label": "政策", "slug": "policy" },
-    { "id": "community", "label": "社区", "slug": "community" }
+    {
+      "id": "models",
+      "label": "Models",
+      "slug": "models"
+    },
+    {
+      "id": "agents",
+      "label": "Agents",
+      "slug": "agents"
+    },
+    {
+      "id": "open-source",
+      "label": "Open Source",
+      "slug": "open-source"
+    },
+    {
+      "id": "developer-tools",
+      "label": "Developer Tools",
+      "slug": "developer-tools"
+    },
+    {
+      "id": "infrastructure",
+      "label": "Infrastructure",
+      "slug": "infrastructure"
+    },
+    {
+      "id": "research",
+      "label": "Research",
+      "slug": "research"
+    },
+    {
+      "id": "hardware",
+      "label": "Hardware",
+      "slug": "hardware"
+    },
+    {
+      "id": "security",
+      "label": "Security",
+      "slug": "security"
+    },
+    {
+      "id": "policy",
+      "label": "Policy",
+      "slug": "policy"
+    },
+    {
+      "id": "community",
+      "label": "Community",
+      "slug": "community"
+    }
   ]
 }

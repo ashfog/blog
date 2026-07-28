@@ -9,20 +9,20 @@ const pageImage = getPageImage("archive");
 ---
 
 <BaseLayout
-  title="日报归档"
-  description="ASHFOG 每日行业情报归档。"
+  title="Daily Archive"
+  description="The ASHFOG archive of source-verified global daily intelligence."
   image={pageImage?.largeSrc}
   pageType="CollectionPage"
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
-    { name: "日报归档", path: "/daily" }
+    { name: "Daily Archive", path: "/daily" }
   ]}
 >
   <section class="archive page-shell">
     <header>
       <span class="eyebrow">Daily archive</span>
-      <h1>每天一页<br /><em>看见变化</em></h1>
-      <p>按日期回看 AI、开源与开发者生态的重要信号。每一期都保留来源、证据等级与社区反馈。</p>
+      <h1>One Page a Day<br /><em>See Change Take Shape</em></h1>
+      <p>Review material signals across AI, open source, and the developer ecosystem by date. Every edition preserves sources, evidence labels, and relevant community findings.</p>
     </header>
     {pageImage && <PageArtwork image={pageImage} priority />}
 
@@ -31,7 +31,7 @@ const pageImage = getPageImage("archive");
         <a href={`/daily/${edition.editionDate}`}>
           <span class="index">{String(index + 1).padStart(2, "0")}</span>
           <span class="date">{formatDate(edition.editionDate, { year: undefined })}</span>
-          <strong>{edition.title.replace("ASHFOG Daily：", "")}</strong>
+          <strong>{edition.title}</strong>
           <span class="meta">{edition.stories.length} signals · {readingMinutes(edition)} min</span>
           <span class="arrow">↗</span>
         </a>

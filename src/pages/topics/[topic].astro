@@ -20,18 +20,18 @@ const title = categoryLabels[topic] ?? topic;
 ---
 
 <BaseLayout
-  title={`${title}主题`}
-  description={`ASHFOG ${title}主题信号归档。`}
+  title={`${title} Signals`}
+  description={`ASHFOG ${title} signal archive.`}
   pageType="CollectionPage"
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
-    { name: "主题索引", path: "/topics" },
-    { name: `${title}主题`, path: `/topics/${topic}` }
+    { name: "Topic Index", path: "/topics" },
+    { name: `${title} Signals`, path: `/topics/${topic}` }
   ]}
 >
   <section class="topic-page page-shell">
     <header>
-      <a href="/topics">← 所有主题</a>
+      <a href="/topics">← All topics</a>
       <span>{String(items.length).padStart(2, "0")} SIGNALS</span>
       <h1>{title}</h1>
     </header>

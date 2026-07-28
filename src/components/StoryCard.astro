@@ -21,6 +21,7 @@ const position = String(story.position).padStart(2, "0");
     <span class="signal-no">{position}</span>
     <div class="card-tags">
       <span class="tag">{categoryLabels[story.category] ?? story.category}</span>
+      {story.region !== "global" && <span class="tag">{story.region.toUpperCase()}</span>}
       {story.openSource && <span class="tag open">OPEN</span>}
     </div>
   </div>

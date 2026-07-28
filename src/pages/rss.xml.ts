@@ -6,7 +6,7 @@ export async function GET(context: { site: URL }) {
 
   return rss({
     title: "ASHFOG Daily",
-    description: "每天一份经过来源核验的 AI、开源与开发者生态要点。",
+    description: "A source-verified global briefing on AI, open source, developer tools, infrastructure, research, and policy.",
     site: context.site,
     items: editions.map((edition) => ({
       title: edition.title,
@@ -14,6 +14,6 @@ export async function GET(context: { site: URL }) {
       pubDate: new Date(edition.generatedAt),
       link: `/daily/${edition.editionDate}`
     })),
-    customData: "<language>zh-CN</language>"
+    customData: "<language>en</language>"
   });
 }

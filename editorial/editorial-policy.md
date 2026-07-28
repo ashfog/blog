@@ -1,8 +1,17 @@
-# AshFog Daily editorial policy
+# ASHFOG Daily editorial policy
 
 ## Mission
 
-Publish one concise Chinese-language daily intelligence brief covering material AI, open-source, developer-tool, infrastructure, research, and policy developments. Reduce noise, link every publishable claim to collected evidence, and explain practical consequences.
+Publish one concise English-language global intelligence brief covering material AI, open-source, developer-tool, infrastructure, research, policy, and community developments. Reduce noise, link every publishable claim to collected evidence, and explain practical consequences.
+
+## Global coverage
+
+- Scan every enabled source inside the 48-hour candidate window, including all enabled China sources.
+- Treat China as a permanent part of global AI coverage, not as an occasional special section.
+- Write the final edition in English while preserving the original source URL.
+- Record each story's region and each primary source's language.
+- Do not retain or publish a separate original-language headline.
+- Apply the same materiality and evidence standards to every region; regional coverage is never a reason to pad an edition.
 
 ## Include
 
@@ -22,31 +31,34 @@ Publish one concise Chinese-language daily intelligence brief covering material 
 
 ## Evidence hierarchy
 
-1. Official announcement, repository, release, specification, model card, paper, or maintainer statement.
+1. Official announcement, repository, release, specification, model card, paper, policy text, or maintainer statement.
 2. Reproducible benchmark, issue thread, practitioner report, or respected technical analysis.
 3. Media report with original reporting.
 4. Aggregator, newsletter, social post, or community discussion used only to discover stronger evidence.
 
-Use the highest available evidence and link the primary source even when a lower-tier source discovered it.
+Use the highest available evidence and link the primary source even when a lower-tier source discovered it. A vendor benchmark must be identified as vendor-reported unless independently reproduced.
 
 ## Selection
 
 - Use an explicit `cutoffAt` in `Asia/Shanghai`.
 - Default to the 48 hours preceding the cutoff.
+- Collect every serious candidate; there is no global candidate-count cap.
 - Merge coverage of the same event under one `eventId`.
 - Compare the previous seven editions and repeat an event only for a documented material update.
-- Prefer quality over quota and provide `qualityShortfallReason` whenever minimum targets are not met.
-- Apply the numeric limits in `editorial/publishing-rules.json`.
+- Publish every material event that passes the evidence and relevance standard.
+- Never add an item to satisfy a quota and never exclude a material event merely because a routine story target was reached.
+- The 30-story Schema maximum is an anomaly guard, not an editorial target. If more than 30 events qualify, publish the 30 most material and record the remainder as `lower-priority`.
 
 ## Writing
 
 For every selected item:
 
 - State what changed without marketing language.
-- Write an original, self-contained summary that meets the exact `summary` length limits in `schemas/daily.schema.json`.
-- Explain why it matters to developers, researchers, operators, founders, or open-source users within the exact `whyItMatters` length limits in the schema.
+- Write an original, self-contained English summary within the exact word limits in `editorial/publishing-rules.json`.
+- Explain why it matters to developers, researchers, operators, founders, or open-source users without repeating the summary.
 - Preserve uncertainty and configuration-specific caveats.
 - Attribute benchmarks and community findings with their conditions.
+- Use `could`, `may`, `suggests`, or equivalent wording for inference.
 - Keep all published URLs inside `research.collectedUrls`.
 
 Write the daily analysis only after the final story order is locked. Synthesize at least three current story IDs into one edition-specific thesis with a practical implication. Do not reuse prior analysis.

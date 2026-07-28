@@ -25,11 +25,10 @@ const validate = (edition, options = {}) =>
     ...options,
   });
 
-test("valid fixture passes with only the documented analysis-length warning", async () => {
+test("valid English global fixture passes", async () => {
   const report = await validate(clone());
   assert.equal(report.status, "ok");
   assert.deepEqual(report.errors, []);
-  assert.ok(report.warnings.every((warning) => warning.includes("daily analysis has")));
 });
 
 test("schema rejects a missing source URL", async () => {
@@ -40,40 +39,44 @@ test("schema rejects a missing source URL", async () => {
   assert.ok(report.errors.some((error) => error.includes("missing required property url")));
 });
 
-test("schema enforces summary length between 200 and 300 characters", async () => {
-  const tooShort = clone();
-  tooShort.stories[0].summary = "短".repeat(199);
-  const shortReport = await validate(tooShort);
-  assert.equal(shortReport.status, "error");
-  assert.ok(shortReport.errors.some((error) => error.includes("summary: string is shorter than 200")));
+const words = (count) => Array.from({ length: count }, (_, index) => `word${index}`).join(" ");
 
-  const tooLong = clone();
-  tooLong.stories[0].summary = "长".repeat(301);
-  const longReport = await validate(tooLong);
-  assert.equal(longReport.status, "error");
-  assert.ok(longReport.errors.some((error) => error.includes("summary: string is longer than 300")));
+test("validator enforces news summary and why-it-matters word ranges", async () => {
+  const shortSummary = clone();
+  shortSummary.stories[0].summary = words(119);
+  assert.ok((await validate(shortSummary)).errors.some((error) => error.includes("summary: 119 words")));
+
+  const longSummary = clone();
+  longSummary.stories[0].summary = words(181);
+  assert.ok((await validate(longSummary)).errors.some((error) => error.includes("summary: 181 words")));
+
+  const shortWhy = clone();
+  shortWhy.stories[0].whyItMatters = words(49);
+  assert.ok((await validate(shortWhy)).errors.some((error) => error.includes("whyItMatters: 49 words")));
+
+  const longWhy = clone();
+  longWhy.stories[0].whyItMatters = words(81);
+  assert.ok((await validate(longWhy)).errors.some((error) => error.includes("whyItMatters: 81 words")));
 });
 
-test("schema enforces whyItMatters length between 70 and 100 characters", async () => {
-  const tooShort = clone();
-  tooShort.stories[0].whyItMatters = "短".repeat(69);
-  const shortReport = await validate(tooShort);
-  assert.equal(shortReport.status, "error");
-  assert.ok(
-    shortReport.errors.some((error) =>
-      error.includes("whyItMatters: string is shorter than 70"),
-    ),
-  );
-
+test("validator enforces shorter community word ranges", async () => {
+  const communityIndex = clone().stories.findIndex((story) => story.kind === "community");
   const tooLong = clone();
-  tooLong.stories[0].whyItMatters = "长".repeat(101);
-  const longReport = await validate(tooLong);
-  assert.equal(longReport.status, "error");
-  assert.ok(
-    longReport.errors.some((error) =>
-      error.includes("whyItMatters: string is longer than 100"),
-    ),
-  );
+  tooLong.stories[communityIndex].summary = words(131);
+  assert.ok((await validate(tooLong)).errors.some((error) => error.includes("summary: 131 words")));
+
+  const tooShort = clone();
+  tooShort.stories[communityIndex].whyItMatters = words(34);
+  assert.ok((await validate(tooShort)).errors.some((error) => error.includes("whyItMatters: 34 words")));
+});
+
+test("adaptive selection accepts a concise edition without a story quota", async () => {
+  const edition = clone();
+  edition.stories = edition.stories.slice(0, 3).map((story, index) => ({ ...story, position: index + 1 }));
+  edition.dailyAnalysis.signalIds = edition.stories.map((story) => story.id);
+  const report = await validate(edition);
+  assert.equal(report.status, "ok");
+  assert.ok(!report.errors.some((error) => error.includes("count")));
 });
 
 test("domain rules reject an unknown source", async () => {
@@ -82,6 +85,14 @@ test("domain rules reject an unknown source", async () => {
   const report = await validate(edition);
   assert.equal(report.status, "error");
   assert.ok(report.errors.some((error) => error.includes("not found in editorial/sources.json")));
+});
+
+test("domain rules reject an unregistered source language", async () => {
+  const edition = clone();
+  edition.stories[0].source.sourceLanguage = "zh-CN";
+  const report = await validate(edition);
+  assert.equal(report.status, "error");
+  assert.ok(report.errors.some((error) => error.includes("sourceLanguage")));
 });
 
 test("domain rules reject a future publication time", async () => {
@@ -163,7 +174,7 @@ test("domain rules reject inconsistent score totals", async () => {
 test("Tier C cannot be the primary source for news", async () => {
   const edition = clone();
   edition.stories[0].source = {
-    ...edition.stories[9].source,
+    ...edition.stories.find((story) => story.kind === "community").source,
     publishedAt: edition.stories[0].source.publishedAt,
   };
   const report = await validate(edition);

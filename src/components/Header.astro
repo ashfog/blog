@@ -3,22 +3,22 @@ import BrandMark from "./BrandMark.astro";
 
 const currentPath = Astro.url.pathname;
 const links = [
-  { href: "/", label: "今日" },
-  { href: "/daily", label: "归档" },
-  { href: "/topics", label: "主题" },
-  { href: "/about", label: "关于" }
+  { href: "/", label: "Today" },
+  { href: "/daily", label: "Archive" },
+  { href: "/topics", label: "Topics" },
+  { href: "/about", label: "About" }
 ];
 ---
 
 <header class="site-header">
   <div class="page-shell header-inner">
-    <a class="brand" href="/" aria-label="ASHFOG 首页">
+    <a class="brand" href="/" aria-label="ASHFOG home">
       <BrandMark />
       <span>ASHFOG</span>
       <em>DAILY INTELLIGENCE</em>
     </a>
 
-    <nav aria-label="主导航">
+    <nav aria-label="Primary navigation">
       {
         links.map((link) => (
           <a
@@ -37,11 +37,11 @@ const links = [
     </nav>
 
     <div class="header-actions">
-      <a class="search-link" href="/search" aria-label="搜索">
+      <a class="search-link" href="/search" aria-label="Search">
         <span aria-hidden="true">⌕</span>
-        <span>搜索</span>
+        <span>Search</span>
       </a>
-      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深浅主题">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle color theme">
         <span class="sun" aria-hidden="true">☼</span>
         <span class="moon" aria-hidden="true">◐</span>
       </button>

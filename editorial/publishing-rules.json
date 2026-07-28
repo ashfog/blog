@@ -1,24 +1,57 @@
 {
-  "version": 1,
+  "version": 2,
   "timezone": "Asia/Shanghai",
   "candidateWindowHours": 48,
   "previousEditionLookback": 7,
-  "targets": {
-    "total": { "min": 12, "max": 20 },
-    "news": { "min": 8, "max": 14 },
-    "community": { "min": 4, "max": 8 },
-    "highlights": { "min": 3, "max": 5 },
-    "openSource": { "minWhenSupported": 4 }
+  "selection": {
+    "collectAllMaterialCandidates": true,
+    "noGlobalCandidateCap": true,
+    "noRoutineStoryQuota": true,
+    "publishEveryMaterialEvent": true,
+    "neverPadToReachACount": true,
+    "safetyMaxStories": 30
+  },
+  "contentLengths": {
+    "news": {
+      "summaryWords": {
+        "min": 120,
+        "max": 180
+      },
+      "whyItMattersWords": {
+        "min": 50,
+        "max": 80
+      }
+    },
+    "community": {
+      "summaryWords": {
+        "min": 80,
+        "max": 130
+      },
+      "whyItMattersWords": {
+        "min": 35,
+        "max": 60
+      }
+    }
+  },
+  "presentation": {
+    "highlights": {
+      "min": 1,
+      "max": 5
+    }
   },
   "caps": {
     "itemsPerCompany": 3,
     "ecosystemShare": 0.3,
+    "applyEcosystemShareAt": 8,
     "mediaOnlyShare": 0.15
   },
   "analysis": {
     "minSignalIds": 3,
-    "minChineseCharacters": 220,
-    "targetChineseCharacters": { "min": 350, "max": 700 },
+    "minWords": 160,
+    "targetWords": {
+      "min": 200,
+      "max": 350
+    },
     "maxPriorSimilarity": 0.72
   },
   "links": {
