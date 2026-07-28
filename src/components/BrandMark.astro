@@ -1,0 +1,44 @@
+---
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<span class:list={["brand-mark", { compact }]} aria-hidden="true">
+  <i></i><i></i><i></i><i></i><i></i>
+</span>
+
+<style>
+  .brand-mark {
+    position: relative;
+    display: inline-grid;
+    width: 27px;
+    height: 27px;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--ink);
+    transform: rotate(-12deg);
+  }
+
+  .brand-mark.compact {
+    width: 22px;
+    height: 22px;
+  }
+
+  i {
+    position: absolute;
+    width: 2px;
+    height: 42px;
+    background: var(--bg);
+    opacity: 0.92;
+  }
+
+  i:nth-child(1) { transform: translateX(-8px) rotate(-8deg); }
+  i:nth-child(2) { transform: translateX(-4px) rotate(-4deg); }
+  i:nth-child(3) { transform: rotate(0); }
+  i:nth-child(4) { transform: translateX(4px) rotate(4deg); }
+  i:nth-child(5) { transform: translateX(8px) rotate(8deg); }
+</style>
