@@ -1004,7 +1004,8 @@
         "compute",
         "standards",
         "ai-ethics"
-      ]
+      ],
+      "endpoint": "https://jxca.miit.gov.cn/"
     },
     {
       "id": "machine-heart",

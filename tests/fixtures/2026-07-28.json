@@ -5,18 +5,20 @@
   "cutoffAt": "2026-07-28T06:09:24Z",
   "generatedAt": "2026-07-28T06:14:36Z",
   "runId": "preview-2026-07-28T061436Z",
-  "title": "Open weights, agent controls, and operational reliability",
-  "description": "Today’s verified signals track open-weight policy, agent security, AI work patterns, runtime correctness, developer tooling, and community evidence on model reliability.",
+  "title": "Global agent controls, China AI signals, and operational reliability",
+  "description": "Today’s verified signals connect global agent controls with Qwen Code releases, Chinese AI policy, DeepSeek API migration, open-source runtimes, and community evidence.",
   "qualityShortfallReason": "",
   "heroImageId": null,
   "dailyAnalysis": {
-    "title": "Capability is expanding faster than the control plane",
-    "body": "Today’s strongest signals are not about a single larger model. They show the industry trying to build the control plane that was missing while AI capability expanded. First, the open-weight debate is moving beyond a binary choice between open and closed systems. Anthropic’s policy position focuses on capability thresholds and mandatory safety testing, while community responses ask who will control access to testing and how much compliance will cost. Those implementation details could shape competition as much as the rules themselves. Second, agents are moving from personal tools into enterprise workflows. Microsoft’s Project Perception frames security as a continuous loop of discovery, assessment, remediation, and improvement rather than a one-time scan. That makes permissions, approval points, rollback, and observability part of the product, not optional operational add-ons. Third, real value increasingly depends on reliability in a specific environment. Ollama shipped a correctness fix for an MLX Metal path that could reduce NVFP4 output quality, while community reports around Claude availability and open-model coding performance show why teams need reproducible task suites and tested fallback paths. The practical lesson is to evaluate systems as operating stacks: model behavior, runtime version, tool permissions, evidence quality, failure recovery, licensing, and cost all matter together. Leaderboards can identify candidates, but production decisions require versioned tests and explicit boundaries.",
+    "title": "The agent control plane is becoming a global competitive layer",
+    "body": "Today’s strongest signals show that AI competition is moving beyond model capability into the control plane around deployment. Anthropic’s policy position makes capability thresholds, evaluation access, and compliance design central to the open-weight debate. Microsoft’s Project Perception treats enterprise security as a continuous agent loop with discovery, assessment, remediation, and improvement. China’s ecosystem is developing parallel operational layers: Qwen Code added real-time steering, isolated worktrees, built-in search, and rebuilt web retrieval, while DeepSeek’s announced API alias sunset reminds developers that model routing and migration dates are production dependencies. MIIT’s account of the APEC digital and AI ministerial meeting adds a regional governance signal around safety, inclusion, connectivity, and capacity building. Runtime details remain equally important. Ollama’s MLX correction demonstrates that one implementation path can change output quality even when the advertised model is unchanged, while community reports about availability and open-model coding performance show why teams need reproducible task suites and tested fallback paths. The practical lesson is to evaluate the complete operating system around AI: model version, runtime, hardware, permissions, evidence, routing, recovery, licensing, and regional policy. Global coverage matters because the strongest implementation ideas and the most consequential policy signals no longer originate from one market.",
     "signalIds": [
       "anthropic-open-weights-position",
       "microsoft-project-perception",
-      "ollama-0325-mlx-quality-fix",
-      "hn-claude-opus5-errors"
+      "qwen-code-weekly-2026-07-23",
+      "china-miit-apec-ai-statement-2026",
+      "deepseek-legacy-api-alias-sunset-2026",
+      "ollama-0325-mlx-quality-fix"
     ]
   },
   "stories": [
@@ -373,9 +375,181 @@
       "region": "global"
     },
     {
+      "id": "qwen-code-weekly-2026-07-23",
+      "eventId": "qwen-code-0201-control-and-isolation-2026-07-23",
+      "position": 7,
+      "kind": "news",
+      "highlight": true,
+      "category": "developer-tools",
+      "topics": [
+        "coding-agents",
+        "open-source",
+        "tool-use",
+        "developer-tools"
+      ],
+      "company": "Alibaba",
+      "ecosystem": "qwen",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "Qwen Code adds real-time agent steering, isolated worktrees, and built-in web search",
+      "summary": "Qwen Code’s official weekly update says versions 0.19.12, 0.20.0, and 0.20.1 shipped across three stable releases with more than 220 merged pull requests. The release adds real-time steering, allowing a user to correct an agent while it is still producing a response; one-click worktree isolation for parallel sessions; and the return of built-in web_search using an existing Bailian API key. The team also says web_fetch was rebuilt, with changes aimed at preserving links and handling PDF content more reliably, while multimodal whole-turn routing decides when an image-capable model should handle the complete interaction. These are official product claims and release notes, not independent measurements of reliability or coding quality. The update nevertheless shows a Chinese open-source coding agent adopting the same control, isolation, search, and multimodal workflow patterns now appearing across major global agent tools, which makes it relevant beyond the Qwen ecosystem.",
+      "whyItMatters": "Real-time correction and isolated worktrees address two practical agent failure modes: users need to redirect a task before it wastes more time, and parallel changes need separation before they can be reviewed safely. Qwen Code’s update also gives global developers another open-source implementation to compare with Claude Code, Codex, and other agent environments.",
+      "source": {
+        "id": "qwen-official",
+        "name": "Qwen",
+        "tier": "A",
+        "url": "https://qwenlm.github.io/qwen-code-docs/en/blog/updates/weekly-update-2026-07-23/",
+        "publishedAt": "2026-07-23T00:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "en"
+      },
+      "factualClaims": [
+        {
+          "text": "Qwen Code said three stable releases added real-time steering, worktree-isolated sessions, built-in web search, a rebuilt web fetcher, and multimodal routing.",
+          "evidenceUrl": "https://qwenlm.github.io/qwen-code-docs/en/blog/updates/weekly-update-2026-07-23/",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": [
+          "Hacker News"
+        ],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 5,
+        "novelty": 4,
+        "practicalUtility": 5,
+        "impact": 4,
+        "communitySignal": 1,
+        "total": 24
+      },
+      "materialUpdate": "",
+      "windowException": "The official weekly release remained operationally material when the global preview fixture was assembled.",
+      "region": "china"
+    },
+    {
+      "id": "china-miit-apec-ai-statement-2026",
+      "eventId": "apec-digital-ai-ministers-chengdu-statement-2026",
+      "position": 8,
+      "kind": "news",
+      "highlight": false,
+      "category": "policy",
+      "topics": [
+        "ai-governance",
+        "policy",
+        "asia-pacific",
+        "standards"
+      ],
+      "company": "MIIT",
+      "ecosystem": "china-ai-policy",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "China’s MIIT says APEC ministers adopted a regional framework for digital and AI cooperation",
+      "summary": "China’s Ministry of Industry and Information Technology reported that APEC digital and artificial-intelligence ministers met in Chengdu on July 23 and adopted the 2026 Chengdu statement. According to the ministry, participating economies agreed to advance digital and AI technologies in support of the Asia-Pacific community and created an action framework for future cooperation. The meeting covered digital transformation, connectivity, ICT resilience, online safety, small-business adoption, artificial-intelligence safety, and capacity building. This is an official Chinese government account of a ministerial meeting, not the full negotiated text or an independent assessment of how individual economies will implement the commitments. Its significance is therefore directional: it places AI deployment, safety, inclusion, and cross-border coordination inside a regional policy process rather than announcing an immediately enforceable technical rule. Follow-up documents and domestic implementation measures will determine the practical effect.",
+      "whyItMatters": "AI governance is increasingly being shaped through regional forums as well as national regulation. Developers and infrastructure providers serving Asia-Pacific markets should watch whether the Chengdu framework produces common safety language, capacity-building programs, procurement expectations, or interoperability work. The announcement signals China’s policy priorities, but it does not yet establish binding compliance requirements.",
+      "source": {
+        "id": "china-miit",
+        "name": "Ministry of Industry and Information Technology of China",
+        "tier": "A",
+        "url": "https://jxca.miit.gov.cn/xwdt/bwyw/art/2026/art_b13a83dbc0cc4d59b089b1cf19424abf.html",
+        "publishedAt": "2026-07-23T20:59:00+08:00",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "zh-CN"
+      },
+      "factualClaims": [
+        {
+          "text": "MIIT reported that APEC digital and AI ministers met in Chengdu and adopted the 2026 Chengdu statement as a framework for cooperation.",
+          "evidenceUrl": "https://jxca.miit.gov.cn/xwdt/bwyw/art/2026/art_b13a83dbc0cc4d59b089b1cf19424abf.html",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "not_applicable",
+        "platformsAttempted": [],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 4,
+        "novelty": 4,
+        "practicalUtility": 3,
+        "impact": 4,
+        "communitySignal": 0,
+        "total": 20
+      },
+      "materialUpdate": "",
+      "windowException": "The regional policy outcome remained material during the preview period even though the official report preceded the routine 48-hour window.",
+      "region": "china"
+    },
+    {
+      "id": "deepseek-legacy-api-alias-sunset-2026",
+      "eventId": "deepseek-v4-legacy-alias-sunset-2026-07-24",
+      "position": 9,
+      "kind": "news",
+      "highlight": false,
+      "category": "infrastructure",
+      "topics": [
+        "deepseek",
+        "api",
+        "models",
+        "migration"
+      ],
+      "company": "DeepSeek",
+      "ecosystem": "deepseek",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "DeepSeek’s announced sunset date passes for its legacy chat and reasoner API aliases",
+      "summary": "DeepSeek’s official changelog says the legacy API model names deepseek-chat and deepseek-reasoner would be discontinued three months after the company introduced DeepSeek V4 on April 24, placing the announced sunset on July 24. During the transition, the two aliases pointed to the non-thinking and thinking modes of deepseek-v4-flash, while the new V4-Pro and V4-Flash names were available through OpenAI-compatible and Anthropic-compatible interfaces. The changelog establishes the migration notice and intended deadline, but it does not by itself prove that every legacy request began failing at the same moment or describe any grace period, regional rollout, or account-specific behavior. Developers should therefore treat the passed date as an operational trigger to inspect production configuration and test the explicit V4 model identifiers rather than assuming alias behavior from earlier deployments.",
+      "whyItMatters": "Model aliases make upgrades convenient, but they can hide a breaking migration until a provider retires a compatibility path. DeepSeek users should inventory hard-coded model names, confirm thinking-mode behavior, run regression tests against explicit V4 identifiers, and update fallback routing. The larger lesson applies to every provider: release notes and sunset dates belong in production dependency monitoring.",
+      "source": {
+        "id": "deepseek-official",
+        "name": "DeepSeek",
+        "tier": "A",
+        "url": "https://api-docs.deepseek.com/updates",
+        "publishedAt": "2026-04-24T00:00:00Z",
+        "updatedAt": "2026-07-24T00:00:00Z",
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "en"
+      },
+      "factualClaims": [
+        {
+          "text": "DeepSeek announced that deepseek-chat and deepseek-reasoner would be discontinued three months after April 24, 2026, while explicit V4 model names were introduced.",
+          "evidenceUrl": "https://api-docs.deepseek.com/updates",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": [
+          "Hacker News"
+        ],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 5,
+        "novelty": 3,
+        "practicalUtility": 5,
+        "impact": 4,
+        "communitySignal": 1,
+        "total": 23
+      },
+      "materialUpdate": "",
+      "windowException": "The source announcement is older, but its stated July 24 sunset became operationally relevant for the July 28 edition.",
+      "region": "china"
+    },
+    {
       "id": "hn-open-model-practical-use",
       "eventId": "hn-open-model-practical-coding-experience-2026-07-28",
-      "position": 7,
+      "position": 10,
       "kind": "community",
       "highlight": false,
       "category": "community",
@@ -451,7 +625,7 @@
     {
       "id": "hn-claude-opus5-errors",
       "eventId": "claude-opus5-elevated-errors-2026-07-27",
-      "position": 8,
+      "position": 11,
       "kind": "community",
       "highlight": true,
       "category": "community",
@@ -560,7 +734,10 @@
       "https://news.ycombinator.com/item?id=49069366",
       "https://github.com/vercel/ai/releases/tag/ai%407.0.40",
       "https://github.com/langchain-ai/langchain/releases/tag/langchain-fireworks%3D%3D1.5.2",
-      "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28-RC"
+      "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28-RC",
+      "https://qwenlm.github.io/qwen-code-docs/en/blog/updates/weekly-update-2026-07-23/",
+      "https://jxca.miit.gov.cn/xwdt/bwyw/art/2026/art_b13a83dbc0cc4d59b089b1cf19424abf.html",
+      "https://api-docs.deepseek.com/updates"
     ],
     "excludedCandidates": [
       {
@@ -589,7 +766,8 @@
     "warnings": [
       "Reddit and X authentication was unavailable; the run recorded both sources as unavailable without blocking Preview.",
       "When a source exposed only a publication date, publishedAt used 00:00:00Z for that date.",
-      "Community entries preserve uncertainty; votes and comment counts were used for discovery, not as factual evidence."
+      "Community entries preserve uncertainty; votes and comment counts were used for discovery, not as factual evidence.",
+      "The China preview examples include documented material window exceptions; production runs still scan the routine 48-hour window first and publish no regional quota."
     ]
   },
   "language": "en",

@@ -21,6 +21,7 @@ const seoImage = getEditionHeroImage(edition, storyImages);
 const featured = edition.stories.find((story) => story.highlight) ?? edition.stories[0];
 const news = edition.stories.filter((story) => story.kind === "news" && story.id !== featured.id);
 const community = edition.stories.filter((story) => story.kind === "community");
+const newsCount = edition.stories.filter((story) => story.kind === "news").length;
 const categories = [...new Set(edition.stories.map((story) => story.category))];
 const sourceCount = new Set(edition.stories.map((story) => story.source.id)).size;
 ---
@@ -60,7 +61,7 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
         </div>
       </div>
       <dl>
-        <div><dt>{edition.stories.length}</dt><dd> industry signals</dd></div>
+        <div><dt>{newsCount}</dt><dd> verified news stories</dd></div>
         <div><dt>{sourceCount}</dt><dd> independent sources</dd></div>
         <div><dt>{edition.stories.filter((story) => story.openSource).length}</dt><dd> open-source updates</dd></div>
         <div><dt>{edition.stories.filter((story) => story.kind === "community").length}</dt><dd> community findings</dd></div>
@@ -107,6 +108,7 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
     <div class="section-heading">
       <div>
         <span class="eyebrow">Verified signals</span>
+        <span class="section-count">{newsCount} news stories · {community.length} community reports</span>
         <h2>What Actually Changed Today</h2>
       </div>
       <p>Every fact returns to its source<br />Every judgment keeps its evidence boundary</p>

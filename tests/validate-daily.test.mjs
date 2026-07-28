@@ -31,6 +31,13 @@ test("valid English global fixture passes", async () => {
   assert.deepEqual(report.errors, []);
 });
 
+test("global preview includes verified China signals", () => {
+  const chinaStories = fixture.stories.filter((story) => story.region === "china");
+  assert.ok(chinaStories.length >= 3);
+  assert.ok(chinaStories.some((story) => story.source.sourceLanguage === "zh-CN"));
+  assert.ok(chinaStories.every((story) => story.source.url.startsWith("https://")));
+});
+
 test("schema rejects a missing source URL", async () => {
   const edition = clone();
   delete edition.stories[0].source.url;
