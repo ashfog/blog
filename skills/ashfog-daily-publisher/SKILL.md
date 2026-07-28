@@ -37,7 +37,8 @@ Treat repository files as the current source of truth. Do not copy their content
 7. Perform targeted community checks according to `editorial/community-policy.md`.
 8. Lock one ordered fact ledger before writing. Do not introduce facts or URLs absent from the ledger.
 9. Generate one JSON document that conforms to `schemas/daily.schema.json`.
-10. Write the candidate to a temporary path and run:
+10. Count every `summary` and `whyItMatters` value and confirm each is within the schema's current minimum and maximum before validation. Do not pad text with repetition to satisfy a length limit.
+11. Write the candidate to a temporary path and run:
 
 ```text
 npm run validate:daily -- <candidate.json> --content-dir src/content/daily --check-links
