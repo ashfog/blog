@@ -41,7 +41,7 @@ const citations = [
   description={edition.description}
   type="article"
   breadcrumbs={[
-    { name: "AshFog", path: "/" },
+    { name: "ASHFOG", path: "/" },
     { name: "日报归档", path: "/daily" },
     { name: edition.editionDate, path: `/daily/${edition.editionDate}` }
   ]}
@@ -56,10 +56,10 @@ const citations = [
   <article class="edition page-shell" data-pagefind-body>
     <header class="edition-header">
       <div class="edition-kicker">
-        <span class="eyebrow">AshFog Daily</span>
+        <span class="eyebrow">ASHFOG Daily</span>
         <span>ISSUE / {edition.editionDate.replaceAll("-", "")}</span>
       </div>
-      <h1>{edition.title.replace("AshFog Daily：", "")}</h1>
+      <h1>{edition.title.replace("ASHFOG Daily：", "")}</h1>
       <p>{edition.description}</p>
       <div class="edition-meta">
         <span>{formatDate(edition.editionDate)}</span>
