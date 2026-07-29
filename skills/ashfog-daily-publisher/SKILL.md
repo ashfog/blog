@@ -18,7 +18,7 @@ Read, in order, `editorial/editorial-policy.md`, `editorial/publishing-rules.jso
 ## Run the pipeline
 
 1. Determine `editionDate` at 09:30:00 in `America/New_York`. Set `cutoffAt` to that timezone-aware instant and `windowStartAt` to exactly 24 hours earlier. Use `schemaVersion: 2`.
-2. If `src/content/daily/YYYY-MM-DD.json` already exists and validates, return `already_valid` without writing.
+2. If `src/content/daily/YYYY-MM-DD.json` already exists, return `already_valid` only when it validates and already uses `schemaVersion: 2`, `America/New_York`, and the correct 09:30 cutoff. Treat an existing v1 or non-New York file as a migration candidate: regenerate a temporary v2 edition and atomically replace only that target after every validation passes.
 3. Reconcile enabled sources with access plans. Missing, unknown, duplicate, empty, or unsupported plans are blocking defects.
 4. Attempt all enabled sources, including all China sources. Date-based routes run once for every New York calendar date intersecting the window. Merge, canonicalize, deduplicate, sort by publication or material-update time, filter to `(windowStartAt, cutoffAt]`, and keep at most the newest 15 per source.
 5. Record one `research.sourceScan` row per source using `itemsInWindow`. Use `collected` for one or more in-window entries, `empty` for a working route covering the window with none, and `unavailable` only after all routes fail. Missing rows and `not-run` are blocking.
