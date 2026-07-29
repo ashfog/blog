@@ -1,12 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "language": "en",
   "edition": "global",
   "editionDate": "2026-07-29",
-  "timezone": "Asia/Shanghai",
-  "cutoffAt": "2026-07-29T14:04:36+08:00",
-  "generatedAt": "2026-07-29T14:04:36+08:00",
-  "runId": "ashfog-daily-2026-07-29-140436",
+  "timezone": "America/New_York",
+  "cutoffAt": "2026-07-29T09:30:00-04:00",
+  "generatedAt": "2026-07-29T09:30:00-04:00",
+  "runId": "ashfog-daily-2026-07-29-093000-ny",
   "title": "ASHFOG Daily — July 29, 2026",
   "description": "MCP resets its transport around stateless requests, Kimi Code adds safer failure handling, and two new benchmarks test desktop state changes and code optimization.",
   "qualityShortfallReason": "",
@@ -48,7 +48,7 @@
         "tier": "A",
         "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28",
         "sourceLanguage": "en",
-        "publishedAt": "2026-07-29T00:47:00+08:00",
+        "publishedAt": "2026-07-28T12:47:00-04:00",
         "updatedAt": null,
         "evidenceLabel": "officially_stated"
       },
@@ -74,7 +74,7 @@
         "signals": [
           {
             "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1442",
-            "retrievedAt": "2026-07-29T14:04:36+08:00",
+            "retrievedAt": "2026-07-29T09:30:00-04:00",
             "authorRole": "specification contributors",
             "evidenceLabel": "community_discussion_suggests",
             "finding": "The specification design discussion identifies load balancing, failure recovery, and implementation complexity as the core reasons for making protocol requests self-contained.",
@@ -122,7 +122,7 @@
         "tier": "A",
         "url": "https://github.com/MoonshotAI/kimi-code/releases/tag/%40moonshot-ai%2Fkimi-code%400.30.0",
         "sourceLanguage": "en",
-        "publishedAt": "2026-07-29T11:39:00+08:00",
+        "publishedAt": "2026-07-28T23:39:00-04:00",
         "updatedAt": null,
         "evidenceLabel": "officially_stated"
       },
@@ -186,7 +186,7 @@
         "tier": "A",
         "url": "https://arxiv.org/abs/2607.26041",
         "sourceLanguage": "en",
-        "publishedAt": "2026-07-29T01:49:51+08:00",
+        "publishedAt": "2026-07-28T13:49:51-04:00",
         "updatedAt": null,
         "evidenceLabel": "officially_stated"
       },
@@ -250,7 +250,7 @@
         "tier": "A",
         "url": "https://arxiv.org/abs/2607.25970",
         "sourceLanguage": "en",
-        "publishedAt": "2026-07-29T00:52:31+08:00",
+        "publishedAt": "2026-07-28T12:52:31-04:00",
         "updatedAt": null,
         "evidenceLabel": "officially_stated"
       },
@@ -290,60 +290,492 @@
   ],
   "research": {
     "sourceScan": [
-      {"sourceId":"openai-news","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"anthropic-news","status":"empty","itemsFetched":10,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"deepmind-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"google-ai-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"meta-ai-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"mistral-news","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"microsoft-ai-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"nvidia-developer-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"hugging-face-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"github-changelog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"cloudflare-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"github-trending","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"hacker-news","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"show-hn","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"hugging-face-papers","status":"collected","itemsFetched":11,"itemsOnEditionDay":11,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"arxiv-cs-ai","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
-      {"sourceId":"arxiv-cs-cl","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"arxiv-cs-lg","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
-      {"sourceId":"ars-ai","status":"collected","itemsFetched":1,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"mit-tech-review-ai","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"ieee-spectrum-ai","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"reddit-localllama","status":"collected","itemsFetched":5,"itemsOnEditionDay":5,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"x-curated-experts","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"phoronix","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"mcp-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"mcp-spec-releases","status":"collected","itemsFetched":1,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
-      {"sourceId":"vercel-ai","status":"collected","itemsFetched":1,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"ollama-blog","status":"empty","itemsFetched":10,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"ollama-releases","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"langchain-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"llamaindex-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"dify-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"hugging-face-trending-papers","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"chips-and-cheese","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"semianalysis","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"the-batch","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"alphasignal","status":"collected","itemsFetched":11,"itemsOnEditionDay":11,"duplicatesRemoved":1,"selectedCount":0,"failureReason":""},
-      {"sourceId":"tldr-ai","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"deepseek-official","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"qwen-official","status":"collected","itemsFetched":2,"itemsOnEditionDay":2,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"bytedance-seed","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"zai-official","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"moonshot-ai","status":"collected","itemsFetched":2,"itemsOnEditionDay":2,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
-      {"sourceId":"minimax-official","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"modelscope-hub","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"tencent-hunyuan","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"baidu-ernie-paddlepaddle","status":"collected","itemsFetched":4,"itemsOnEditionDay":4,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"huawei-ascend","status":"collected","itemsFetched":1,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"stepfun-official","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"china-cac","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"china-miit","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"machine-heart","status":"collected","itemsFetched":5,"itemsOnEditionDay":5,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"qbitai","status":"collected","itemsFetched":3,"itemsOnEditionDay":3,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
-      {"sourceId":"36kr-ai","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""}
+      {
+        "sourceId": "openai-news",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "anthropic-news",
+        "status": "empty",
+        "itemsFetched": 10,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "deepmind-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "google-ai-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "meta-ai-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "mistral-news",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "microsoft-ai-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "nvidia-developer-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "hugging-face-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "github-changelog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "cloudflare-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "github-trending",
+        "status": "collected",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 15
+      },
+      {
+        "sourceId": "hacker-news",
+        "status": "collected",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 15
+      },
+      {
+        "sourceId": "show-hn",
+        "status": "collected",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 15
+      },
+      {
+        "sourceId": "hugging-face-papers",
+        "status": "collected",
+        "itemsFetched": 11,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 11
+      },
+      {
+        "sourceId": "arxiv-cs-ai",
+        "status": "collected",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 1,
+        "failureReason": "",
+        "itemsInWindow": 15
+      },
+      {
+        "sourceId": "arxiv-cs-cl",
+        "status": "collected",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 15
+      },
+      {
+        "sourceId": "arxiv-cs-lg",
+        "status": "collected",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 1,
+        "failureReason": "",
+        "itemsInWindow": 15
+      },
+      {
+        "sourceId": "ars-ai",
+        "status": "collected",
+        "itemsFetched": 1,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 1
+      },
+      {
+        "sourceId": "mit-tech-review-ai",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "ieee-spectrum-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "reddit-localllama",
+        "status": "collected",
+        "itemsFetched": 5,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 5
+      },
+      {
+        "sourceId": "x-curated-experts",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "phoronix",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "mcp-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "mcp-spec-releases",
+        "status": "collected",
+        "itemsFetched": 1,
+        "duplicatesRemoved": 0,
+        "selectedCount": 1,
+        "failureReason": "",
+        "itemsInWindow": 1
+      },
+      {
+        "sourceId": "vercel-ai",
+        "status": "collected",
+        "itemsFetched": 1,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 1
+      },
+      {
+        "sourceId": "ollama-blog",
+        "status": "empty",
+        "itemsFetched": 10,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "ollama-releases",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "langchain-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "llamaindex-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "dify-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "hugging-face-trending-papers",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "chips-and-cheese",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "semianalysis",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "the-batch",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "alphasignal",
+        "status": "collected",
+        "itemsFetched": 11,
+        "duplicatesRemoved": 1,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 11
+      },
+      {
+        "sourceId": "tldr-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "deepseek-official",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "qwen-official",
+        "status": "collected",
+        "itemsFetched": 2,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 2
+      },
+      {
+        "sourceId": "bytedance-seed",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "zai-official",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "moonshot-ai",
+        "status": "collected",
+        "itemsFetched": 2,
+        "duplicatesRemoved": 0,
+        "selectedCount": 1,
+        "failureReason": "",
+        "itemsInWindow": 2
+      },
+      {
+        "sourceId": "minimax-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "modelscope-hub",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "tencent-hunyuan",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "baidu-ernie-paddlepaddle",
+        "status": "collected",
+        "itemsFetched": 4,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 4
+      },
+      {
+        "sourceId": "huawei-ascend",
+        "status": "collected",
+        "itemsFetched": 1,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 1
+      },
+      {
+        "sourceId": "stepfun-official",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "china-cac",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "china-miit",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      },
+      {
+        "sourceId": "machine-heart",
+        "status": "collected",
+        "itemsFetched": 5,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 5
+      },
+      {
+        "sourceId": "qbitai",
+        "status": "collected",
+        "itemsFetched": 3,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 3
+      },
+      {
+        "sourceId": "36kr-ai",
+        "status": "empty",
+        "itemsFetched": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "",
+        "itemsInWindow": 0
+      }
     ],
     "collectedUrls": [
       "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28",
@@ -354,8 +786,6 @@
       "https://huggingface.co/papers/2607.26041",
       "https://arxiv.org/abs/2607.25970",
       "https://huggingface.co/papers/2607.25970",
-      "https://arxiv.org/abs/2607.25698",
-      "https://arxiv.org/abs/2607.25583",
       "https://github.com/vercel/ai/releases/tag/ai%407.0.41",
       "https://github.com/MoonshotAI/FlashKDA",
       "https://github.com/QwenLM/qwen-code",
@@ -363,18 +793,79 @@
       "https://github.com/Ascend/pytorch"
     ],
     "excludedCandidates": [
-      {"eventId":"shieldstral-guard-model","title":"Shieldstral safety model paper","url":"https://arxiv.org/abs/2607.25698","reason":"stale"},
-      {"eventId":"speculate-inference-paper","title":"Speculative decoding paper candidate","url":"https://arxiv.org/abs/2607.25583","reason":"stale"},
-      {"eventId":"vercel-ai-sdk-7-0-41","title":"Vercel AI SDK 7.0.41","url":"https://github.com/vercel/ai/releases/tag/ai%407.0.41","reason":"low-relevance"},
-      {"eventId":"moonshot-flashkda-commits","title":"FlashKDA repository updates","url":"https://github.com/MoonshotAI/FlashKDA","reason":"duplicate"},
-      {"eventId":"qwen-code-routine-updates","title":"Qwen Code same-day repository updates","url":"https://github.com/QwenLM/qwen-code","reason":"low-relevance"},
-      {"eventId":"paddle-routine-framework-updates","title":"PaddlePaddle same-day framework updates","url":"https://github.com/PaddlePaddle/Paddle","reason":"low-relevance"},
-      {"eventId":"ascend-pytorch-routine-updates","title":"Ascend PyTorch same-day repository updates","url":"https://github.com/Ascend/pytorch","reason":"low-relevance"}
+      {
+        "eventId": "vercel-ai-sdk-7-0-41",
+        "title": "Vercel AI SDK 7.0.41",
+        "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.41",
+        "reason": "low-relevance",
+        "score": {
+          "evidenceStrength": 5,
+          "relevance": 2,
+          "novelty": 2,
+          "practicalUtility": 3,
+          "impact": 2,
+          "communitySignal": 0,
+          "total": 14
+        }
+      },
+      {
+        "eventId": "moonshot-flashkda-commits",
+        "title": "FlashKDA repository updates",
+        "url": "https://github.com/MoonshotAI/FlashKDA",
+        "reason": "duplicate"
+      },
+      {
+        "eventId": "qwen-code-routine-updates",
+        "title": "Qwen Code same-day repository updates",
+        "url": "https://github.com/QwenLM/qwen-code",
+        "reason": "low-relevance",
+        "score": {
+          "evidenceStrength": 4,
+          "relevance": 2,
+          "novelty": 1,
+          "practicalUtility": 2,
+          "impact": 1,
+          "communitySignal": 0,
+          "total": 10
+        }
+      },
+      {
+        "eventId": "paddle-routine-framework-updates",
+        "title": "PaddlePaddle same-day framework updates",
+        "url": "https://github.com/PaddlePaddle/Paddle",
+        "reason": "low-relevance",
+        "score": {
+          "evidenceStrength": 4,
+          "relevance": 2,
+          "novelty": 1,
+          "practicalUtility": 2,
+          "impact": 1,
+          "communitySignal": 0,
+          "total": 10
+        }
+      },
+      {
+        "eventId": "ascend-pytorch-routine-updates",
+        "title": "Ascend PyTorch same-day repository updates",
+        "url": "https://github.com/Ascend/pytorch",
+        "reason": "low-relevance",
+        "score": {
+          "evidenceStrength": 4,
+          "relevance": 2,
+          "novelty": 1,
+          "practicalUtility": 2,
+          "impact": 1,
+          "communitySignal": 0,
+          "total": 10
+        }
+      }
     ],
     "unavailableSources": [],
     "warnings": [
-      "Community checks found no relevant same-day discussion for three highlights; no standalone community story was selected.",
+      "No standalone community story met the independent-event rule; one project-attached GitHub signal was adopted and counted as a community finding.",
       "Tier C China discoveries did not resolve to sufficiently strong primary evidence before cutoff."
-    ]
-  }
+    ],
+    "seriousCandidateCount": 9
+  },
+  "windowStartAt": "2026-07-28T09:30:00-04:00"
 }
