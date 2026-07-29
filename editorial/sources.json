@@ -1,6 +1,6 @@
 {
-  "version": 4,
-  "last_reviewed": "2026-07-28",
+  "version": 5,
+  "last_reviewed": "2026-07-29",
   "timezone": "Asia/Shanghai",
   "tiers": {
     "A": "Primary facts: official announcements, repositories, releases, specifications, model cards, and papers.",
@@ -607,7 +607,8 @@
       "region": "north-america",
       "languages": [
         "en"
-      ]
+      ],
+      "repository": "https://github.com/langchain-ai"
     },
     {
       "id": "llamaindex-blog",
@@ -624,7 +625,8 @@
       "region": "north-america",
       "languages": [
         "en"
-      ]
+      ],
+      "repository": "https://github.com/run-llama/llama_index"
     },
     {
       "id": "dify-blog",
@@ -641,7 +643,8 @@
       "region": "asia-pacific",
       "languages": [
         "en"
-      ]
+      ],
+      "repository": "https://github.com/langgenius/dify"
     },
     {
       "id": "hugging-face-trending-papers",
@@ -794,8 +797,8 @@
       "id": "bytedance-seed",
       "name": "ByteDance Seed",
       "tier": "A",
-      "kind": "official",
-      "url": "https://seed.bytedance.com/blog",
+      "kind": "official-and-repository",
+      "url": "https://seed.bytedance.com/en/blog",
       "region": "china",
       "languages": [
         "zh-CN",
@@ -808,7 +811,8 @@
         "image",
         "video",
         "multimodal"
-      ]
+      ],
+      "repository": "https://github.com/ByteDance-Seed"
     },
     {
       "id": "zai-official",
@@ -934,7 +938,7 @@
       "id": "huawei-ascend",
       "name": "Huawei Ascend",
       "tier": "A",
-      "kind": "official",
+      "kind": "official-and-repository",
       "url": "https://www.hiascend.com/en/",
       "region": "china",
       "languages": [
@@ -947,13 +951,14 @@
         "inference",
         "training",
         "deployment"
-      ]
+      ],
+      "repository": "https://github.com/Ascend"
     },
     {
       "id": "stepfun-official",
       "name": "StepFun",
       "tier": "A",
-      "kind": "official",
+      "kind": "official-and-repository",
       "url": "https://www.stepfun.com/",
       "region": "china",
       "languages": [
@@ -966,7 +971,8 @@
         "audio",
         "video",
         "open-models"
-      ]
+      ],
+      "repository": "https://github.com/stepfun-ai"
     },
     {
       "id": "china-cac",
@@ -1011,7 +1017,7 @@
       "name": "Synced",
       "tier": "C",
       "kind": "discovery",
-      "url": "https://www.jiqizhixin.com/",
+      "url": "https://www.jiqizhixin.com/industry",
       "region": "china",
       "languages": [
         "zh-CN"
@@ -1047,7 +1053,7 @@
       "name": "36Kr AI",
       "tier": "C",
       "kind": "discovery",
-      "url": "https://36kr.com/",
+      "url": "https://www.36kr.com/search-list/3628",
       "region": "china",
       "languages": [
         "zh-CN"
