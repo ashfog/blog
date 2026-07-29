@@ -15,6 +15,45 @@ const fixturePath = path.join(testDir, "fixtures", "2026-07-28.json");
 const fixture = JSON.parse(await fs.readFile(fixturePath, "utf8"));
 const config = await loadEditorialConfig(root);
 const clone = () => structuredClone(fixture);
+const rollingClone = () => {
+  const edition = clone();
+  edition.schemaVersion = 2;
+  edition.timezone = "America/New_York";
+  edition.windowStartAt = "2026-07-27T09:30:00-04:00";
+  edition.cutoffAt = "2026-07-28T09:30:00-04:00";
+  edition.generatedAt = "2026-07-28T09:45:00-04:00";
+  edition.research.sourceScan = edition.research.sourceScan.map((scan) => {
+    const { itemsOnEditionDay, ...rest } = scan;
+    return { ...rest, itemsInWindow: itemsOnEditionDay };
+  });
+  edition.stories = edition.stories.map((story) => ({
+    ...story,
+    source: {
+      ...story.source,
+      publishedAt: "2026-07-28T08:00:00-04:00",
+      updatedAt: null,
+    },
+    score: {
+      ...story.score,
+      evidenceStrength: Math.max(3, story.score.evidenceStrength),
+      relevance: Math.max(3, story.score.relevance),
+      practicalUtility: Math.max(3, story.score.practicalUtility),
+    },
+    windowException: "",
+  }));
+  edition.stories.forEach((story) => {
+    story.score.total = Object.entries(story.score)
+      .filter(([key]) => key !== "total")
+      .reduce((total, [, value]) => total + value, 0);
+  });
+  edition.research.excludedCandidates = edition.research.excludedCandidates.map((candidate) =>
+    candidate.reason === "low-relevance"
+      ? { ...candidate, score: { evidenceStrength: 4, relevance: 2, novelty: 2, practicalUtility: 2, impact: 1, communitySignal: 0, total: 11 } }
+      : candidate
+  );
+  edition.research.seriousCandidateCount = edition.stories.length + edition.research.excludedCandidates.length;
+  return edition;
+};
 
 const validate = (edition, options = {}) =>
   validateEdition(edition, {
@@ -140,7 +179,64 @@ test("domain rules reject an unexceptional prior-day item", async () => {
   edition.stories[0].windowException = "";
   const report = await validate(edition);
   assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("outside edition day")));
+  assert.ok(report.errors.some((error) => error.includes("outside collection window")));
+});
+
+test("schemaVersion 2 accepts the exact New York trailing 24-hour window", async () => {
+  const report = await validate(rollingClone());
+  assert.equal(report.status, "ok");
+});
+
+test("schemaVersion 2 rejects a window that is not exactly 24 hours", async () => {
+  const edition = rollingClone();
+  edition.windowStartAt = "2026-07-27T10:30:00-04:00";
+  const report = await validate(edition);
+  assert.ok(report.errors.some((error) => error.includes("exactly 24 hours")));
+});
+
+test("schemaVersion 2 rejects a cutoff that is not 09:30 New York time", async () => {
+  const edition = rollingClone();
+  edition.windowStartAt = "2026-07-27T10:00:00-04:00";
+  edition.cutoffAt = "2026-07-28T10:00:00-04:00";
+  const report = await validate(edition);
+  assert.ok(report.errors.some((error) => error.includes("must be 09:30:00")));
+});
+
+test("schemaVersion 2 includes the prior New York calendar date inside the rolling window", async () => {
+  const edition = rollingClone();
+  edition.stories[0].source.publishedAt = "2026-07-27T18:00:00-04:00";
+  const report = await validate(edition);
+  assert.ok(!report.errors.some((error) => error.includes("outside collection window")));
+});
+
+test("schemaVersion 2 rejects an item older than the rolling window", async () => {
+  const edition = rollingClone();
+  edition.stories[0].source.publishedAt = "2026-07-27T09:29:59-04:00";
+  const report = await validate(edition);
+  assert.ok(report.errors.some((error) => error.includes("outside collection window")));
+});
+
+test("schemaVersion 2 requires itemsInWindow instead of itemsOnEditionDay", async () => {
+  const edition = rollingClone();
+  edition.research.sourceScan[0].itemsOnEditionDay = edition.research.sourceScan[0].itemsInWindow;
+  delete edition.research.sourceScan[0].itemsInWindow;
+  const report = await validate(edition);
+  assert.ok(report.errors.some((error) => error.includes("itemsInWindow")));
+});
+
+test("schemaVersion 2 rejects a serious candidate ledger that silently drops candidates", async () => {
+  const edition = rollingClone();
+  edition.research.seriousCandidateCount += 1;
+  const report = await validate(edition);
+  assert.ok(report.errors.some((error) => error.includes("seriousCandidateCount")));
+});
+
+test("schemaVersion 2 cannot exclude a qualifying event as low-relevance", async () => {
+  const edition = rollingClone();
+  const candidate = edition.research.excludedCandidates.find((item) => item.reason === "low-relevance");
+  candidate.score = { evidenceStrength: 4, relevance: 4, novelty: 3, practicalUtility: 4, impact: 3, communitySignal: 1, total: 19 };
+  const report = await validate(edition);
+  assert.ok(report.errors.some((error) => error.includes("meets the materiality floor")));
 });
 
 test("domain rules reject duplicate events", async () => {

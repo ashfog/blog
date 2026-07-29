@@ -1,7 +1,7 @@
 {
-  "version": 5,
+  "version": 6,
   "last_reviewed": "2026-07-29",
-  "timezone": "Asia/Shanghai",
+  "timezone": "America/New_York",
   "tiers": {
     "A": "Primary facts: official announcements, repositories, releases, specifications, model cards, and papers.",
     "B": "Engineering evidence: reproducible benchmarks, practitioner reports, technical analysis, and community threads.",
@@ -18,8 +18,8 @@
     "candidate_collection_has_no_global_cap": true,
     "regional_coverage_is_not_a_publication_quota": true,
     "items_per_source_is_a_hard_maximum": true,
-    "scan_all_enabled_sources_each_edition_day": true,
-    "record_every_source_attempt": true
+    "record_every_source_attempt": true,
+    "scan_all_enabled_sources_each_run": true
   },
   "access_profiles": {
     "official-web": {
@@ -1093,10 +1093,12 @@
     "rule": "Registry languages describe available source languages. Every published story must record the language of the exact page used in source.sourceLanguage."
   },
   "collection": {
-    "window_mode": "edition-day",
-    "timezone": "Asia/Shanghai",
+    "window_mode": "rolling-hours",
+    "window_hours": 24,
+    "timezone": "America/New_York",
+    "cutoff_local_time": "09:30",
     "items_per_source_limit": 15,
     "use_available_when_fewer": true,
-    "backfill_prior_days": false
+    "outside_window_backfill": false
   }
 }

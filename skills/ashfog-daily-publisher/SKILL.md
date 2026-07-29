@@ -9,67 +9,41 @@ Produce one evidence-backed global daily edition as a single validated JSON file
 
 ## Select a mode
 
-- Use **Preview** when the user does not name a mode. Research, draft, and validate without an external write.
-- Use **Publish** only when explicitly requested by the user or scheduled automation. Complete Preview first and publish only after every blocking check passes.
+Use Preview when the user does not name a mode. Use Publish only when explicitly requested or in the scheduled automation. A Publish run completes Preview first and writes only after every blocking check passes.
 
 ## Load repository rules
 
-Read these files before research:
-
-1. `editorial/editorial-policy.md`
-2. `editorial/publishing-rules.json`
-3. `editorial/sources.json`
-4. `editorial/source-access.json`
-5. `editorial/community-policy.md`
-6. `editorial/categories.json`
-7. `editorial/evidence-labels.json`
-8. `editorial/image-library.json`
-9. `schemas/daily.schema.json`
-
-Treat repository files as the current source of truth. Do not copy their contents into the automation prompt or duplicate them inside this skill.
+Read, in order, `editorial/editorial-policy.md`, `editorial/publishing-rules.json`, `editorial/sources.json`, `editorial/source-access.json`, `editorial/community-policy.md`, `editorial/categories.json`, `editorial/evidence-labels.json`, `editorial/image-library.json`, and `schemas/daily.schema.json`. Repository files are the source of truth; do not duplicate them in the automation prompt.
 
 ## Run the pipeline
 
-1. Determine `editionDate` and `cutoffAt` in `Asia/Shanghai`. The routine collection window is 00:00 through `cutoffAt` on that edition date.
-2. Check whether `src/content/daily/YYYY-MM-DD.json` already exists and validates. Return `already_valid` without writing when it does.
-3. Reconcile `editorial/sources.json` with `editorial/source-access.json` before network access. Every enabled source must have exactly one explicit, non-empty ordered plan; missing plans, unknown plan IDs, duplicate source IDs, or unsupported route types are blocking configuration defects. Prefer structured RSS, JSON, CLI, or connected GitHub routes before page parsing, and use site-restricted search only as a fallback. Continue after a route failure until one route exposes a trustworthy dated listing or all routes are exhausted.
-4. Attempt every enabled source, including every enabled China source. For each source, collect at most the 15 newest entries published or materially updated on the edition date. If fewer exist, use the available number and do not backfill prior dates.
-5. Record exactly one `research.sourceScan` row for every registered source. Use `collected` when a working route has edition-day entries, `empty` when a working dated route has none, and `unavailable` only after every configured route fails. A missing source row or `not-run` status blocks Preview and Publish.
-6. Begin verification with Tier A primary evidence and use Tier C only to discover stronger evidence. Do not impose a global candidate-count cap before selection.
-7. Record every serious candidate URL in `research.collectedUrls` before drafting.
-8. Merge coverage of one event under one `eventId`. Compare the previous seven editions and require `materialUpdate` for repeated events.
-9. Score and select according to repository policy. Publish every material event, never pad an edition, and treat the 46-story maximum only as an anomaly guard.
-10. Perform targeted community checks according to `editorial/community-policy.md`. Deep-check every highlight on at least two applicable surfaces when available, and check at least one project-attached surface for repository, model, paper, runtime, or developer-tool candidates.
-11. Lock one ordered fact ledger before writing. Do not introduce facts or URLs absent from the ledger.
-12. Generate one English JSON document with `language: "en"` and `edition: "global"` that conforms to `schemas/daily.schema.json`.
-13. Record `region` for every story and `sourceLanguage` for every primary source. Preserve the original source URL but do not retain an original-language headline.
-14. Count English words in every `summary`, `whyItMatters`, and daily analysis value. Confirm the kind-specific limits in `editorial/publishing-rules.json` before validation and never pad with repetition.
-15. Write the candidate to a temporary path and run:
+1. Determine `editionDate` at 09:30:00 in `America/New_York`. Set `cutoffAt` to that timezone-aware instant and `windowStartAt` to exactly 24 hours earlier. Use `schemaVersion: 2`.
+2. If `src/content/daily/YYYY-MM-DD.json` already exists and validates, return `already_valid` without writing.
+3. Reconcile enabled sources with access plans. Missing, unknown, duplicate, empty, or unsupported plans are blocking defects.
+4. Attempt all enabled sources, including all China sources. Date-based routes run once for every New York calendar date intersecting the window. Merge, canonicalize, deduplicate, sort by publication or material-update time, filter to `[windowStartAt, cutoffAt]`, and keep at most the newest 15 per source.
+5. Record one `research.sourceScan` row per source using `itemsInWindow`. Use `collected` for one or more in-window entries, `empty` for a working route covering the window with none, and `unavailable` only after all routes fail. Missing rows and `not-run` are blocking.
+6. Start verification with Tier A evidence and use Tier C only for discovery. Record every serious candidate and URL before drafting.
+7. Merge one event under one `eventId`, compare the previous seven editions, and require `materialUpdate` for a repeated event.
+8. Score every serious candidate. Publish every verified event meeting the repository materiality floor. Every unselected serious candidate must appear in the exclusion ledger with a reason. Set `research.seriousCandidateCount` to selected stories plus excluded candidates, and include the full score on every `low-relevance` exclusion. Do not use a story quota; 46 is only an anomaly guard.
+9. Perform targeted community checks. Deep-check every highlight on at least two applicable surfaces when available and every repository, model, paper, runtime, or developer-tool candidate on at least one project-attached surface.
+10. Treat every adopted nested `communityCheck` signal as a published community finding. Use a standalone community story only for an independent event. Never report community count by standalone stories alone.
+11. Lock one fact ledger before writing. Generate one English JSON document with original source URLs, story regions, source languages, exact word limits, and no facts absent from the ledger.
+12. Write real paragraph breaks in `dailyAnalysis.body`, then validate a temporary candidate with:
 
-```text
-npm run validate:daily -- <candidate.json> --content-dir src/content/daily --check-links
-```
+`npm run validate:daily -- <candidate.json> --content-dir src/content/daily --check-links`
 
-Treat exit code `1` as blocking. Do not weaken validation, remove evidence, invent replacement URLs, or publish a partial edition to make a run pass.
+Exit code 1 blocks publication. Do not weaken validation, invent replacement evidence, or publish a partial edition.
 
 ## Assign images
 
-Omit `imageId` and `heroImageId` by default. Astro assigns unique images deterministically. The first 40 stories use category artwork; positions 41–46 can use the six registered reserve artworks without repeating an image. Set `imageId` only for an intentional editorial override after reading `editorial/image-library.json`; the ID must be a category story image and unique in the edition. Never invent or reuse an image ID.
+Omit `imageId` and `heroImageId` by default so Astro assigns unique registered images deterministically. Use explicit IDs only for intentional overrides found in `editorial/image-library.json`; never invent or repeat an ID.
 
-## Preview
+## Preview report
 
-Return the candidate path, attempted-source count, collected, empty, unavailable, and not-run sources, route failures and successful fallbacks, total fetched entries, edition-day entries, duplicate count, candidate count, selected news and community counts, regional and tier distributions, community surfaces attempted, exclusions, warnings, and validation report. Do not mutate GitHub.
+Report candidate path, cutoff and window start, attempted/collected/empty/unavailable/not-run sources, successful fallbacks and route failures, fetched and in-window entries, duplicates, serious candidates, exclusions, selected news, standalone community stories, adopted nested community findings, regional and tier distributions, surfaces attempted, warnings, and validation result. Do not mutate GitHub.
 
 ## Publish
 
-1. Re-read the current target path and default-branch head.
-2. Publish exactly one file: `src/content/daily/YYYY-MM-DD.json`.
-3. Create one commit. Never force-push or overwrite unrelated work.
-4. If the target appeared after validation, re-read it. Return `already_valid` when valid; otherwise stop with `conflict`.
-5. Re-read the file from the resulting commit and validate its date, IDs, URLs, language, region, source languages, source-scan ledger, and content hash.
-6. Allow Cloudflare Pages to build Astro and Pagefind from the commit.
-7. When deployment exists, verify the public edition URL before reporting `published`.
+Re-read the target and default-branch head. Publish exactly one daily JSON file in one commit without force-pushing or overwriting unrelated work. Handle races idempotently. Re-read and validate the committed file, allow Cloudflare Pages to build Astro and Pagefind, and verify the public edition URL before reporting `published`.
 
-## Automation behavior
-
-Make retries idempotent. A valid existing edition produces no new commit. An invalid or missing edition runs the complete pipeline. On any access, validation, concurrency, build, or deployment failure, report `blocked` with the exact reason and leave the previous public edition unchanged.
+On any access, validation, concurrency, build, or deployment failure, return `blocked` with the exact reason and leave the previous public edition unchanged.
