@@ -6,6 +6,7 @@
   "routeTypes": [
     "rss",
     "json-api",
+    "sitemap",
     "connected-github",
     "web-index",
     "date-archive",
@@ -49,7 +50,7 @@
         "url": "https://www.anthropic.com/news"
       },
       {
-        "type": "json-api",
+        "type": "sitemap",
         "url": "https://www.anthropic.com/sitemap.xml",
         "note": "Use loc and lastmod only for discovery, then verify the article's visible publication date."
       },
@@ -78,7 +79,7 @@
         "url": "https://ai.meta.com/blog/"
       },
       {
-        "type": "json-api",
+        "type": "sitemap",
         "url": "https://ai.meta.com/sitemap.xml",
         "note": "Use only for URL discovery; verify dates on canonical article pages."
       },
