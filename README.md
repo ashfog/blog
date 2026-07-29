@@ -24,6 +24,12 @@ When the formal content directory is empty, the site uses
 part of the publication directory. As soon as a formal edition exists, only
 formal editions are rendered.
 
+## Source collection
+
+`editorial/sources.json` is the stable 54-source editorial registry. Machine-readable endpoints and ordered fallbacks live separately in `editorial/source-access.json`, so RSS, API, GitHub, page, and indexed-search routes can be maintained without changing source IDs or invalidating historical editions. Community research behavior lives in `editorial/community-policy.md`.
+
+A collector must try a source's configured routes in order. It records `empty` when a working dated route has no edition-day entries and records `unavailable` only after every configured route fails.
+
 ## Image library
 
 The committed library contains 40 category story artworks and 8 page artworks. Six page artworks are registered as overflow reserves, giving every valid edition 46 unique story-image slots. The daily Schema uses 46 only as an anomaly guard. Each

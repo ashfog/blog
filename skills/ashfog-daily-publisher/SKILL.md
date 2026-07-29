@@ -19,11 +19,12 @@ Read these files before research:
 1. `editorial/editorial-policy.md`
 2. `editorial/publishing-rules.json`
 3. `editorial/sources.json`
-4. `editorial/community-policy.md`
-5. `editorial/categories.json`
-6. `editorial/evidence-labels.json`
-7. `editorial/image-library.json`
-8. `schemas/daily.schema.json`
+4. `editorial/source-access.json`
+5. `editorial/community-policy.md`
+6. `editorial/categories.json`
+7. `editorial/evidence-labels.json`
+8. `editorial/image-library.json`
+9. `schemas/daily.schema.json`
 
 Treat repository files as the current source of truth. Do not copy their contents into the automation prompt or duplicate them inside this skill.
 
@@ -31,18 +32,19 @@ Treat repository files as the current source of truth. Do not copy their content
 
 1. Determine `editionDate` and `cutoffAt` in `Asia/Shanghai`. The routine collection window is 00:00 through `cutoffAt` on that edition date.
 2. Check whether `src/content/daily/YYYY-MM-DD.json` already exists and validates. Return `already_valid` without writing when it does.
-3. Attempt every enabled source, including every enabled China source. For each source, collect at most the 15 newest entries published or materially updated on the edition date. If fewer exist, use the available number and do not backfill prior dates.
-4. Record exactly one `research.sourceScan` row for every registered source, including access status, fetched count, edition-day count, duplicates removed, selected count, and failure reason. A missing source row or `not-run` status blocks Preview and Publish.
-5. Begin verification with Tier A primary evidence and use Tier C only to discover stronger evidence. Do not impose a global candidate-count cap before selection.
-6. Record every serious candidate URL in `research.collectedUrls` before drafting.
-7. Merge coverage of one event under one `eventId`. Compare the previous seven editions and require `materialUpdate` for repeated events.
-8. Score and select according to repository policy. Publish every material event, never pad an edition, and treat the 46-story maximum only as an anomaly guard.
-9. Perform targeted community checks according to `editorial/community-policy.md`.
-10. Lock one ordered fact ledger before writing. Do not introduce facts or URLs absent from the ledger.
-11. Generate one English JSON document with `language: "en"` and `edition: "global"` that conforms to `schemas/daily.schema.json`.
-12. Record `region` for every story and `sourceLanguage` for every primary source. Preserve the original source URL but do not retain an original-language headline.
-13. Count English words in every `summary`, `whyItMatters`, and daily analysis value. Confirm the kind-specific limits in `editorial/publishing-rules.json` before validation and never pad with repetition.
-14. Write the candidate to a temporary path and run:
+3. Reconcile `editorial/sources.json` with `editorial/source-access.json` before network access. Every enabled source must have exactly one explicit, non-empty ordered plan; missing plans, unknown plan IDs, duplicate source IDs, or unsupported route types are blocking configuration defects. Prefer structured RSS, JSON, CLI, or connected GitHub routes before page parsing, and use site-restricted search only as a fallback. Continue after a route failure until one route exposes a trustworthy dated listing or all routes are exhausted.
+4. Attempt every enabled source, including every enabled China source. For each source, collect at most the 15 newest entries published or materially updated on the edition date. If fewer exist, use the available number and do not backfill prior dates.
+5. Record exactly one `research.sourceScan` row for every registered source. Use `collected` when a working route has edition-day entries, `empty` when a working dated route has none, and `unavailable` only after every configured route fails. A missing source row or `not-run` status blocks Preview and Publish.
+6. Begin verification with Tier A primary evidence and use Tier C only to discover stronger evidence. Do not impose a global candidate-count cap before selection.
+7. Record every serious candidate URL in `research.collectedUrls` before drafting.
+8. Merge coverage of one event under one `eventId`. Compare the previous seven editions and require `materialUpdate` for repeated events.
+9. Score and select according to repository policy. Publish every material event, never pad an edition, and treat the 46-story maximum only as an anomaly guard.
+10. Perform targeted community checks according to `editorial/community-policy.md`. Deep-check every highlight on at least two applicable surfaces when available, and check at least one project-attached surface for repository, model, paper, runtime, or developer-tool candidates.
+11. Lock one ordered fact ledger before writing. Do not introduce facts or URLs absent from the ledger.
+12. Generate one English JSON document with `language: "en"` and `edition: "global"` that conforms to `schemas/daily.schema.json`.
+13. Record `region` for every story and `sourceLanguage` for every primary source. Preserve the original source URL but do not retain an original-language headline.
+14. Count English words in every `summary`, `whyItMatters`, and daily analysis value. Confirm the kind-specific limits in `editorial/publishing-rules.json` before validation and never pad with repetition.
+15. Write the candidate to a temporary path and run:
 
 ```text
 npm run validate:daily -- <candidate.json> --content-dir src/content/daily --check-links
@@ -56,7 +58,7 @@ Omit `imageId` and `heroImageId` by default. Astro assigns unique images determi
 
 ## Preview
 
-Return the candidate path, attempted-source count, available and unavailable sources, total fetched entries, edition-day entries, duplicate count, candidate count, selected count, regional and tier distributions, exclusions, warnings, and validation report. Do not mutate GitHub.
+Return the candidate path, attempted-source count, collected, empty, unavailable, and not-run sources, route failures and successful fallbacks, total fetched entries, edition-day entries, duplicate count, candidate count, selected news and community counts, regional and tier distributions, community surfaces attempted, exclusions, warnings, and validation report. Do not mutate GitHub.
 
 ## Publish
 
