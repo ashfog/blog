@@ -38,14 +38,37 @@ export interface DailyStory {
   whyItMatters: string;
   source: DailySource;
   score: { total: number };
+  communityCheck?: {
+    status: "checked" | "no_relevant_signal" | "unavailable" | "not_applicable";
+    platformsAttempted: string[];
+    platformsUnavailable: string[];
+    signals: DailyCommunitySignal[];
+  };
+}
+
+export interface DailyCommunitySignal {
+  url: string;
+  retrievedAt: string;
+  authorRole: string;
+  evidenceLabel: EvidenceLabel;
+  finding: string;
+  configuration: string;
+  adopted: boolean;
+}
+
+export interface AdoptedCommunityFinding extends DailyCommunitySignal {
+  platform: string;
+  parentStoryId: string;
+  parentHeadline: string;
 }
 
 export interface DailyEdition {
-  schemaVersion: number;
+  schemaVersion: 1 | 2;
   language: "en";
   edition: "global";
   editionDate: string;
-  timezone: "Asia/Shanghai";
+  timezone: "Asia/Shanghai" | "America/New_York";
+  windowStartAt?: string;
   cutoffAt: string;
   generatedAt: string;
   runId: string;
@@ -108,12 +131,36 @@ export function getStoriesByTopic(topic: string) {
 }
 
 export function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {
+  const [year, month, day] = date.split("-").map(Number);
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
     ...options
-  }).format(new Date(`${date}T00:00:00+08:00`));
+  }).format(new Date(Date.UTC(year, month - 1, day, 12)));
+}
+
+export function getAdoptedCommunityFindings(edition: DailyEdition) {
+  return edition.stories
+    .filter((story) => story.kind === "news")
+    .flatMap((story) =>
+      (story.communityCheck?.signals ?? [])
+        .filter((signal) => signal.adopted)
+        .map((signal) => ({
+          ...signal,
+          platform: new URL(signal.url).hostname.replace(/^www\./u, ""),
+          parentStoryId: story.id,
+          parentHeadline: story.headline
+        }))
+    );
+}
+
+export function communityFindingCount(edition: DailyEdition) {
+  return (
+    edition.stories.filter((story) => story.kind === "community").length +
+    getAdoptedCommunityFindings(edition).length
+  );
 }
 
 export function readingMinutes(edition: DailyEdition) {

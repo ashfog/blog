@@ -31,6 +31,24 @@ const parseDateTime = (value) => {
   return Number.isNaN(timestamp) ? null : new Date(timestamp);
 };
 
+const zonedDateAndTime = (date, timeZone) => {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  return {
+    date: `${values.year}-${values.month}-${values.day}`,
+    time: `${values.hour}:${values.minute}:${values.second}`,
+  };
+};
+
 const resolveRef = (root, ref) => {
   if (!ref.startsWith("#/")) {
     throw new Error(`Only local JSON Schema references are supported: ${ref}`);
@@ -384,6 +402,36 @@ export async function validateEdition(
   }
   if (generated < cutoff) errors.push("$.generatedAt: cannot be before cutoffAt");
 
+  const isRollingWindow = edition.schemaVersion === 2;
+  let collectionStart;
+  if (isRollingWindow) {
+    if (edition.timezone !== "America/New_York") {
+      errors.push("$.timezone: schemaVersion 2 requires America/New_York");
+    }
+    collectionStart = parseDateTime(edition.windowStartAt);
+    if (!collectionStart) {
+      errors.push("$.windowStartAt: required for schemaVersion 2");
+      collectionStart = cutoff;
+    } else {
+      const expectedWindowMs = rules.collection.windowHours * 60 * 60 * 1000;
+      if (cutoff - collectionStart !== expectedWindowMs) {
+        errors.push(`$.windowStartAt: must be exactly ${rules.collection.windowHours} hours before cutoffAt`);
+      }
+    }
+    const cutoffLocal = zonedDateAndTime(cutoff, "America/New_York");
+    if (cutoffLocal.date !== edition.editionDate) {
+      errors.push("$.editionDate: must be the America/New_York date at cutoffAt");
+    }
+    if (cutoffLocal.time !== "09:30:00") {
+      errors.push("$.cutoffAt: must be 09:30:00 in America/New_York");
+    }
+  } else {
+    if (edition.timezone !== "Asia/Shanghai") {
+      errors.push("$.timezone: schemaVersion 1 requires Asia/Shanghai");
+    }
+    collectionStart = new Date(`${edition.editionDate}T00:00:00+08:00`);
+  }
+
   const ids = new Set();
   const eventIds = new Set();
   const sourceUrls = new Set();
@@ -399,7 +447,7 @@ export async function validateEdition(
   let attemptedSources = 0;
   let availableSources = 0;
   let fetchedItems = 0;
-  let editionDayItems = 0;
+  let windowItems = 0;
   let scannedDuplicates = 0;
   const isThemeFixture = file.includes(`${path.sep}tests${path.sep}fixtures${path.sep}`);
 
@@ -411,14 +459,28 @@ export async function validateEdition(
     if (scan.itemsFetched > rules.collection.perSourceLatestLimit) {
       errors.push(`${at}.itemsFetched: exceeds per-source limit ${rules.collection.perSourceLatestLimit}`);
     }
-    if (scan.itemsOnEditionDay > scan.itemsFetched) {
-      errors.push(`${at}.itemsOnEditionDay: cannot exceed itemsFetched`);
+    const countField = isRollingWindow ? "itemsInWindow" : "itemsOnEditionDay";
+    if (!Number.isInteger(scan[countField])) {
+      errors.push(`${at}.${countField}: required for schemaVersion ${edition.schemaVersion}`);
     }
-    if (scan.duplicatesRemoved > scan.itemsOnEditionDay) {
-      errors.push(`${at}.duplicatesRemoved: cannot exceed itemsOnEditionDay`);
+    if (isRollingWindow && "itemsOnEditionDay" in scan) {
+      errors.push(`${at}.itemsOnEditionDay: use itemsInWindow for schemaVersion 2`);
     }
-    if (scan.selectedCount > scan.itemsOnEditionDay - scan.duplicatesRemoved) {
+    const inWindowItems = Number.isInteger(scan[countField]) ? scan[countField] : 0;
+    if (inWindowItems > scan.itemsFetched) {
+      errors.push(`${at}.${countField}: cannot exceed itemsFetched`);
+    }
+    if (scan.duplicatesRemoved > inWindowItems) {
+      errors.push(`${at}.duplicatesRemoved: cannot exceed ${countField}`);
+    }
+    if (scan.selectedCount > inWindowItems - scan.duplicatesRemoved) {
       errors.push(`${at}.selectedCount: exceeds available deduplicated items`);
+    }
+    if (scan.status === "collected" && inWindowItems === 0) {
+      errors.push(`${at}.status: collected requires at least one ${countField} item`);
+    }
+    if (scan.status === "empty" && inWindowItems !== 0) {
+      errors.push(`${at}.status: empty requires zero ${countField} items`);
     }
     if (scan.status === "not-run" && !isThemeFixture) {
       errors.push(`${at}.status: not-run is forbidden outside theme fixtures`);
@@ -429,7 +491,7 @@ export async function validateEdition(
     if (scan.status !== "not-run") attemptedSources += 1;
     if (scan.status === "collected" || scan.status === "empty") availableSources += 1;
     fetchedItems += scan.itemsFetched;
-    editionDayItems += scan.itemsOnEditionDay;
+    windowItems += inWindowItems;
     scannedDuplicates += scan.duplicatesRemoved;
   }
   if (!isThemeFixture) {
@@ -443,6 +505,36 @@ export async function validateEdition(
         `$.research.sourceScan: expected exactly ${sourceIds.size} registered sources; received ${sourceScanIds.size}`,
       );
     }
+  }
+
+  if (isRollingWindow) {
+    const expectedCandidateCount = edition.stories.length + edition.research.excludedCandidates.length;
+    if (!Number.isInteger(edition.research.seriousCandidateCount)) {
+      errors.push("$.research.seriousCandidateCount: required for schemaVersion 2");
+    } else if (edition.research.seriousCandidateCount !== expectedCandidateCount) {
+      errors.push(`$.research.seriousCandidateCount: expected ${expectedCandidateCount} selected plus excluded candidates`);
+    }
+    edition.research.excludedCandidates.forEach((candidate, index) => {
+      const at = `$.research.excludedCandidates[${index}]`;
+      if (!collected.has(normalizeUrl(candidate.url))) {
+        errors.push(`${at}.url: URL is absent from research.collectedUrls`);
+      }
+      if (candidate.reason === "low-relevance") {
+        if (!candidate.score) {
+          errors.push(`${at}.score: required for a low-relevance exclusion`);
+        } else {
+          const floor = rules.selection.materialityFloor;
+          const qualifies = candidate.score.total >= floor.minimumTotalScore &&
+            candidate.score.evidenceStrength >= floor.minimumEvidenceStrength &&
+            candidate.score.relevance >= floor.minimumRelevance &&
+            Math.max(candidate.score.impact, candidate.score.practicalUtility) >= floor.minimumImpactOrPracticalUtility;
+          if (qualifies) errors.push(`${at}.reason: candidate meets the materiality floor and cannot be excluded as low-relevance`);
+        }
+      }
+      if (candidate.reason === "lower-priority" && edition.stories.length < rules.selection.safetyMaxStories) {
+        errors.push(`${at}.reason: lower-priority is allowed only after the safety maximum is reached`);
+      }
+    });
   }
 
   if (edition.heroImageId && !imageIds.has(edition.heroImageId)) {
@@ -513,16 +605,15 @@ export async function validateEdition(
 
     const publishedAt = parseDateTime(story.source.publishedAt);
     if (publishedAt > cutoff) errors.push(`${at}.source.publishedAt: after cutoffAt`);
-    const editionDayStart = new Date(`${edition.editionDate}T00:00:00+08:00`);
     let updatedAt = null;
     if (story.source.updatedAt) {
       updatedAt = parseDateTime(story.source.updatedAt);
       if (updatedAt > cutoff) errors.push(`${at}.source.updatedAt: after cutoffAt`);
     }
-    const currentByPublication = publishedAt >= editionDayStart && publishedAt <= cutoff;
-    const currentByUpdate = updatedAt && updatedAt >= editionDayStart && updatedAt <= cutoff;
+    const currentByPublication = publishedAt >= collectionStart && publishedAt <= cutoff;
+    const currentByUpdate = updatedAt && updatedAt >= collectionStart && updatedAt <= cutoff;
     if (!currentByPublication && !currentByUpdate && !story.windowException) {
-      errors.push(`${at}.source.publishedAt: outside edition day without windowException`);
+      errors.push(`${at}.source.publishedAt: outside collection window without windowException`);
     }
 
     story.factualClaims.forEach((claim, claimIndex) => {
@@ -590,6 +681,15 @@ export async function validateEdition(
 
     const total = scoreTotal(story.score);
     if (story.score.total !== total) errors.push(`${at}.score.total: expected ${total}`);
+    if (isRollingWindow) {
+      const floor = rules.selection.materialityFloor;
+      if (total < floor.minimumTotalScore) errors.push(`${at}.score.total: below materiality floor ${floor.minimumTotalScore}`);
+      if (story.score.evidenceStrength < floor.minimumEvidenceStrength) errors.push(`${at}.score.evidenceStrength: below materiality floor`);
+      if (story.score.relevance < floor.minimumRelevance) errors.push(`${at}.score.relevance: below materiality floor`);
+      if (Math.max(story.score.impact, story.score.practicalUtility) < floor.minimumImpactOrPracticalUtility) {
+        errors.push(`${at}.score: impact or practicalUtility must meet the materiality floor`);
+      }
+    }
     if (story.highlight) highlights += 1;
     if (story.openSource) openSource += 1;
     if (story.mediaOnly) mediaOnly += 1;
@@ -691,7 +791,7 @@ export async function validateEdition(
       attemptedSources,
       availableSources,
       fetchedItems,
-      editionDayItems,
+      inWindowItems: windowItems,
       scannedDuplicates,
     },
     errors,

@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "timezone": "Asia/Shanghai",
+  "version": 4,
+  "timezone": "America/New_York",
   "previousEditionLookback": 7,
   "selection": {
     "collectAllMaterialCandidates": true,
@@ -8,7 +8,15 @@
     "noRoutineStoryQuota": true,
     "publishEveryMaterialEvent": true,
     "neverPadToReachACount": true,
-    "safetyMaxStories": 46
+    "safetyMaxStories": 46,
+    "materialityFloor": {
+      "minimumTotalScore": 16,
+      "minimumEvidenceStrength": 3,
+      "minimumRelevance": 3,
+      "minimumImpactOrPracticalUtility": 3
+    },
+    "recordEverySeriousCandidate": true,
+    "recordExplicitExclusionForEveryUnselectedCandidate": true
   },
   "contentLengths": {
     "news": {
@@ -59,11 +67,17 @@
     "maxConcurrentChecks": 6
   },
   "collection": {
-    "windowMode": "edition-day",
-    "timezone": "Asia/Shanghai",
+    "windowMode": "rolling-hours",
+    "windowHours": 24,
+    "timezone": "America/New_York",
+    "cutoffLocalTime": "09:30",
     "perSourceLatestLimit": 15,
     "useAvailableWhenFewer": true,
-    "backfillPriorDays": false,
+    "outsideWindowBackfill": false,
     "requireAllRegisteredSourcesAttempted": true
+  },
+  "schedule": {
+    "localTime": "09:30",
+    "timezone": "America/New_York"
   }
 }

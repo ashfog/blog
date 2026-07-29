@@ -1,8 +1,8 @@
 {
-  "version": 2,
+  "version": 3,
   "lastReviewed": "2026-07-29",
-  "timezone": "Asia/Shanghai",
-  "purpose": "Machine-readable ordered collection routes and deterministic fallbacks for every registered source.",
+  "timezone": "America/New_York",
+  "purpose": "Machine-readable ordered collection routes and deterministic fallbacks for every registered source in a trailing 24-hour window.",
   "routeTypes": [
     "rss",
     "json-api",
@@ -14,20 +14,25 @@
     "cli"
   ],
   "statusSemantics": {
-    "collected": "At least one route succeeded and exposed one or more entries on the edition date.",
-    "empty": "At least one route succeeded and exposed a trustworthy dated listing, but it contained no edition-day entries.",
+    "collected": "At least one route succeeded and exposed one or more entries inside the trailing 24-hour window.",
+    "empty": "At least one route succeeded and exposed a trustworthy dated listing covering the window, but it contained no in-window entries.",
     "unavailable": "Every configured route failed, was blocked, required unavailable credentials, or could not expose trustworthy dates.",
     "not-run": "No configured route was attempted. This remains blocking."
   },
   "collectionRules": {
     "tryRoutesInOrder": true,
     "continueAfterRouteFailure": true,
-    "stopAfterTrustworthyDatedListing": true,
+    "stopAfterTrustworthyDatedListingCoveringWindow": true,
     "siteRestrictedSearchIsFallbackOnly": true,
     "searchResultMustResolveToCanonicalSource": true,
     "doNotTreatNoSearchResultsAsAccessFailure": true,
+    "exactTimestampWindow": true,
+    "windowHours": 24,
+    "expandWindowDateRoutes": true,
+    "deduplicateAcrossWindowDates": true,
+    "mergeThenSortFilterAndLimit": true,
     "maxEntriesPerSource": 15,
-    "backfillPriorDays": false
+    "outsideWindowBackfill": false
   },
   "plans": {
     "openai-news": [
@@ -41,7 +46,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:openai.com/news {editionDate} OpenAI"
+        "query": "site:openai.com/news {windowDate} OpenAI"
       }
     ],
     "anthropic-news": [
@@ -56,7 +61,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:anthropic.com/news {editionDate} Anthropic"
+        "query": "site:anthropic.com/news {windowDate} Anthropic"
       }
     ],
     "google-ai-blog": [
@@ -70,7 +75,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:blog.google/technology/ai {editionDate}"
+        "query": "site:blog.google/technology/ai {windowDate}"
       }
     ],
     "meta-ai-blog": [
@@ -85,7 +90,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:ai.meta.com/blog {editionDate}"
+        "query": "site:ai.meta.com/blog {windowDate}"
       }
     ],
     "nvidia-developer-blog": [
@@ -99,7 +104,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:developer.nvidia.com/blog {editionDate} AI"
+        "query": "site:developer.nvidia.com/blog {windowDate} AI"
       }
     ],
     "github-trending": [
@@ -107,23 +112,23 @@
         "type": "connected-github",
         "url": "https://api.github.com/search/repositories",
         "queries": [
-          "created:{editionDate} topic:artificial-intelligence",
-          "created:{editionDate} topic:llm",
-          "pushed:{editionDate} topic:machine-learning"
+          "created:{windowDate} topic:artificial-intelligence",
+          "created:{windowDate} topic:llm",
+          "pushed:{windowDate} topic:machine-learning"
         ],
         "note": "Primary dated route. Use connected GitHub access, deduplicate repositories, and verify license, release history, and maintainer activity."
       },
       {
         "type": "web-index",
         "url": "https://github.com/trending",
-        "note": "Discovery fallback only. The Today page lacks trustworthy per-repository timestamps, so it cannot by itself produce collected or empty status for the edition-day window."
+        "note": "Discovery fallback only. The Today page lacks trustworthy per-repository timestamps, so it cannot by itself produce collected or empty status for the in-window window."
       }
     ],
     "hacker-news": [
       {
         "type": "json-api",
         "url": "https://hacker-news.firebaseio.com/v0/newstories.json",
-        "note": "Fetch only enough item records to inspect the newest 15 edition-day stories."
+        "note": "Fetch only enough item records to inspect the newest 15 in-window stories."
       },
       {
         "type": "json-api",
@@ -150,7 +155,7 @@
         "type": "json-api",
         "url": "https://huggingface.co/api/daily_papers",
         "params": {
-          "date": "{editionDate}",
+          "date": "{windowDate}",
           "sort": "publishedAt",
           "limit": 15,
           "p": 0
@@ -158,7 +163,7 @@
       },
       {
         "type": "cli",
-        "command": "hf papers ls --date {editionDate} --limit 15 --format json"
+        "command": "hf papers ls --date {windowDate} --limit 15 --format json"
       },
       {
         "type": "web-index",
@@ -173,7 +178,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:technologyreview.com {editionDate} artificial intelligence"
+        "query": "site:technologyreview.com {windowDate} artificial intelligence"
       }
     ],
     "reddit-localllama": [
@@ -183,7 +188,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:reddit.com/r/LocalLLaMA {editionDate} {candidateTerms}"
+        "query": "site:reddit.com/r/LocalLLaMA {windowDate} {candidateTerms}"
       },
       {
         "type": "web-index",
@@ -193,7 +198,7 @@
     "x-curated-experts": [
       {
         "type": "indexed-search",
-        "query": "site:x.com/{candidateHandle} {editionDate} {candidateTerms}",
+        "query": "site:x.com/{candidateHandle} {windowDate} {candidateTerms}",
         "note": "Run only around an identified candidate and a named official, maintainer, researcher, or founder account."
       },
       {
@@ -209,7 +214,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:phoronix.com {editionDate} AI GPU Linux"
+        "query": "site:phoronix.com {windowDate} AI GPU Linux"
       }
     ],
     "mcp-blog": [
@@ -223,7 +228,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:blog.modelcontextprotocol.io {editionDate}"
+        "query": "site:blog.modelcontextprotocol.io {windowDate}"
       }
     ],
     "langchain-blog": [
@@ -238,7 +243,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:langchain.com/blog {editionDate}"
+        "query": "site:langchain.com/blog {windowDate}"
       }
     ],
     "llamaindex-blog": [
@@ -252,7 +257,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:llamaindex.ai/blog {editionDate}"
+        "query": "site:llamaindex.ai/blog {windowDate}"
       }
     ],
     "dify-blog": [
@@ -266,7 +271,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:dify.ai/blog {editionDate}"
+        "query": "site:dify.ai/blog {windowDate}"
       }
     ],
     "hugging-face-trending-papers": [
@@ -274,7 +279,7 @@
         "type": "json-api",
         "url": "https://huggingface.co/api/daily_papers",
         "params": {
-          "date": "{editionDate}",
+          "date": "{windowDate}",
           "sort": "trending",
           "limit": 15,
           "p": 0
@@ -283,7 +288,7 @@
       },
       {
         "type": "cli",
-        "command": "hf papers ls --date {editionDate} --sort trending --limit 15 --format json",
+        "command": "hf papers ls --date {windowDate} --sort trending --limit 15 --format json",
         "note": "Use the edition-date paper publication field. Do not claim the timestamp represents when trending rank changed."
       },
       {
@@ -295,7 +300,7 @@
     "tldr-ai": [
       {
         "type": "date-archive",
-        "urlTemplate": "https://tldr.tech/ai/{editionDate}"
+        "urlTemplate": "https://tldr.tech/ai/{windowDate}"
       },
       {
         "type": "web-index",
@@ -303,7 +308,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:tldr.tech/ai/{editionDate}"
+        "query": "site:tldr.tech/ai/{windowDate}"
       }
     ],
     "bytedance-seed": [
@@ -318,7 +323,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:seed.bytedance.com {editionDate}"
+        "query": "site:seed.bytedance.com {windowDate}"
       }
     ],
     "modelscope-hub": [
@@ -328,11 +333,11 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:modelscope.cn/models {editionDate} 大模型 OR AI"
+        "query": "site:modelscope.cn/models {windowDate} 大模型 OR AI"
       },
       {
         "type": "indexed-search",
-        "query": "site:modelscope.cn/organization {editionDate} 模型"
+        "query": "site:modelscope.cn/organization {windowDate} 模型"
       }
     ],
     "huawei-ascend": [
@@ -347,7 +352,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:hiascend.com {editionDate} CANN OR MindIE OR Ascend"
+        "query": "site:hiascend.com {windowDate} CANN OR MindIE OR Ascend"
       }
     ],
     "stepfun-official": [
@@ -362,13 +367,13 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:stepfun.com {editionDate} 模型 OR Step"
+        "query": "site:stepfun.com {windowDate} 模型 OR Step"
       }
     ],
     "china-cac": [
       {
         "type": "indexed-search",
-        "query": "site:cac.gov.cn {editionDate} 人工智能 OR 算法 OR 数据安全"
+        "query": "site:cac.gov.cn {windowDate} 人工智能 OR 算法 OR 数据安全"
       },
       {
         "type": "web-index",
@@ -378,7 +383,7 @@
     "china-miit": [
       {
         "type": "indexed-search",
-        "query": "site:miit.gov.cn {editionDate} 人工智能 OR 大模型 OR 算力 OR 芯片"
+        "query": "site:miit.gov.cn {windowDate} 人工智能 OR 大模型 OR 算力 OR 芯片"
       },
       {
         "type": "web-index",
@@ -401,7 +406,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:jiqizhixin.com/articles {editionDate}"
+        "query": "site:jiqizhixin.com/articles {windowDate}"
       }
     ],
     "36kr-ai": [
@@ -415,7 +420,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:36kr.com/p {editionDate} 人工智能 OR 大模型 OR 智能体"
+        "query": "site:36kr.com/p {windowDate} 人工智能 OR 大模型 OR 智能体"
       }
     ],
     "deepmind-blog": [
@@ -425,7 +430,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:deepmind.google/discover/blog {editionDate}"
+        "query": "site:deepmind.google/discover/blog {windowDate}"
       }
     ],
     "mistral-news": [
@@ -435,7 +440,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:mistral.ai/news {editionDate}"
+        "query": "site:mistral.ai/news {windowDate}"
       }
     ],
     "microsoft-ai-blog": [
@@ -449,7 +454,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:blogs.microsoft.com/ai {editionDate}"
+        "query": "site:blogs.microsoft.com/ai {windowDate}"
       }
     ],
     "hugging-face-blog": [
@@ -459,7 +464,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:huggingface.co/blog {editionDate}"
+        "query": "site:huggingface.co/blog {windowDate}"
       }
     ],
     "github-changelog": [
@@ -473,7 +478,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:github.blog/changelog {editionDate} AI OR Copilot"
+        "query": "site:github.blog/changelog {windowDate} AI OR Copilot"
       }
     ],
     "cloudflare-blog": [
@@ -487,7 +492,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:blog.cloudflare.com {editionDate} AI OR Workers"
+        "query": "site:blog.cloudflare.com {windowDate} AI OR Workers"
       }
     ],
     "arxiv-cs-ai": [
@@ -545,7 +550,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:arstechnica.com/ai {editionDate}"
+        "query": "site:arstechnica.com/ai {windowDate}"
       }
     ],
     "ieee-spectrum-ai": [
@@ -555,7 +560,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:spectrum.ieee.org {editionDate} artificial intelligence"
+        "query": "site:spectrum.ieee.org {windowDate} artificial intelligence"
       }
     ],
     "mcp-spec-releases": [
@@ -579,7 +584,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:vercel.com/blog {editionDate} AI SDK OR agent"
+        "query": "site:vercel.com/blog {windowDate} AI SDK OR agent"
       }
     ],
     "ollama-blog": [
@@ -589,7 +594,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:ollama.com/blog {editionDate}"
+        "query": "site:ollama.com/blog {windowDate}"
       }
     ],
     "ollama-releases": [
@@ -613,7 +618,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:chipsandcheese.com {editionDate}"
+        "query": "site:chipsandcheese.com {windowDate}"
       }
     ],
     "semianalysis": [
@@ -623,7 +628,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:semianalysis.com {editionDate}"
+        "query": "site:semianalysis.com {windowDate}"
       }
     ],
     "the-batch": [
@@ -633,7 +638,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:deeplearning.ai/the-batch {editionDate}"
+        "query": "site:deeplearning.ai/the-batch {windowDate}"
       }
     ],
     "alphasignal": [
@@ -643,7 +648,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:alphasignal.ai {editionDate}"
+        "query": "site:alphasignal.ai {windowDate}"
       }
     ],
     "deepseek-official": [
@@ -658,7 +663,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:api-docs.deepseek.com/news {editionDate}"
+        "query": "site:api-docs.deepseek.com/news {windowDate}"
       }
     ],
     "qwen-official": [
@@ -673,7 +678,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:qwenlm.github.io/blog {editionDate}"
+        "query": "site:qwenlm.github.io/blog {windowDate}"
       }
     ],
     "zai-official": [
@@ -688,7 +693,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:z.ai/blog {editionDate}"
+        "query": "site:z.ai/blog {windowDate}"
       }
     ],
     "moonshot-ai": [
@@ -703,7 +708,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:moonshot.ai {editionDate} Kimi OR model"
+        "query": "site:moonshot.ai {windowDate} Kimi OR model"
       }
     ],
     "minimax-official": [
@@ -717,7 +722,7 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:minimax.io {editionDate} model OR release"
+        "query": "site:minimax.io {windowDate} model OR release"
       }
     ],
     "tencent-hunyuan": [
@@ -749,8 +754,15 @@
       },
       {
         "type": "indexed-search",
-        "query": "site:qbitai.com {editionDate} AI OR 大模型 OR 智能体"
+        "query": "site:qbitai.com {windowDate} AI OR 大模型 OR 智能体"
       }
     ]
+  },
+  "windowVariables": {
+    "windowStartAt": "ISO 8601 instant exactly 24 hours before cutoffAt",
+    "cutoffAt": "ISO 8601 instant at 09:30 America/New_York",
+    "windowStartDate": "America/New_York calendar date containing windowStartAt",
+    "editionDate": "America/New_York calendar date containing cutoffAt",
+    "windowDate": "Each distinct America/New_York calendar date intersecting the window; expand date routes once per date"
   }
 }
