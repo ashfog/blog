@@ -30,9 +30,7 @@ export interface LibraryImage {
 
 const storyEntries = imageLibrary.storyImages as StoryImageEntry[];
 const pageEntries = imageLibrary.pageImages as PageImageEntry[];
-const reserveStoryPageIds = new Set(imageLibrary.storyReservePageIds as string[]);
-const reserveStoryEntries = pageEntries.filter((image) => reserveStoryPageIds.has(image.id));
-const storyPoolEntries = [...storyEntries, ...reserveStoryEntries];
+const storyPoolEntries = storyEntries;
 const allEntries = [...storyEntries, ...pageEntries];
 
 function hash(value: string) {

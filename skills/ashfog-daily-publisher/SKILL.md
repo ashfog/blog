@@ -54,7 +54,7 @@ Treat exit code `1` as blocking. Do not weaken validation, remove evidence, inve
 
 ## Assign images
 
-Omit `imageId` and `heroImageId` by default. Astro assigns unique images deterministically. The first 40 stories use category artwork; positions 41–46 can use the six registered reserve artworks without repeating an image. Set `imageId` only for an intentional editorial override after reading `editorial/image-library.json`; the ID must be a category story image and unique in the edition. Never invent or reuse an image ID.
+Omit `imageId` and `heroImageId` by default. Astro assigns unique images deterministically from the 70 registered story images; page images are never used for stories. Each edition may use at most 46 unique story images. Set `imageId` only for an intentional editorial override after reading `editorial/image-library.json`; the ID must be a category story image and unique in the edition. Never invent or reuse an image ID.
 
 ## Preview
 

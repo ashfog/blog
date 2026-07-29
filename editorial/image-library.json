@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "dimensions": {
     "width": 1536,
     "height": 1024,
@@ -249,6 +249,186 @@
       "category": "community",
       "variant": "dark",
       "alt": "Abstract community forms and signal paths on a dark field"
+    },
+    {
+      "id": "models-main-c",
+      "category": "models",
+      "variant": "main",
+      "alt": "Layered model planes and signal paths converging around a central structure"
+    },
+    {
+      "id": "models-main-d",
+      "category": "models",
+      "variant": "main",
+      "alt": "Twin model stacks arranged around a shared computational core"
+    },
+    {
+      "id": "models-light-b",
+      "category": "models",
+      "variant": "light",
+      "alt": "Sparse model contours and probability paths across an open field"
+    },
+    {
+      "id": "agents-main-c",
+      "category": "agents",
+      "variant": "main",
+      "alt": "Agent planning routes radiating from a central coordination point"
+    },
+    {
+      "id": "agents-main-d",
+      "category": "agents",
+      "variant": "main",
+      "alt": "Distributed agent modules connected through branching task routes"
+    },
+    {
+      "id": "agents-dark-b",
+      "category": "agents",
+      "variant": "dark",
+      "alt": "Dark agent control network with coordinated routes and checkpoints"
+    },
+    {
+      "id": "open-source-main-c",
+      "category": "open-source",
+      "variant": "main",
+      "alt": "Open source modules branching and merging through a shared network"
+    },
+    {
+      "id": "open-source-main-d",
+      "category": "open-source",
+      "variant": "main",
+      "alt": "Modular open source components arranged around a collaborative center"
+    },
+    {
+      "id": "open-source-light-b",
+      "category": "open-source",
+      "variant": "light",
+      "alt": "Airy fork and merge paths connecting open source contributions"
+    },
+    {
+      "id": "developer-tools-main-c",
+      "category": "developer-tools",
+      "variant": "main",
+      "alt": "Developer workflow stages connected through an abstract software pipeline"
+    },
+    {
+      "id": "developer-tools-main-d",
+      "category": "developer-tools",
+      "variant": "main",
+      "alt": "Build test and deployment stages arranged as a technical pipeline"
+    },
+    {
+      "id": "developer-tools-dark-b",
+      "category": "developer-tools",
+      "variant": "dark",
+      "alt": "Dark debugging pipeline with verified and failed diagnostic routes"
+    },
+    {
+      "id": "infrastructure-main-c",
+      "category": "infrastructure",
+      "variant": "main",
+      "alt": "Clustered compute systems linked by a redundant network fabric"
+    },
+    {
+      "id": "infrastructure-main-d",
+      "category": "infrastructure",
+      "variant": "main",
+      "alt": "Cloud and edge regions connected across layered infrastructure zones"
+    },
+    {
+      "id": "infrastructure-light-b",
+      "category": "infrastructure",
+      "variant": "light",
+      "alt": "Sparse distributed systems topology spanning several regions"
+    },
+    {
+      "id": "research-main-c",
+      "category": "research",
+      "variant": "main",
+      "alt": "Research evidence trails converging around a central result"
+    },
+    {
+      "id": "research-main-d",
+      "category": "research",
+      "variant": "main",
+      "alt": "Experimental measurements and hypotheses arranged across layered paper fields"
+    },
+    {
+      "id": "research-dark-b",
+      "category": "research",
+      "variant": "dark",
+      "alt": "Dark research field with uncertainty traces and measured points"
+    },
+    {
+      "id": "hardware-main-c",
+      "category": "hardware",
+      "variant": "main",
+      "alt": "Semiconductor die and memory channels shown in technical cutaway"
+    },
+    {
+      "id": "hardware-main-d",
+      "category": "hardware",
+      "variant": "main",
+      "alt": "Exploded accelerator tiles and packaging layers with dense interconnects"
+    },
+    {
+      "id": "hardware-light-b",
+      "category": "hardware",
+      "variant": "light",
+      "alt": "Airy silicon topology with compute blocks and memory fabric"
+    },
+    {
+      "id": "security-main-c",
+      "category": "security",
+      "variant": "main",
+      "alt": "Concentric security boundaries containing a routed threat signal"
+    },
+    {
+      "id": "security-main-d",
+      "category": "security",
+      "variant": "main",
+      "alt": "Fragmented attack paths crossing layered defensive boundaries"
+    },
+    {
+      "id": "security-dark-b",
+      "category": "security",
+      "variant": "dark",
+      "alt": "Dark zero trust network with a contained breach and trusted route"
+    },
+    {
+      "id": "policy-main-c",
+      "category": "policy",
+      "variant": "main",
+      "alt": "Layered policy frameworks balanced across institutional boundaries"
+    },
+    {
+      "id": "policy-main-d",
+      "category": "policy",
+      "variant": "main",
+      "alt": "Abstract governance network with distributed review paths and checks"
+    },
+    {
+      "id": "policy-light-b",
+      "category": "policy",
+      "variant": "light",
+      "alt": "Airy regulatory boundary map with overlapping jurisdictions"
+    },
+    {
+      "id": "community-main-c",
+      "category": "community",
+      "variant": "main",
+      "alt": "Conversation clusters connected by shared community signals"
+    },
+    {
+      "id": "community-main-d",
+      "category": "community",
+      "variant": "main",
+      "alt": "Distributed knowledge communities joined by branching discussion routes"
+    },
+    {
+      "id": "community-dark-b",
+      "category": "community",
+      "variant": "dark",
+      "alt": "Dark community signal clusters joined by trusted bridges"
     }
   ],
   "pageImages": [
@@ -301,12 +481,5 @@
       "alt": "Abstract collage of an interrupted information path and a lost signal"
     }
   ],
-  "storyReservePageIds": [
-    "page-daily",
-    "page-archive",
-    "page-topics",
-    "page-about",
-    "page-search",
-    "page-404"
-  ]
+  "storyReservePageIds": []
 }

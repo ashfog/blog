@@ -121,8 +121,8 @@ test("source scan counts obey the per-source maximum", async () => {
   assert.ok(report.errors.some((error) => error.includes("itemsFetched")));
 });
 
-test("image pool provides 46 unique story slots", () => {
-  assert.equal(config.storyImageCount, 46);
+test("image pool provides at least 46 unique story slots", () => {
+  assert.ok(config.storyImageCount >= 46);
 });
 
 test("domain rules reject a future publication time", async () => {

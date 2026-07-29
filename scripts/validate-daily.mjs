@@ -347,7 +347,7 @@ export async function loadEditorialConfig(root = repoRoot) {
     storyImageCategories,
     pageImageIds,
     sourceIds: new Set(sourceData.sources.map((source) => source.id)),
-    storyImageCount: imageData.storyImages.length + imageData.storyReservePageIds.length,
+    storyImageCount: imageData.storyImages.length,
   };
 }
 
