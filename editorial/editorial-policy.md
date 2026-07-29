@@ -44,6 +44,8 @@ Use the highest available evidence and link the primary source even when a lower
 - Use an explicit `cutoffAt` in `Asia/Shanghai`.
 - The routine collection window begins at 00:00 on `editionDate` and ends at `cutoffAt`.
 - Attempt every registered source and record one `research.sourceScan` row per source.
+- Resolve the source's ordered routes from `editorial/source-access.json`, prefer structured access, and continue through fallbacks after a route failure.
+- Mark a source `empty` when a working dated route has no edition-day entries; mark it `unavailable` only after every configured route fails.
 - Fetch no more than 15 edition-day entries per source; use fewer when fewer exist.
 - Collect every serious candidate; there is no global candidate-count cap before selection.
 - Merge coverage of the same event under one `eventId`.
