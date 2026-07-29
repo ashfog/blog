@@ -27,6 +27,7 @@
     "searchResultMustResolveToCanonicalSource": true,
     "doNotTreatNoSearchResultsAsAccessFailure": true,
     "exactTimestampWindow": true,
+    "windowBoundary": "(windowStartAt, cutoffAt]",
     "windowHours": 24,
     "expandWindowDateRoutes": true,
     "deduplicateAcrossWindowDates": true,

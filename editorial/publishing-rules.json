@@ -54,6 +54,7 @@
   },
   "analysis": {
     "minSignalIds": 3,
+    "minParagraphs": 2,
     "minWords": 160,
     "targetWords": {
       "min": 200,
@@ -68,6 +69,8 @@
   },
   "collection": {
     "windowMode": "rolling-hours",
+    "windowBoundary": "(windowStartAt, cutoffAt]",
+    "schemaVersion2RequiredFrom": "2026-07-30",
     "windowHours": 24,
     "timezone": "America/New_York",
     "cutoffLocalTime": "09:30",

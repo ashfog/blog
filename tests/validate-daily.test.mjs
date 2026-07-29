@@ -117,12 +117,22 @@ test("validator enforces shorter community word ranges", async () => {
 });
 
 test("adaptive selection accepts a concise edition without a story quota", async () => {
+  for (const storyCount of [1, 2, 3]) {
+    const edition = clone();
+    edition.stories = edition.stories.slice(0, storyCount).map((story, index) => ({ ...story, position: index + 1 }));
+    edition.dailyAnalysis.signalIds = edition.stories.map((story) => story.id);
+    const report = await validate(edition);
+    assert.equal(report.status, "ok", report.errors.join("\n"));
+    assert.ok(!report.errors.some((error) => error.includes("signalIds")));
+  }
+});
+
+test("daily analysis requires real paragraph breaks", async () => {
   const edition = clone();
-  edition.stories = edition.stories.slice(0, 3).map((story, index) => ({ ...story, position: index + 1 }));
-  edition.dailyAnalysis.signalIds = edition.stories.map((story) => story.id);
+  edition.dailyAnalysis.body = words(200);
   const report = await validate(edition);
-  assert.equal(report.status, "ok");
-  assert.ok(!report.errors.some((error) => error.includes("count")));
+  assert.equal(report.status, "error");
+  assert.ok(report.errors.some((error) => error.includes("expected at least 2 paragraphs")));
 });
 
 test("domain rules reject an unknown source", async () => {
@@ -150,6 +160,34 @@ test("production validation requires all registered source attempts", async () =
   assert.ok(report.errors.some((error) => error.includes("not-run is forbidden")));
 });
 
+test("unavailable source ledger must match source scan statuses", async () => {
+  const edition = rollingClone();
+  const scan = edition.research.sourceScan[0];
+  scan.status = "unavailable";
+  scan.failureReason = "Synthetic route failure";
+  edition.research.unavailableSources = [];
+  const report = await validate(edition, {
+    file: path.join(root, "src", "content", "daily", "2026-07-28.json"),
+  });
+  assert.ok(report.errors.some((error) => error.includes("unavailableSources: missing")));
+});
+
+test("unavailable sources cannot contain or select in-window items", async () => {
+  const edition = rollingClone();
+  const scan = edition.research.sourceScan[0];
+  scan.status = "unavailable";
+  scan.itemsFetched = 1;
+  scan.itemsInWindow = 1;
+  scan.selectedCount = 1;
+  scan.failureReason = "Synthetic route failure";
+  edition.research.unavailableSources = [scan.sourceId];
+  const report = await validate(edition, {
+    file: path.join(root, "src", "content", "daily", "2026-07-28.json"),
+  });
+  assert.ok(report.errors.some((error) => error.includes("unavailable requires zero")));
+  assert.ok(report.errors.some((error) => error.includes("unavailable source cannot select")));
+});
+
 test("source scan counts obey the per-source maximum", async () => {
   const edition = clone();
   edition.research.sourceScan[0].status = "collected";
@@ -162,6 +200,11 @@ test("source scan counts obey the per-source maximum", async () => {
 
 test("image pool provides 46 unique story slots", () => {
   assert.equal(config.storyImageCount, 46);
+});
+
+test("every registered source has a validated access plan", () => {
+  assert.equal(config.sourceAccessPlanIds.size, config.sourceIds.size);
+  assert.deepEqual([...config.sourceAccessPlanIds].sort(), [...config.sourceIds].sort());
 });
 
 test("domain rules reject a future publication time", async () => {
@@ -185,6 +228,14 @@ test("domain rules reject an unexceptional prior-day item", async () => {
 test("schemaVersion 2 accepts the exact New York trailing 24-hour window", async () => {
   const report = await validate(rollingClone());
   assert.equal(report.status, "ok");
+});
+
+test("new editions cannot fall back to schemaVersion 1 or Shanghai time", async () => {
+  const edition = clone();
+  edition.editionDate = "2026-07-30";
+  const report = await validate(edition);
+  assert.equal(report.status, "error");
+  assert.ok(report.errors.some((error) => error.includes("version 2 is required")));
 });
 
 test("schemaVersion 2 rejects a window that is not exactly 24 hours", async () => {
@@ -216,6 +267,13 @@ test("schemaVersion 2 rejects an item older than the rolling window", async () =
   assert.ok(report.errors.some((error) => error.includes("outside collection window")));
 });
 
+test("schemaVersion 2 excludes the exact left window boundary", async () => {
+  const edition = rollingClone();
+  edition.stories[0].source.publishedAt = edition.windowStartAt;
+  const report = await validate(edition);
+  assert.ok(report.errors.some((error) => error.includes("outside collection window")));
+});
+
 test("schemaVersion 2 requires itemsInWindow instead of itemsOnEditionDay", async () => {
   const edition = rollingClone();
   edition.research.sourceScan[0].itemsOnEditionDay = edition.research.sourceScan[0].itemsInWindow;
@@ -237,6 +295,15 @@ test("schemaVersion 2 cannot exclude a qualifying event as low-relevance", async
   candidate.score = { evidenceStrength: 4, relevance: 4, novelty: 3, practicalUtility: 4, impact: 3, communitySignal: 1, total: 19 };
   const report = await validate(edition);
   assert.ok(report.errors.some((error) => error.includes("meets the materiality floor")));
+});
+
+test("excluded low-relevance candidates cannot falsify score totals", async () => {
+  const edition = rollingClone();
+  const candidate = edition.research.excludedCandidates.find((item) => item.reason === "low-relevance");
+  candidate.score.total = 0;
+  const report = await validate(edition);
+  assert.equal(report.status, "error");
+  assert.ok(report.errors.some((error) => error.includes("score.total: expected")));
 });
 
 test("domain rules reject duplicate events", async () => {
