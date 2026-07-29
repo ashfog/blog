@@ -7,7 +7,7 @@ Publish one concise English-language global intelligence brief covering material
 ## Global coverage and time window
 
 - Run at 09:30 in `America/New_York`; daylight-saving changes are handled by the named timezone, never by a fixed UTC or Shanghai offset.
-- Set `cutoffAt` to that instant and `windowStartAt` to exactly 24 hours earlier. The interval is inclusive: `[windowStartAt, cutoffAt]`.
+- Set `cutoffAt` to that instant and `windowStartAt` to exactly 24 hours earlier. Use the half-open interval `(windowStartAt, cutoffAt]` so an event exactly on a boundary belongs to only one edition.
 - Attempt every enabled source on every run, including all enabled China sources.
 - From each source, collect at most its 15 newest entries whose publication or material-update timestamp falls inside the window. Use fewer when fewer exist and never backfill outside the window.
 - Date-based routes must run for every New York calendar date touched by the window, then merge, deduplicate, sort, apply the exact timestamp filter, and take at most 15.
@@ -56,7 +56,7 @@ Use the highest available evidence and link the primary source even when a lower
 
 For every selected item, state what changed without marketing language, write an original English summary and distinct practical consequence within repository word limits, preserve uncertainty, attribute benchmarks and community findings with their conditions, and keep every published URL inside `research.collectedUrls`.
 
-Write the daily analysis only after final story order is locked. Synthesize at least three current story IDs into one edition-specific thesis, use real paragraph breaks, and do not reuse prior analysis.
+Write the daily analysis only after final story order is locked. Synthesize every current story when the edition has fewer than three, otherwise at least three current story IDs, into one edition-specific thesis, use real paragraph breaks, and do not reuse prior analysis.
 
 ## Copyright and privacy
 

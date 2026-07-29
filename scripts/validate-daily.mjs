@@ -275,10 +275,11 @@ const loadPreviousEditions = async (contentDir, currentFile, limit) => {
 };
 
 export async function loadEditorialConfig(root = repoRoot) {
-  const [schema, rules, sourceData, categoriesData, evidenceData, imageData] = await Promise.all([
+  const [schema, rules, sourceData, sourceAccessData, categoriesData, evidenceData, imageData] = await Promise.all([
     readJson(path.join(root, "schemas", "daily.schema.json")),
     readJson(path.join(root, "editorial", "publishing-rules.json")),
     readJson(path.join(root, "editorial", "sources.json")),
+    readJson(path.join(root, "editorial", "source-access.json")),
     readJson(path.join(root, "editorial", "categories.json")),
     readJson(path.join(root, "editorial", "evidence-labels.json")),
     readJson(path.join(root, "editorial", "image-library.json")),
@@ -309,6 +310,46 @@ export async function loadEditorialConfig(root = repoRoot) {
     if (!hosts.size) throw new Error(`editorial/sources.json source ${source.id} has no valid URL`);
     sourceHosts.set(source.id, hosts);
   }
+
+  const routeTypes = new Set(sourceAccessData.routeTypes ?? []);
+  if (!routeTypes.size) {
+    throw new Error("editorial/source-access.json has no supported route types");
+  }
+  const accessPlans = sourceAccessData.plans;
+  if (!isObject(accessPlans)) {
+    throw new Error("editorial/source-access.json plans must be an object");
+  }
+
+  for (const sourceId of Object.keys(accessPlans)) {
+    if (!seenSourceIds.has(sourceId)) {
+      throw new Error("editorial/source-access.json has an unknown source plan: " + sourceId);
+    }
+  }
+
+  for (const sourceId of seenSourceIds) {
+    const routes = accessPlans[sourceId];
+    if (!Array.isArray(routes) || routes.length === 0) {
+      throw new Error("editorial/source-access.json has a missing or empty plan: " + sourceId);
+    }
+    routes.forEach((route, index) => {
+      if (!isObject(route) || !routeTypes.has(route.type)) {
+        throw new Error("editorial/source-access.json has an unsupported route at " + sourceId + "[" + index + "]");
+      }
+      const requiredFieldByType = { "date-archive": "urlTemplate", "indexed-search": "query", cli: "command" };
+      const requiredField = requiredFieldByType[route.type] ?? "url";
+      if (typeof route[requiredField] !== "string" || !route[requiredField].trim()) {
+        throw new Error("editorial/source-access.json route is missing " + requiredField + " at " + sourceId + "[" + index + "]");
+      }
+    });
+  }
+
+  if (sourceAccessData.timezone !== rules.collection.timezone) {
+    throw new Error("editorial/source-access.json timezone must match publishing rules");
+  }
+  if (sourceAccessData.collectionRules?.windowBoundary !== rules.collection.windowBoundary) {
+    throw new Error("editorial/source-access.json window boundary must match publishing rules");
+  }
+
   const categoryIds = categoriesData.categories.map((category) => category.id);
   if (new Set(categoryIds).size !== categoryIds.length) {
     throw new Error("editorial/categories.json contains duplicate category ids");
@@ -365,6 +406,7 @@ export async function loadEditorialConfig(root = repoRoot) {
     storyImageCategories,
     pageImageIds,
     sourceIds: new Set(sourceData.sources.map((source) => source.id)),
+    sourceAccessPlanIds: new Set(Object.keys(accessPlans)),
     storyImageCount: imageData.storyImages.length + imageData.storyReservePageIds.length,
   };
 }
@@ -401,6 +443,11 @@ export async function validateEdition(
     errors.push(`$: filename must be ${expectedName}`);
   }
   if (generated < cutoff) errors.push("$.generatedAt: cannot be before cutoffAt");
+
+  const version2RequiredFrom = rules.collection.schemaVersion2RequiredFrom;
+  if (edition.editionDate >= version2RequiredFrom && edition.schemaVersion !== 2) {
+    errors.push("$.schemaVersion: version 2 is required from " + version2RequiredFrom);
+  }
 
   const isRollingWindow = edition.schemaVersion === 2;
   let collectionStart;
@@ -444,6 +491,7 @@ export async function validateEdition(
   let mediaOnly = 0;
   const requestedImageIds = new Set();
   const sourceScanIds = new Set();
+  const unavailableScanIds = new Set();
   let attemptedSources = 0;
   let availableSources = 0;
   let fetchedItems = 0;
@@ -488,6 +536,11 @@ export async function validateEdition(
     if (scan.status === "unavailable" && !scan.failureReason) {
       errors.push(`${at}.failureReason: required when source is unavailable`);
     }
+    if (scan.status === "unavailable") {
+      unavailableScanIds.add(scan.sourceId);
+      if (inWindowItems !== 0) errors.push(at + ".status: unavailable requires zero " + countField + " items");
+      if (scan.selectedCount !== 0) errors.push(at + ".selectedCount: unavailable source cannot select items");
+    }
     if (scan.status !== "not-run") attemptedSources += 1;
     if (scan.status === "collected" || scan.status === "empty") availableSources += 1;
     fetchedItems += scan.itemsFetched;
@@ -495,6 +548,16 @@ export async function validateEdition(
     scannedDuplicates += scan.duplicatesRemoved;
   }
   if (!isThemeFixture) {
+    const listedUnavailableIds = new Set(edition.research.unavailableSources);
+    for (const sourceId of listedUnavailableIds) {
+      if (!sourceIds.has(sourceId)) errors.push("$.research.unavailableSources: unknown source " + sourceId);
+    }
+    for (const sourceId of unavailableScanIds) {
+      if (!listedUnavailableIds.has(sourceId)) errors.push("$.research.unavailableSources: missing " + sourceId);
+    }
+    for (const sourceId of listedUnavailableIds) {
+      if (!unavailableScanIds.has(sourceId)) errors.push("$.research.unavailableSources: source is not unavailable " + sourceId);
+    }
     for (const sourceId of sourceIds) {
       if (!sourceScanIds.has(sourceId)) {
         errors.push(`$.research.sourceScan: missing registered source ${sourceId}`);
@@ -524,7 +587,9 @@ export async function validateEdition(
           errors.push(`${at}.score: required for a low-relevance exclusion`);
         } else {
           const floor = rules.selection.materialityFloor;
-          const qualifies = candidate.score.total >= floor.minimumTotalScore &&
+          const actualTotal = scoreTotal(candidate.score);
+          if (candidate.score.total !== actualTotal) errors.push(at + ".score.total: expected " + actualTotal);
+          const qualifies = actualTotal >= floor.minimumTotalScore &&
             candidate.score.evidenceStrength >= floor.minimumEvidenceStrength &&
             candidate.score.relevance >= floor.minimumRelevance &&
             Math.max(candidate.score.impact, candidate.score.practicalUtility) >= floor.minimumImpactOrPracticalUtility;
@@ -610,8 +675,8 @@ export async function validateEdition(
       updatedAt = parseDateTime(story.source.updatedAt);
       if (updatedAt > cutoff) errors.push(`${at}.source.updatedAt: after cutoffAt`);
     }
-    const currentByPublication = publishedAt >= collectionStart && publishedAt <= cutoff;
-    const currentByUpdate = updatedAt && updatedAt >= collectionStart && updatedAt <= cutoff;
+    const currentByPublication = publishedAt > collectionStart && publishedAt <= cutoff;
+    const currentByUpdate = updatedAt && updatedAt > collectionStart && updatedAt <= cutoff;
     if (!currentByPublication && !currentByUpdate && !story.windowException) {
       errors.push(`${at}.source.publishedAt: outside collection window without windowException`);
     }
@@ -734,8 +799,16 @@ export async function validateEdition(
   }
 
   const analysisIds = new Set(edition.dailyAnalysis.signalIds);
+  const requiredAnalysisIds = Math.min(edition.stories.length, rules.analysis.minSignalIds);
+  if (analysisIds.size < requiredAnalysisIds) {
+    errors.push("$.dailyAnalysis.signalIds: expected at least " + requiredAnalysisIds + " current story IDs");
+  }
   for (const signalId of analysisIds) {
     if (!ids.has(signalId)) errors.push(`$.dailyAnalysis.signalIds: unknown story ID ${signalId}`);
+  }
+  const analysisParagraphs = edition.dailyAnalysis.body.trim().split(/\n\s*\n/).filter(Boolean);
+  if (analysisParagraphs.length < rules.analysis.minParagraphs) {
+    errors.push("$.dailyAnalysis.body: expected at least " + rules.analysis.minParagraphs + " paragraphs");
   }
   const analysisWords = countEnglishWords(edition.dailyAnalysis.body);
   if (analysisWords < rules.analysis.minWords) {
