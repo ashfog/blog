@@ -1,0 +1,380 @@
+{
+  "schemaVersion": 1,
+  "language": "en",
+  "edition": "global",
+  "editionDate": "2026-07-29",
+  "timezone": "Asia/Shanghai",
+  "cutoffAt": "2026-07-29T14:04:36+08:00",
+  "generatedAt": "2026-07-29T14:04:36+08:00",
+  "runId": "ashfog-daily-2026-07-29-140436",
+  "title": "ASHFOG Daily — July 29, 2026",
+  "description": "MCP resets its transport around stateless requests, Kimi Code adds safer failure handling, and two new benchmarks test desktop state changes and code optimization.",
+  "qualityShortfallReason": "",
+  "dailyAnalysis": {
+    "title": "The interface is becoming the real unit of progress",
+    "body": "Today’s strongest signals all move attention away from raw model capability and toward the interface between a model and the system around it. The new MCP specification removes protocol sessions and the mandatory initialization handshake, requiring requests to carry the version and capability context they need. That is a large interoperability reset, but its aim is operational: easier load balancing, recovery, and horizontal scaling without hidden conversational state inside the transport.\n\nKimi Code’s release addresses the same boundary from a product angle. A configurable status line improves observability, while terminating repeated invalid tool calls and failing fast on exhausted quota turn ambiguous loops into explicit states. Those details matter more as coding agents run longer and touch more tools.\n\nThe research signals make the evaluation boundary more realistic. Desktop-Delta Bench asks models to infer meaningful changes across multi-application desktop states, including ordered three-frame cases with decoys. The code-optimization work places models inside a calibrated execution sandbox and rewards both correctness and measured speed, rather than accepting plausible patches or synthetic judge scores.\n\nFor builders, the pattern is clear: dependable AI systems need self-describing requests, observable agent state, hard failure modes, and evaluations connected to the actual environment. Model quality remains necessary, but the next practical gains will increasingly come from making state, tools, measurements, and recovery behavior explicit enough to test.",
+    "signalIds": [
+      "mcp-2026-07-28-stateless-spec",
+      "kimi-code-0-30-0",
+      "desktop-delta-bench",
+      "rl-code-optimization"
+    ]
+  },
+  "stories": [
+    {
+      "id": "mcp-2026-07-28-stateless-spec",
+      "eventId": "mcp-2026-07-28-stateless-protocol-release",
+      "position": 1,
+      "kind": "news",
+      "highlight": true,
+      "region": "north-america",
+      "category": "developer-tools",
+      "topics": [
+        "mcp",
+        "protocol",
+        "agents",
+        "interoperability"
+      ],
+      "company": null,
+      "ecosystem": "model-context-protocol",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "MCP’s July specification makes the protocol stateless by default",
+      "summary": "The Model Context Protocol project published its 2026-07-28 specification, replacing the session-oriented interaction model with self-contained requests. Streamable HTTP no longer defines protocol sessions or the Mcp-Session-Id header, and the mandatory initialization handshake has been removed. Requests instead carry protocol-version and capability metadata, while servers expose a required server/discover method for server information and capabilities. Long-lived delivery now uses subscriptions/listen as a POST-based stream, and tasks move out of the core protocol into an extension. The release also introduces a multi-round-trip input_required pattern with declared result types, while removing SSE resumability, ping, logging, roots changed notifications, and several related lifecycle features. The project describes this as a stateless-first design: implementations can still build stateful applications, but transport-level state is no longer the default contract. Existing clients, servers, gateways, and SDKs will need compatibility work rather than a version-label-only update.",
+      "whyItMatters": "This changes the operational assumptions underneath a fast-growing agent integration layer. Stateless requests should simplify load balancing, recovery, and horizontally scaled servers, but the removed handshake and session semantics create a real migration boundary. Platform teams should audit SDK support, capability discovery, streaming behavior, authentication context, and backward compatibility before adopting the new protocol version.",
+      "source": {
+        "id": "mcp-spec-releases",
+        "name": "MCP Specification Releases",
+        "tier": "A",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-29T00:47:00+08:00",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "The 2026-07-28 specification removes protocol sessions, Mcp-Session-Id, and the mandatory initialization handshake.",
+          "evidenceUrl": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28",
+          "evidenceLabel": "officially_stated"
+        },
+        {
+          "text": "The specification requires server/discover and defines subscriptions/listen for long-lived server streams.",
+          "evidenceUrl": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "checked",
+        "platformsAttempted": [
+          "GitHub",
+          "Hacker News"
+        ],
+        "platformsUnavailable": [],
+        "signals": [
+          {
+            "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1442",
+            "retrievedAt": "2026-07-29T14:04:36+08:00",
+            "authorRole": "specification contributors",
+            "evidenceLabel": "community_discussion_suggests",
+            "finding": "The specification design discussion identifies load balancing, failure recovery, and implementation complexity as the core reasons for making protocol requests self-contained.",
+            "configuration": "MCP transport design discussion linked to the stateless specification change.",
+            "adopted": true
+          }
+        ]
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 5,
+        "novelty": 5,
+        "practicalUtility": 5,
+        "impact": 5,
+        "communitySignal": 3,
+        "total": 28
+      },
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "kimi-code-0-30-0",
+      "eventId": "moonshot-kimi-code-0-30-0-release",
+      "position": 2,
+      "kind": "news",
+      "highlight": true,
+      "region": "china",
+      "category": "developer-tools",
+      "topics": [
+        "coding-agents",
+        "tool-calling",
+        "observability",
+        "reliability"
+      ],
+      "company": "Moonshot AI",
+      "ecosystem": "kimi",
+      "openSource": true,
+      "mediaOnly": false,
+      "headline": "Kimi Code 0.30.0 adds a customizable status line and harder failure stops",
+      "summary": "Moonshot AI released Kimi Code 0.30.0 with a configurable terminal status line and several changes intended to make long-running coding-agent sessions easier to observe and safer to stop. Users can define status-line content in tui.toml, exposing the session details they consider useful without changing the core interface. The agent now stops after repeated invalid tool calls instead of continuing an unproductive loop, and quota exhaustion fails fast rather than leaving the session in an ambiguous state. The release also adds quota and plugin-update notices, fixes web line-number handling, and removes the previous 50 MB upload limit. These changes do not introduce a new model or benchmark result; they tighten the control surface around the existing tool. That makes the release primarily an operational update, centered on visibility, explicit terminal conditions, and fewer silent constraints for developers using Kimi Code in larger repositories or extended sessions.",
+      "whyItMatters": "Coding agents increasingly fail at workflow boundaries rather than code generation itself. Explicit quota states, invalid-call termination, and configurable session visibility reduce wasted runs and make failures easier to diagnose. Teams evaluating Kimi Code can now test whether its new stopping behavior and status telemetry integrate cleanly with their own supervision, logging, and retry policies.",
+      "source": {
+        "id": "moonshot-ai",
+        "name": "Moonshot AI",
+        "tier": "A",
+        "url": "https://github.com/MoonshotAI/kimi-code/releases/tag/%40moonshot-ai%2Fkimi-code%400.30.0",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-29T11:39:00+08:00",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "Kimi Code 0.30.0 adds a customizable footer status line configured through tui.toml.",
+          "evidenceUrl": "https://github.com/MoonshotAI/kimi-code/releases/tag/%40moonshot-ai%2Fkimi-code%400.30.0",
+          "evidenceLabel": "officially_stated"
+        },
+        {
+          "text": "The release stops after repeated invalid tool calls and fails fast when quota is exhausted.",
+          "evidenceUrl": "https://github.com/MoonshotAI/kimi-code/releases/tag/%40moonshot-ai%2Fkimi-code%400.30.0",
+          "evidenceLabel": "officially_stated"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": [
+          "GitHub",
+          "Hacker News"
+        ],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 4,
+        "novelty": 3,
+        "practicalUtility": 5,
+        "impact": 3,
+        "communitySignal": 0,
+        "total": 20
+      },
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "desktop-delta-bench",
+      "eventId": "desktop-delta-bench-state-change-evaluation",
+      "position": 3,
+      "kind": "news",
+      "highlight": true,
+      "region": "global",
+      "category": "research",
+      "topics": [
+        "computer-use",
+        "multimodal",
+        "evaluation",
+        "desktop-agents"
+      ],
+      "company": null,
+      "ecosystem": "desktop-agents",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "Desktop-Delta Bench tests whether agents understand changing desktop state",
+      "summary": "Researchers introduced Desktop-Delta Bench, an evaluation for reasoning about what changed across desktop screenshots rather than describing a single static screen. The benchmark contains 2,013 human-verified instances collected from a Linux environment spanning roughly 15 applications and 50 domains. Its 463 three-frame tasks test temporal ordering, including 105 cases with a decoy frame, while 1,550 two-frame tasks focus on before-and-after state changes. The authors evaluated eight model families and report that the strongest systems reached only 65.1 percent exact match on the two-frame set and 65.7 percent on the three-frame set. Supplying task context improved decoy identification by 6.9 percentage points, but reduced performance on non-decoy cases by 2.2 points. The result suggests that current vision-language systems can recognize visible content yet remain unreliable at reconstructing action-conditioned state transitions, a capability needed for dependable desktop agents and post-action verification.",
+      "whyItMatters": "Computer-use agents need to verify that an action produced the intended state, not merely locate buttons. This benchmark isolates that gap with ordered changes and decoy frames across real applications. It gives agent teams a more relevant regression target for screenshot memory, action attribution, and recovery logic than static visual question answering alone.",
+      "source": {
+        "id": "arxiv-cs-ai",
+        "name": "arXiv cs.AI recent",
+        "tier": "A",
+        "url": "https://arxiv.org/abs/2607.26041",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-29T01:49:51+08:00",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "Desktop-Delta Bench contains 2,013 human-verified instances across about 15 Linux applications and 50 domains.",
+          "evidenceUrl": "https://arxiv.org/abs/2607.26041",
+          "evidenceLabel": "officially_stated"
+        },
+        {
+          "text": "The authors report best exact-match results of 65.1 percent for two-frame tasks and 65.7 percent for three-frame tasks.",
+          "evidenceUrl": "https://arxiv.org/abs/2607.26041",
+          "evidenceLabel": "not_independently_verified"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": [
+          "Hugging Face",
+          "Hacker News"
+        ],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 4,
+        "novelty": 4,
+        "practicalUtility": 4,
+        "impact": 4,
+        "communitySignal": 0,
+        "total": 21
+      },
+      "materialUpdate": "",
+      "windowException": ""
+    },
+    {
+      "id": "rl-code-optimization",
+      "eventId": "reinforcement-learning-code-optimization-sandbox",
+      "position": 4,
+      "kind": "news",
+      "highlight": true,
+      "region": "global",
+      "category": "research",
+      "topics": [
+        "code-optimization",
+        "reinforcement-learning",
+        "evaluation",
+        "performance"
+      ],
+      "company": null,
+      "ecosystem": "code-generation",
+      "openSource": false,
+      "mediaOnly": false,
+      "headline": "Code-optimization research ties reinforcement learning to measured runtime gains",
+      "summary": "A new paper presents a reinforcement-learning pipeline for code optimization that evaluates generated programs inside a calibrated execution sandbox and rewards both correctness and measured speed. The authors adapt group relative policy optimization and introduce DMC-Optim as the training and evaluation setting, arguing that noisy runtime measurements and correctness failures make code performance a different target from ordinary program synthesis. On a strict top-50 pass-at-one evaluation, they report Qwen2.5-7B improving from 18.0 to 31.3 and a 32B code-world model rising from 30.7 to 50.4. Under deliberately degraded timing conditions, the paper says its robust training approach delivers gains of 100 to 200 percent over a simpler verifiable-reward baseline. The strongest trained model wins up to 83 percent of pairwise speed comparisons and changes asymptotic complexity in 14 percent of evaluated cases, compared with 28 percent for human reference optimizations. All results remain author-reported pending independent reproduction.",
+      "whyItMatters": "Performance work is a useful stress test for coding agents because a patch must stay correct and survive noisy, environment-dependent measurement. The paper offers a concrete training and evaluation recipe for that setting. Infrastructure and compiler teams can use its calibrated-sandbox design as a baseline while independently testing hardware sensitivity, benchmark leakage, and reproducibility.",
+      "source": {
+        "id": "arxiv-cs-lg",
+        "name": "arXiv cs.LG recent",
+        "tier": "A",
+        "url": "https://arxiv.org/abs/2607.25970",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-29T00:52:31+08:00",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "factualClaims": [
+        {
+          "text": "The method trains code optimization with correctness and measured execution speed inside a calibrated sandbox.",
+          "evidenceUrl": "https://arxiv.org/abs/2607.25970",
+          "evidenceLabel": "officially_stated"
+        },
+        {
+          "text": "The authors report strict top-50 pass-at-one gains from 18.0 to 31.3 for Qwen2.5-7B and from 30.7 to 50.4 for a 32B code-world model.",
+          "evidenceUrl": "https://arxiv.org/abs/2607.25970",
+          "evidenceLabel": "not_independently_verified"
+        }
+      ],
+      "communityCheck": {
+        "status": "no_relevant_signal",
+        "platformsAttempted": [
+          "Hugging Face",
+          "Hacker News"
+        ],
+        "platformsUnavailable": [],
+        "signals": []
+      },
+      "score": {
+        "evidenceStrength": 5,
+        "relevance": 4,
+        "novelty": 4,
+        "practicalUtility": 4,
+        "impact": 4,
+        "communitySignal": 0,
+        "total": 21
+      },
+      "materialUpdate": "",
+      "windowException": ""
+    }
+  ],
+  "research": {
+    "sourceScan": [
+      {"sourceId":"openai-news","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"anthropic-news","status":"empty","itemsFetched":10,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"deepmind-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"google-ai-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"meta-ai-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"mistral-news","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"microsoft-ai-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"nvidia-developer-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"hugging-face-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"github-changelog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"cloudflare-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"github-trending","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"hacker-news","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"show-hn","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"hugging-face-papers","status":"collected","itemsFetched":11,"itemsOnEditionDay":11,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"arxiv-cs-ai","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
+      {"sourceId":"arxiv-cs-cl","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"arxiv-cs-lg","status":"collected","itemsFetched":15,"itemsOnEditionDay":15,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
+      {"sourceId":"ars-ai","status":"collected","itemsFetched":1,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"mit-tech-review-ai","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"ieee-spectrum-ai","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"reddit-localllama","status":"collected","itemsFetched":5,"itemsOnEditionDay":5,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"x-curated-experts","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"phoronix","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"mcp-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"mcp-spec-releases","status":"collected","itemsFetched":1,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
+      {"sourceId":"vercel-ai","status":"collected","itemsFetched":1,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"ollama-blog","status":"empty","itemsFetched":10,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"ollama-releases","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"langchain-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"llamaindex-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"dify-blog","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"hugging-face-trending-papers","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"chips-and-cheese","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"semianalysis","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"the-batch","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"alphasignal","status":"collected","itemsFetched":11,"itemsOnEditionDay":11,"duplicatesRemoved":1,"selectedCount":0,"failureReason":""},
+      {"sourceId":"tldr-ai","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"deepseek-official","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"qwen-official","status":"collected","itemsFetched":2,"itemsOnEditionDay":2,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"bytedance-seed","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"zai-official","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"moonshot-ai","status":"collected","itemsFetched":2,"itemsOnEditionDay":2,"duplicatesRemoved":0,"selectedCount":1,"failureReason":""},
+      {"sourceId":"minimax-official","status":"empty","itemsFetched":15,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"modelscope-hub","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"tencent-hunyuan","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"baidu-ernie-paddlepaddle","status":"collected","itemsFetched":4,"itemsOnEditionDay":4,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"huawei-ascend","status":"collected","itemsFetched":1,"itemsOnEditionDay":1,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"stepfun-official","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"china-cac","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"china-miit","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"machine-heart","status":"collected","itemsFetched":5,"itemsOnEditionDay":5,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"qbitai","status":"collected","itemsFetched":3,"itemsOnEditionDay":3,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""},
+      {"sourceId":"36kr-ai","status":"empty","itemsFetched":0,"itemsOnEditionDay":0,"duplicatesRemoved":0,"selectedCount":0,"failureReason":""}
+    ],
+    "collectedUrls": [
+      "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28",
+      "https://modelcontextprotocol.io/specification/2026-07-28/changelog",
+      "https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1442",
+      "https://github.com/MoonshotAI/kimi-code/releases/tag/%40moonshot-ai%2Fkimi-code%400.30.0",
+      "https://arxiv.org/abs/2607.26041",
+      "https://huggingface.co/papers/2607.26041",
+      "https://arxiv.org/abs/2607.25970",
+      "https://huggingface.co/papers/2607.25970",
+      "https://arxiv.org/abs/2607.25698",
+      "https://arxiv.org/abs/2607.25583",
+      "https://github.com/vercel/ai/releases/tag/ai%407.0.41",
+      "https://github.com/MoonshotAI/FlashKDA",
+      "https://github.com/QwenLM/qwen-code",
+      "https://github.com/PaddlePaddle/Paddle",
+      "https://github.com/Ascend/pytorch"
+    ],
+    "excludedCandidates": [
+      {"eventId":"shieldstral-guard-model","title":"Shieldstral safety model paper","url":"https://arxiv.org/abs/2607.25698","reason":"stale"},
+      {"eventId":"speculate-inference-paper","title":"Speculative decoding paper candidate","url":"https://arxiv.org/abs/2607.25583","reason":"stale"},
+      {"eventId":"vercel-ai-sdk-7-0-41","title":"Vercel AI SDK 7.0.41","url":"https://github.com/vercel/ai/releases/tag/ai%407.0.41","reason":"low-relevance"},
+      {"eventId":"moonshot-flashkda-commits","title":"FlashKDA repository updates","url":"https://github.com/MoonshotAI/FlashKDA","reason":"duplicate"},
+      {"eventId":"qwen-code-routine-updates","title":"Qwen Code same-day repository updates","url":"https://github.com/QwenLM/qwen-code","reason":"low-relevance"},
+      {"eventId":"paddle-routine-framework-updates","title":"PaddlePaddle same-day framework updates","url":"https://github.com/PaddlePaddle/Paddle","reason":"low-relevance"},
+      {"eventId":"ascend-pytorch-routine-updates","title":"Ascend PyTorch same-day repository updates","url":"https://github.com/Ascend/pytorch","reason":"low-relevance"}
+    ],
+    "unavailableSources": [],
+    "warnings": [
+      "Community checks found no relevant same-day discussion for three highlights; no standalone community story was selected.",
+      "Tier C China discoveries did not resolve to sufficiently strong primary evidence before cutoff."
+    ]
+  }
+}
