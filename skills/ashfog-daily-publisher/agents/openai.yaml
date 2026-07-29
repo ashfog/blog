@@ -1,4 +1,4 @@
 interface:
   display_name: "ASHFOG Daily Publisher"
-  short_description: "Research and publish daily briefs"
-  default_prompt: "Use $ashfog-daily-publisher in Preview mode for the current ASHFOG daily brief."
+  short_description: "Collect and publish deduplicated daily briefs"
+  default_prompt: "Use $ashfog-daily-publisher in Preview mode to collect, deduplicate, and draft the current ASHFOG daily brief."

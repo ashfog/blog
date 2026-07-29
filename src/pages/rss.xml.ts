@@ -6,7 +6,7 @@ export async function GET(context: { site: URL }) {
 
   return rss({
     title: "ASHFOG Daily",
-    description: "A source-verified global briefing on AI, open source, developer tools, infrastructure, research, and policy.",
+    description: "A source-linked global briefing on AI, open source, developer tools, infrastructure, research, and policy.",
     site: context.site,
     items: editions.map((edition) => ({
       title: edition.title,

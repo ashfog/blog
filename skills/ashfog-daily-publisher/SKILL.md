@@ -1,49 +1,48 @@
 ---
 name: ashfog-daily-publisher
-description: Research, draft, validate, and publish the English-language ASHFOG global daily AI, open-source, developer-tool, infrastructure, research, policy, and community intelligence brief. Use for scheduled ASHFOG daily research, Preview runs, Publish runs, source verification, daily JSON generation, publication retries, or validation of src/content/daily/YYYY-MM-DD.json in ashfog/blog.
+description: Collect, deduplicate, write, validate, and publish the English-language ASHFOG daily AI news and community brief. Use for scheduled ASHFOG daily runs, preview runs, publication retries, source collection, daily JSON generation, or validation of src/content/daily/YYYY-MM-DD.json in ashfog/blog.
 ---
 
 # ASHFOG Daily Publisher
 
-Produce one evidence-backed global daily edition as a single validated JSON file. Treat discovery, verification, writing, validation, and publication as one fail-closed transaction.
-
-## Select a mode
-
-Use Preview when the user does not name a mode. Use Publish only when explicitly requested or in the scheduled automation. A Publish run completes Preview first and writes only after every blocking check passes.
+Produce one English daily edition from the repository's registered sources. Keep the pipeline deterministic, concise, and tolerant of individual source and link failures.
 
 ## Load repository rules
 
-Read, in order, `editorial/editorial-policy.md`, `editorial/publishing-rules.json`, `editorial/sources.json`, `editorial/source-access.json`, `editorial/community-policy.md`, `editorial/categories.json`, `editorial/evidence-labels.json`, `editorial/image-library.json`, and `schemas/daily.schema.json`. Repository files are the source of truth; do not duplicate them in the automation prompt.
+Read `editorial/editorial-policy.md`, `editorial/publishing-rules.json`, `editorial/sources.json`, `editorial/source-access.json`, `editorial/community-policy.md`, `editorial/categories.json`, `editorial/evidence-labels.json`, `editorial/image-library.json`, and `schemas/daily.schema.json`. Treat these files as the source of truth.
 
 ## Run the pipeline
 
-1. Determine `editionDate` at 09:30:00 in `America/New_York`. Set `cutoffAt` to that timezone-aware instant and `windowStartAt` to exactly 24 hours earlier. Use `schemaVersion: 2`. Set `generatedAt` to the actual instant after research and drafting finish; never copy `cutoffAt` into it.
-2. If `src/content/daily/YYYY-MM-DD.json` already exists, inspect only its version and cutoff metadata. Return `already_valid` only when it is already a valid v2 New York edition for that cutoff. Otherwise treat the target as obsolete output, never as a migration template: do not copy its title, description, analysis, stories, candidates, source scans, counts, timestamps, or wording. Start a blank v2 candidate, run the complete collection and editorial pipeline from source data, validate it before touching the target, then atomically replace only that target.
-3. Reconcile enabled sources with access plans. Missing, unknown, duplicate, empty, or unsupported plans are blocking defects.
-4. Attempt all enabled sources, including all China sources. Date-based routes run once for every New York calendar date intersecting the window. Merge, canonicalize, deduplicate, sort by publication or material-update time, filter to `(windowStartAt, cutoffAt]`, and keep at most the newest 15 per source.
-5. Record one `research.sourceScan` row per source using `itemsInWindow`. Use `collected` for one or more in-window entries, `empty` for a working route covering the window with none, and `unavailable` only after all routes fail. Missing rows and `not-run` are blocking.
-6. Start verification with Tier A evidence and use Tier C only for discovery. Record every serious candidate and URL before drafting.
-7. Merge one event under one `eventId`, compare the previous seven editions, and require `materialUpdate` for a repeated event.
-8. Score every serious candidate. Publish every verified event meeting the repository materiality floor. Every unselected serious candidate must appear in the exclusion ledger with a reason. Set `research.seriousCandidateCount` to selected stories plus excluded candidates, and include the full score on every `low-relevance` exclusion. Do not use a story quota; 46 is only an anomaly guard.
-9. Perform targeted community checks. Deep-check every highlight on at least two applicable surfaces when available and every repository, model, paper, runtime, or developer-tool candidate on at least one project-attached surface.
-10. Treat every adopted nested `communityCheck` signal as a published community finding. Use a standalone community story only for an independent event. Never report community count by standalone stories alone.
-11. Lock one fact ledger before writing. Generate one English JSON document with original source URLs, story regions, source languages, exact word limits, and no facts absent from the ledger.
-12. Write real paragraph breaks in `dailyAnalysis.body`, then validate a temporary candidate with:
+1. Set `editionDate` and `cutoffAt` to 09:30:00 in `America/New_York`. Set `windowStartAt` to exactly 24 hours earlier and use the half-open interval `(windowStartAt, cutoffAt]`. Use `schemaVersion: 2`, create a unique `runId`, and set `generatedAt` when drafting finishes.
+2. Start from a blank candidate. Never copy wording, stories, counts, or research from an existing edition. A Publish retry may replace only the target date after the new candidate passes local validation.
+3. Attempt all 54 registered sources, including every China and community source. Use the ordered routes in `editorial/source-access.json`. Keep at most the newest 15 in-window entries per source and never backfill outside the window.
+4. Record exactly one `research.sourceScan` row per source. Use `collected` when a working route yields in-window entries, `empty` when it yields none, and `unavailable` when all routes fail. A source failure never blocks the edition after its attempt is recorded.
+5. Normalize all in-window entries once. In the same pass:
+   - discard only entries that are clearly outside the site's AI, open-source, developer-tool, infrastructure, research, policy, or community scope;
+   - group every report about the same underlying release, model, paper, policy, repository change, or community event under one `eventId`;
+   - keep one story per event and prefer the official announcement, repository, paper, specification, or policy URL when present.
+6. Do not score importance, rank materiality, create an exclusion ledger, enforce regional or company quotas, or perform follow-up community searches. Treat configured community sources as normal collection sources and publish independent community events as `kind: "community"`.
+7. When more than 46 independent events remain, keep the newest 46 by the event's publication or material-update timestamp. The limit is an anomaly guard, not an editorial ranking.
+8. Preserve each selected entry's collected source URL exactly as supplied. Do not fetch it again, validate it, inspect its host, resolve redirects, or block publication because of a link.
+9. Generate an original English headline, summary, and `whyItMatters` for every selected event within repository word limits. Do not generate scores, factual-claim ledgers, nested community checks, materiality explanations, or exclusion records.
+10. Generate `dailyAnalysis` only after the story list is final. Use real paragraph breaks and reference current story IDs.
+11. Keep `research.sourceScan` and `research.warnings` only. Derive all counts from the source scan and final stories instead of duplicating link, unavailable-source, candidate, or exclusion ledgers.
+12. Validate the temporary candidate locally:
 
-`npm run validate:daily -- <candidate.json> --content-dir src/content/daily --check-links`
+`npm run validate:daily -- <candidate.json>`
 
-Exit code 1 blocks publication. Do not weaken validation, invent replacement evidence, or publish a partial edition.
+Validation checks JSON structure, content lengths, the New York time window, all-source accounting, registered metadata, image assignments, and duplicate event IDs. It never makes network requests.
 
 ## Assign images
 
-Omit `imageId` and `heroImageId` by default so Astro assigns unique registered images deterministically. Use explicit IDs only for intentional overrides found in `editorial/image-library.json`; never invent or repeat an ID.
+Omit `imageId` and `heroImageId` by default so Astro assigns unique registered images deterministically. Use explicit IDs only for intentional overrides found in `editorial/image-library.json`.
 
 ## Preview report
 
-Report candidate path, cutoff and window start, attempted/collected/empty/unavailable/not-run sources, successful fallbacks and route failures, fetched and in-window entries, duplicates, serious candidates, exclusions, selected news, standalone community stories, adopted nested community findings, regional and tier distributions, surfaces attempted, warnings, and validation result. Do not mutate GitHub.
+Report the candidate path, cutoff and window start, attempted/collected/empty/unavailable sources, fetched and in-window entries, discarded out-of-scope entries, merged duplicate entries, selected news, selected community stories, warnings, and validation result. Do not mutate GitHub.
 
 ## Publish
 
-Re-read the target and default-branch head. Publish exactly one daily JSON file in one commit without force-pushing or overwriting unrelated work. Handle races idempotently. Re-read and validate the committed file, allow Cloudflare Pages to build Astro and Pagefind, and verify the public edition URL before reporting `published`.
+After local validation succeeds, replace only `src/content/daily/YYYY-MM-DD.json`, commit that file, and push without force. Allow Cloudflare Pages to build Astro and Pagefind. Do not perform a separate public-link validation step.
 
-On any access, validation, concurrency, build, or deployment failure, return `blocked` with the exact reason and leave the previous public edition unchanged.
+Return `blocked` only for an invalid JSON candidate, an incomplete 54-source attempt ledger, a concurrency conflict, or a GitHub write failure. Individual source, article-link, community-platform, build-observation, or deployment-observation failures do not invalidate an otherwise publishable edition.

@@ -33,25 +33,7 @@ const rollingClone = () => {
       publishedAt: "2026-07-28T08:00:00-04:00",
       updatedAt: null,
     },
-    score: {
-      ...story.score,
-      evidenceStrength: Math.max(3, story.score.evidenceStrength),
-      relevance: Math.max(3, story.score.relevance),
-      practicalUtility: Math.max(3, story.score.practicalUtility),
-    },
-    windowException: "",
   }));
-  edition.stories.forEach((story) => {
-    story.score.total = Object.entries(story.score)
-      .filter(([key]) => key !== "total")
-      .reduce((total, [, value]) => total + value, 0);
-  });
-  edition.research.excludedCandidates = edition.research.excludedCandidates.map((candidate) =>
-    candidate.reason === "low-relevance"
-      ? { ...candidate, score: { evidenceStrength: 4, relevance: 2, novelty: 2, practicalUtility: 2, impact: 1, communitySignal: 0, total: 11 } }
-      : candidate
-  );
-  edition.research.seriousCandidateCount = edition.stories.length + edition.research.excludedCandidates.length;
   return edition;
 };
 
@@ -59,8 +41,6 @@ const validate = (edition, options = {}) =>
   validateEdition(edition, {
     config,
     file: fixturePath,
-    previousEditions: [],
-    linkResults: [],
     ...options,
   });
 
@@ -70,7 +50,7 @@ test("valid English global fixture passes", async () => {
   assert.deepEqual(report.errors, []);
 });
 
-test("global preview includes verified China signals", () => {
+test("global preview includes China signals", () => {
   const chinaStories = fixture.stories.filter((story) => story.region === "china");
   assert.ok(chinaStories.length >= 3);
   assert.ok(chinaStories.some((story) => story.source.sourceLanguage === "zh-CN"));
@@ -160,18 +140,6 @@ test("production validation requires all registered source attempts", async () =
   assert.ok(report.errors.some((error) => error.includes("not-run is forbidden")));
 });
 
-test("unavailable source ledger must match source scan statuses", async () => {
-  const edition = rollingClone();
-  const scan = edition.research.sourceScan[0];
-  scan.status = "unavailable";
-  scan.failureReason = "Synthetic route failure";
-  edition.research.unavailableSources = [];
-  const report = await validate(edition, {
-    file: path.join(root, "src", "content", "daily", "2026-07-28.json"),
-  });
-  assert.ok(report.errors.some((error) => error.includes("unavailableSources: missing")));
-});
-
 test("unavailable sources cannot contain or select in-window items", async () => {
   const edition = rollingClone();
   const scan = edition.research.sourceScan[0];
@@ -180,7 +148,6 @@ test("unavailable sources cannot contain or select in-window items", async () =>
   scan.itemsInWindow = 1;
   scan.selectedCount = 1;
   scan.failureReason = "Synthetic route failure";
-  edition.research.unavailableSources = [scan.sourceId];
   const report = await validate(edition, {
     file: path.join(root, "src", "content", "daily", "2026-07-28.json"),
   });
@@ -219,7 +186,6 @@ test("domain rules reject an unexceptional prior-day item", async () => {
   const edition = clone();
   edition.stories[0].source.publishedAt = "2026-07-27T10:00:00+08:00";
   edition.stories[0].source.updatedAt = null;
-  edition.stories[0].windowException = "";
   const report = await validate(edition);
   assert.equal(report.status, "error");
   assert.ok(report.errors.some((error) => error.includes("outside collection window")));
@@ -282,30 +248,6 @@ test("schemaVersion 2 requires itemsInWindow instead of itemsOnEditionDay", asyn
   assert.ok(report.errors.some((error) => error.includes("itemsInWindow")));
 });
 
-test("schemaVersion 2 rejects a serious candidate ledger that silently drops candidates", async () => {
-  const edition = rollingClone();
-  edition.research.seriousCandidateCount += 1;
-  const report = await validate(edition);
-  assert.ok(report.errors.some((error) => error.includes("seriousCandidateCount")));
-});
-
-test("schemaVersion 2 cannot exclude a qualifying event as low-relevance", async () => {
-  const edition = rollingClone();
-  const candidate = edition.research.excludedCandidates.find((item) => item.reason === "low-relevance");
-  candidate.score = { evidenceStrength: 4, relevance: 4, novelty: 3, practicalUtility: 4, impact: 3, communitySignal: 1, total: 19 };
-  const report = await validate(edition);
-  assert.ok(report.errors.some((error) => error.includes("meets the materiality floor")));
-});
-
-test("excluded low-relevance candidates cannot falsify score totals", async () => {
-  const edition = rollingClone();
-  const candidate = edition.research.excludedCandidates.find((item) => item.reason === "low-relevance");
-  candidate.score.total = 0;
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("score.total: expected")));
-});
-
 test("domain rules reject duplicate events", async () => {
   const edition = clone();
   edition.stories[1].eventId = edition.stories[0].eventId;
@@ -348,56 +290,18 @@ test("image rules reject an unknown hero image", async () => {
   assert.ok(report.errors.some((error) => error.includes("heroImageId: unknown image ID")));
 });
 
-test("domain rules reject evidence URLs absent from the collected ledger", async () => {
+
+test("source URLs are preserved without URL, host, or network validation", async () => {
   const edition = clone();
-  edition.stories[0].factualClaims[0].evidenceUrl = "https://example.com/invented";
+  edition.stories[0].source.url = "collected-link-as-supplied";
   const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("absent from research.collectedUrls")));
+  assert.equal(report.status, "ok", report.errors.join("\n"));
 });
 
-test("domain rules reject unregistered evidence hosts", async () => {
+test("highly similar headlines warn but do not block distinct event IDs", async () => {
   const edition = clone();
-  const invented = "https://example.com/invented";
-  edition.stories[0].factualClaims[0].evidenceUrl = invented;
-  edition.research.collectedUrls.push(invented);
+  edition.stories[1].headline = edition.stories[0].headline;
   const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("host is absent")));
-});
-
-test("domain rules reject inconsistent score totals", async () => {
-  const edition = clone();
-  edition.stories[0].score.total = 30;
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("score.total")));
-});
-
-test("Tier C cannot be the primary source for news", async () => {
-  const edition = clone();
-  edition.stories[0].source = {
-    ...edition.stories.find((story) => story.kind === "community").source,
-    publishedAt: edition.stories[0].source.publishedAt,
-  };
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("Tier C cannot")));
-});
-
-test("link-check failures block publication", async () => {
-  const report = await validate(clone(), {
-    linkResults: [{ url: "https://example.com/missing", status: 404 }],
-  });
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("returned 404")));
-});
-
-test("a repeated prior event requires materialUpdate", async () => {
-  const edition = clone();
-  const previous = clone();
-  previous.editionDate = "2026-07-26";
-  const report = await validate(edition, { previousEditions: [previous] });
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("repeated event requires")));
+  assert.equal(report.status, "ok", report.errors.join("\n"));
+  assert.ok(report.warnings.some((warning) => warning.includes("highly similar headlines")));
 });

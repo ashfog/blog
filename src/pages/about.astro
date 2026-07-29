@@ -7,7 +7,7 @@ const pageImage = getPageImage("about");
 
 <BaseLayout
   title="About ASHFOG"
-  description="ASHFOG’s editorial principles, evidence standards, and automated publishing method."
+  description="ASHFOG’s editorial principles, source collection, and automated publishing method."
   image={pageImage?.largeSrc}
   pageType="AboutPage"
   breadcrumbs={[
@@ -19,7 +19,7 @@ const pageImage = getPageImage("about");
     <header>
       <span class="eyebrow">About ASHFOG</span>
       <h1>Not More News<br /><em>Less Noise</em></h1>
-      <p>ASHFOG tracks material changes across AI, open source, developer tools, infrastructure, research, and policy. Every fact returns to a source, and every judgment keeps its evidence boundary visible.</p>
+      <p>ASHFOG tracks independent events across AI, open source, developer tools, infrastructure, research, policy, and relevant communities. Every item keeps its collected source link so readers can investigate directly.</p>
     </header>
     {pageImage && <PageArtwork image={pageImage} priority />}
 
@@ -27,22 +27,22 @@ const pageImage = getPageImage("about");
       <article>
         <span>01</span>
         <h2>Sources First</h2>
-        <p>Official announcements, releases, papers, policy texts, and maintainer statements come first. Media and communities help discovery; they do not replace primary evidence.</p>
+        <p>Reports about the same event are grouped by content. When an official announcement, repository, paper, specification, or policy page is available, it becomes the source link for that event.</p>
       </article>
       <article>
         <span>02</span>
-        <h2>Quality Before Quota</h2>
-        <p>There is no routine story quota. Quiet days stay concise, while busy days expand only when additional events meet the same materiality and evidence standards.</p>
+        <h2>Breadth Without Ranking</h2>
+        <p>There is no importance threshold or routine story quota. Quiet days stay concise, while busy days include every independent in-scope event up to the 46-story anomaly guard.</p>
       </article>
       <article>
         <span>03</span>
-        <h2>Community Evidence Is Labeled</h2>
+        <h2>Community Uses the Same Pipeline</h2>
         <p>Single tests, multiple-user reports, and maintainer confirmations are labeled separately. Popularity, votes, and reposts are never presented as proof.</p>
       </article>
       <article>
         <span>04</span>
         <h2>Machine Validated</h2>
-        <p>Before publication, validation checks strict JSON, language, word counts, dates, duplicate events, source identity, links, balance, and the previous seven editions.</p>
+        <p>Before publication, local validation checks JSON structure, language, word counts, dates, all-source accounting, image assignments, and duplicate event IDs without network requests.</p>
       </article>
     </div>
 

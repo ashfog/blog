@@ -1,7 +1,7 @@
 # ASHFOG
 
-ASHFOG is a static Astro publication for one verified AI, open-source, and
-developer-ecosystem intelligence brief per day.
+ASHFOG is a static Astro publication for one source-linked AI, open-source, and
+developer-ecosystem brief per day.
 
 ## Content contract
 
@@ -14,9 +14,7 @@ src/content/daily/YYYY-MM-DD.json
 Every edition must pass:
 
 ```text
-pnpm run validate:daily -- src/content/daily/YYYY-MM-DD.json \
-  --content-dir src/content/daily \
-  --check-links
+pnpm run validate:daily -- src/content/daily/YYYY-MM-DD.json
 ```
 
 When the formal content directory is empty, the site uses
@@ -26,9 +24,9 @@ formal editions are rendered.
 
 ## Source collection
 
-`editorial/sources.json` is the stable 54-source editorial registry. Machine-readable endpoints and ordered fallbacks live separately in `editorial/source-access.json`, so RSS, API, GitHub, page, and indexed-search routes can be maintained without changing source IDs or invalidating historical editions. Community research behavior lives in `editorial/community-policy.md`.
+`editorial/sources.json` is the stable 54-source editorial registry. Machine-readable endpoints and ordered fallbacks live separately in `editorial/source-access.json`, so RSS, API, GitHub, page, and indexed-search routes can be maintained without changing source IDs or invalidating historical editions. Community collection behavior lives in `editorial/community-policy.md`.
 
-A collector must try a source's configured routes in order. It records `empty` when a working dated route has no edition-day entries and records `unavailable` only after every configured route fails.
+A collector must try a source's configured routes in order. It records `empty` when a working dated route has no entries in the rolling 24-hour window and records `unavailable` only after every configured route fails.
 
 ## Image library
 
