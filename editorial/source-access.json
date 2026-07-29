@@ -1,1 +1,756 @@
-{"placeholder":"will be replaced by orchestrated content"}
+{
+  "version": 2,
+  "lastReviewed": "2026-07-29",
+  "timezone": "Asia/Shanghai",
+  "purpose": "Machine-readable ordered collection routes and deterministic fallbacks for every registered source.",
+  "routeTypes": [
+    "rss",
+    "json-api",
+    "sitemap",
+    "connected-github",
+    "web-index",
+    "date-archive",
+    "indexed-search",
+    "cli"
+  ],
+  "statusSemantics": {
+    "collected": "At least one route succeeded and exposed one or more entries on the edition date.",
+    "empty": "At least one route succeeded and exposed a trustworthy dated listing, but it contained no edition-day entries.",
+    "unavailable": "Every configured route failed, was blocked, required unavailable credentials, or could not expose trustworthy dates.",
+    "not-run": "No configured route was attempted. This remains blocking."
+  },
+  "collectionRules": {
+    "tryRoutesInOrder": true,
+    "continueAfterRouteFailure": true,
+    "stopAfterTrustworthyDatedListing": true,
+    "siteRestrictedSearchIsFallbackOnly": true,
+    "searchResultMustResolveToCanonicalSource": true,
+    "doNotTreatNoSearchResultsAsAccessFailure": true,
+    "maxEntriesPerSource": 15,
+    "backfillPriorDays": false
+  },
+  "plans": {
+    "openai-news": [
+      {
+        "type": "rss",
+        "url": "https://openai.com/news/rss.xml"
+      },
+      {
+        "type": "web-index",
+        "url": "https://openai.com/news/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:openai.com/news {editionDate} OpenAI"
+      }
+    ],
+    "anthropic-news": [
+      {
+        "type": "web-index",
+        "url": "https://www.anthropic.com/news"
+      },
+      {
+        "type": "sitemap",
+        "url": "https://www.anthropic.com/sitemap.xml",
+        "note": "Use loc and lastmod only for discovery, then verify the article's visible publication date."
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:anthropic.com/news {editionDate} Anthropic"
+      }
+    ],
+    "google-ai-blog": [
+      {
+        "type": "rss",
+        "url": "https://blog.google/technology/ai/rss/"
+      },
+      {
+        "type": "web-index",
+        "url": "https://blog.google/technology/ai/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:blog.google/technology/ai {editionDate}"
+      }
+    ],
+    "meta-ai-blog": [
+      {
+        "type": "web-index",
+        "url": "https://ai.meta.com/blog/"
+      },
+      {
+        "type": "sitemap",
+        "url": "https://ai.meta.com/sitemap.xml",
+        "note": "Use only for URL discovery; verify dates on canonical article pages."
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:ai.meta.com/blog {editionDate}"
+      }
+    ],
+    "nvidia-developer-blog": [
+      {
+        "type": "rss",
+        "url": "https://developer.nvidia.com/blog/feed/"
+      },
+      {
+        "type": "web-index",
+        "url": "https://developer.nvidia.com/blog/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:developer.nvidia.com/blog {editionDate} AI"
+      }
+    ],
+    "github-trending": [
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/search/repositories",
+        "queries": [
+          "created:{editionDate} topic:artificial-intelligence",
+          "created:{editionDate} topic:llm",
+          "pushed:{editionDate} topic:machine-learning"
+        ],
+        "note": "Primary dated route. Use connected GitHub access, deduplicate repositories, and verify license, release history, and maintainer activity."
+      },
+      {
+        "type": "web-index",
+        "url": "https://github.com/trending",
+        "note": "Discovery fallback only. The Today page lacks trustworthy per-repository timestamps, so it cannot by itself produce collected or empty status for the edition-day window."
+      }
+    ],
+    "hacker-news": [
+      {
+        "type": "json-api",
+        "url": "https://hacker-news.firebaseio.com/v0/newstories.json",
+        "note": "Fetch only enough item records to inspect the newest 15 edition-day stories."
+      },
+      {
+        "type": "json-api",
+        "url": "https://hn.algolia.com/api/v1/search_by_date",
+        "note": "Use targeted candidate-title, domain, or repository queries; retain the canonical news.ycombinator.com thread URL."
+      },
+      {
+        "type": "web-index",
+        "url": "https://news.ycombinator.com/newest"
+      }
+    ],
+    "show-hn": [
+      {
+        "type": "json-api",
+        "url": "https://hacker-news.firebaseio.com/v0/showstories.json"
+      },
+      {
+        "type": "web-index",
+        "url": "https://news.ycombinator.com/show"
+      }
+    ],
+    "hugging-face-papers": [
+      {
+        "type": "json-api",
+        "url": "https://huggingface.co/api/daily_papers",
+        "params": {
+          "date": "{editionDate}",
+          "sort": "publishedAt",
+          "limit": 15,
+          "p": 0
+        }
+      },
+      {
+        "type": "cli",
+        "command": "hf papers ls --date {editionDate} --limit 15 --format json"
+      },
+      {
+        "type": "web-index",
+        "url": "https://huggingface.co/papers"
+      }
+    ],
+    "mit-tech-review-ai": [
+      {
+        "type": "rss",
+        "url": "https://www.technologyreview.com/feed/",
+        "note": "Filter the broad feed to AI-relevant entries after date filtering."
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:technologyreview.com {editionDate} artificial intelligence"
+      }
+    ],
+    "reddit-localllama": [
+      {
+        "type": "rss",
+        "url": "https://www.reddit.com/r/LocalLLaMA/new/.rss"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:reddit.com/r/LocalLLaMA {editionDate} {candidateTerms}"
+      },
+      {
+        "type": "web-index",
+        "url": "https://www.reddit.com/r/LocalLLaMA/new/"
+      }
+    ],
+    "x-curated-experts": [
+      {
+        "type": "indexed-search",
+        "query": "site:x.com/{candidateHandle} {editionDate} {candidateTerms}",
+        "note": "Run only around an identified candidate and a named official, maintainer, researcher, or founder account."
+      },
+      {
+        "type": "web-index",
+        "url": "https://x.com/",
+        "note": "Use only when an authenticated permitted session is available. Never scan the general feed."
+      }
+    ],
+    "phoronix": [
+      {
+        "type": "rss",
+        "url": "https://www.phoronix.com/rss.php"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:phoronix.com {editionDate} AI GPU Linux"
+      }
+    ],
+    "mcp-blog": [
+      {
+        "type": "rss",
+        "url": "https://blog.modelcontextprotocol.io/index.xml"
+      },
+      {
+        "type": "web-index",
+        "url": "https://blog.modelcontextprotocol.io/posts/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:blog.modelcontextprotocol.io {editionDate}"
+      }
+    ],
+    "langchain-blog": [
+      {
+        "type": "web-index",
+        "url": "https://www.langchain.com/blog"
+      },
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/orgs/langchain-ai/repos",
+        "note": "Use recent releases and materially changed repositories as a fallback, not routine commit noise."
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:langchain.com/blog {editionDate}"
+      }
+    ],
+    "llamaindex-blog": [
+      {
+        "type": "web-index",
+        "url": "https://www.llamaindex.ai/blog"
+      },
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/repos/run-llama/llama_index/releases"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:llamaindex.ai/blog {editionDate}"
+      }
+    ],
+    "dify-blog": [
+      {
+        "type": "web-index",
+        "url": "https://dify.ai/blog"
+      },
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/repos/langgenius/dify/releases"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:dify.ai/blog {editionDate}"
+      }
+    ],
+    "hugging-face-trending-papers": [
+      {
+        "type": "json-api",
+        "url": "https://huggingface.co/api/daily_papers",
+        "params": {
+          "date": "{editionDate}",
+          "sort": "trending",
+          "limit": 15,
+          "p": 0
+        },
+        "note": "Use the edition-date paper publication field. Do not claim the timestamp represents when trending rank changed."
+      },
+      {
+        "type": "cli",
+        "command": "hf papers ls --date {editionDate} --sort trending --limit 15 --format json",
+        "note": "Use the edition-date paper publication field. Do not claim the timestamp represents when trending rank changed."
+      },
+      {
+        "type": "web-index",
+        "url": "https://huggingface.co/papers/trending",
+        "note": "Discovery fallback only unless the page exposes a trustworthy edition-date publication field for each retained paper."
+      }
+    ],
+    "tldr-ai": [
+      {
+        "type": "date-archive",
+        "urlTemplate": "https://tldr.tech/ai/{editionDate}"
+      },
+      {
+        "type": "web-index",
+        "url": "https://ai.tldr.tech/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:tldr.tech/ai/{editionDate}"
+      }
+    ],
+    "bytedance-seed": [
+      {
+        "type": "web-index",
+        "url": "https://seed.bytedance.com/en/blog"
+      },
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/orgs/ByteDance-Seed/repos",
+        "note": "Sort by updated_at and inspect material releases or repository launches, not ordinary commits."
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:seed.bytedance.com {editionDate}"
+      }
+    ],
+    "modelscope-hub": [
+      {
+        "type": "web-index",
+        "url": "https://www.modelscope.cn/models"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:modelscope.cn/models {editionDate} 大模型 OR AI"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:modelscope.cn/organization {editionDate} 模型"
+      }
+    ],
+    "huawei-ascend": [
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/orgs/Ascend/repos",
+        "note": "Inspect releases and material changes for CANN, MindIE, torch_npu, MindSpeed, and deployment tooling."
+      },
+      {
+        "type": "web-index",
+        "url": "https://www.hiascend.com/en/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:hiascend.com {editionDate} CANN OR MindIE OR Ascend"
+      }
+    ],
+    "stepfun-official": [
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/orgs/stepfun-ai/repos",
+        "note": "Inspect new repositories, releases, and materially updated model cards."
+      },
+      {
+        "type": "web-index",
+        "url": "https://www.stepfun.com/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:stepfun.com {editionDate} 模型 OR Step"
+      }
+    ],
+    "china-cac": [
+      {
+        "type": "indexed-search",
+        "query": "site:cac.gov.cn {editionDate} 人工智能 OR 算法 OR 数据安全"
+      },
+      {
+        "type": "web-index",
+        "url": "https://www.cac.gov.cn/"
+      }
+    ],
+    "china-miit": [
+      {
+        "type": "indexed-search",
+        "query": "site:miit.gov.cn {editionDate} 人工智能 OR 大模型 OR 算力 OR 芯片"
+      },
+      {
+        "type": "web-index",
+        "url": "https://www.miit.gov.cn/"
+      },
+      {
+        "type": "web-index",
+        "url": "https://jxca.miit.gov.cn/",
+        "note": "Use for AI-related filing and administrative signals when relevant."
+      }
+    ],
+    "machine-heart": [
+      {
+        "type": "web-index",
+        "url": "https://www.jiqizhixin.com/industry"
+      },
+      {
+        "type": "web-index",
+        "url": "https://www.jiqizhixin.com/articles/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:jiqizhixin.com/articles {editionDate}"
+      }
+    ],
+    "36kr-ai": [
+      {
+        "type": "web-index",
+        "url": "https://www.36kr.com/search-list/3628"
+      },
+      {
+        "type": "web-index",
+        "url": "https://eu.36kr.com/zh/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:36kr.com/p {editionDate} 人工智能 OR 大模型 OR 智能体"
+      }
+    ],
+    "deepmind-blog": [
+      {
+        "type": "web-index",
+        "url": "https://deepmind.google/discover/blog/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:deepmind.google/discover/blog {editionDate}"
+      }
+    ],
+    "mistral-news": [
+      {
+        "type": "web-index",
+        "url": "https://mistral.ai/news"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:mistral.ai/news {editionDate}"
+      }
+    ],
+    "microsoft-ai-blog": [
+      {
+        "type": "rss",
+        "url": "https://blogs.microsoft.com/ai/feed/"
+      },
+      {
+        "type": "web-index",
+        "url": "https://blogs.microsoft.com/ai/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:blogs.microsoft.com/ai {editionDate}"
+      }
+    ],
+    "hugging-face-blog": [
+      {
+        "type": "web-index",
+        "url": "https://huggingface.co/blog"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:huggingface.co/blog {editionDate}"
+      }
+    ],
+    "github-changelog": [
+      {
+        "type": "rss",
+        "url": "https://github.blog/changelog/feed/"
+      },
+      {
+        "type": "web-index",
+        "url": "https://github.blog/changelog/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:github.blog/changelog {editionDate} AI OR Copilot"
+      }
+    ],
+    "cloudflare-blog": [
+      {
+        "type": "rss",
+        "url": "https://blog.cloudflare.com/rss/"
+      },
+      {
+        "type": "web-index",
+        "url": "https://blog.cloudflare.com/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:blog.cloudflare.com {editionDate} AI OR Workers"
+      }
+    ],
+    "arxiv-cs-ai": [
+      {
+        "type": "json-api",
+        "url": "https://export.arxiv.org/api/query",
+        "params": {
+          "search_query": "cat:cs.AI",
+          "sortBy": "submittedDate",
+          "sortOrder": "descending",
+          "max_results": 15
+        }
+      },
+      {
+        "type": "web-index",
+        "url": "https://arxiv.org/list/cs.AI/recent"
+      }
+    ],
+    "arxiv-cs-cl": [
+      {
+        "type": "json-api",
+        "url": "https://export.arxiv.org/api/query",
+        "params": {
+          "search_query": "cat:cs.CL",
+          "sortBy": "submittedDate",
+          "sortOrder": "descending",
+          "max_results": 15
+        }
+      },
+      {
+        "type": "web-index",
+        "url": "https://arxiv.org/list/cs.CL/recent"
+      }
+    ],
+    "arxiv-cs-lg": [
+      {
+        "type": "json-api",
+        "url": "https://export.arxiv.org/api/query",
+        "params": {
+          "search_query": "cat:cs.LG",
+          "sortBy": "submittedDate",
+          "sortOrder": "descending",
+          "max_results": 15
+        }
+      },
+      {
+        "type": "web-index",
+        "url": "https://arxiv.org/list/cs.LG/recent"
+      }
+    ],
+    "ars-ai": [
+      {
+        "type": "web-index",
+        "url": "https://arstechnica.com/ai/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:arstechnica.com/ai {editionDate}"
+      }
+    ],
+    "ieee-spectrum-ai": [
+      {
+        "type": "web-index",
+        "url": "https://spectrum.ieee.org/artificial-intelligence"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:spectrum.ieee.org {editionDate} artificial intelligence"
+      }
+    ],
+    "mcp-spec-releases": [
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/releases"
+      },
+      {
+        "type": "web-index",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases"
+      }
+    ],
+    "vercel-ai": [
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/repos/vercel/ai/releases"
+      },
+      {
+        "type": "web-index",
+        "url": "https://vercel.com/blog"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:vercel.com/blog {editionDate} AI SDK OR agent"
+      }
+    ],
+    "ollama-blog": [
+      {
+        "type": "web-index",
+        "url": "https://ollama.com/blog"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:ollama.com/blog {editionDate}"
+      }
+    ],
+    "ollama-releases": [
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/repos/ollama/ollama/releases"
+      },
+      {
+        "type": "web-index",
+        "url": "https://github.com/ollama/ollama/releases"
+      }
+    ],
+    "chips-and-cheese": [
+      {
+        "type": "rss",
+        "url": "https://chipsandcheese.com/feed/"
+      },
+      {
+        "type": "web-index",
+        "url": "https://chipsandcheese.com/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:chipsandcheese.com {editionDate}"
+      }
+    ],
+    "semianalysis": [
+      {
+        "type": "web-index",
+        "url": "https://semianalysis.com/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:semianalysis.com {editionDate}"
+      }
+    ],
+    "the-batch": [
+      {
+        "type": "web-index",
+        "url": "https://www.deeplearning.ai/the-batch/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:deeplearning.ai/the-batch {editionDate}"
+      }
+    ],
+    "alphasignal": [
+      {
+        "type": "web-index",
+        "url": "https://alphasignal.ai/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:alphasignal.ai {editionDate}"
+      }
+    ],
+    "deepseek-official": [
+      {
+        "type": "web-index",
+        "url": "https://api-docs.deepseek.com/news/"
+      },
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/orgs/deepseek-ai/repos",
+        "note": "Inspect releases, new repositories, model cards, and material project changes; ignore ordinary commit noise."
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:api-docs.deepseek.com/news {editionDate}"
+      }
+    ],
+    "qwen-official": [
+      {
+        "type": "web-index",
+        "url": "https://qwenlm.github.io/blog/"
+      },
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/orgs/QwenLM/repos",
+        "note": "Inspect releases, new repositories, model cards, and material project changes; ignore ordinary commit noise."
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:qwenlm.github.io/blog {editionDate}"
+      }
+    ],
+    "zai-official": [
+      {
+        "type": "web-index",
+        "url": "https://z.ai/blog"
+      },
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/orgs/zai-org/repos",
+        "note": "Inspect releases, new repositories, model cards, and material project changes; ignore ordinary commit noise."
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:z.ai/blog {editionDate}"
+      }
+    ],
+    "moonshot-ai": [
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/orgs/MoonshotAI/repos",
+        "note": "Inspect releases, new repositories, model cards, and material project changes; ignore ordinary commit noise."
+      },
+      {
+        "type": "web-index",
+        "url": "https://www.moonshot.ai/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:moonshot.ai {editionDate} Kimi OR model"
+      }
+    ],
+    "minimax-official": [
+      {
+        "type": "web-index",
+        "url": "https://www.minimax.io/news"
+      },
+      {
+        "type": "web-index",
+        "url": "https://platform.minimax.io/docs/release-notes/models"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:minimax.io {editionDate} model OR release"
+      }
+    ],
+    "tencent-hunyuan": [
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/orgs/Tencent-Hunyuan/repos",
+        "note": "Inspect releases, new repositories, model cards, and material project changes; ignore ordinary commit noise."
+      },
+      {
+        "type": "web-index",
+        "url": "https://github.com/Tencent-Hunyuan"
+      }
+    ],
+    "baidu-ernie-paddlepaddle": [
+      {
+        "type": "connected-github",
+        "url": "https://api.github.com/orgs/PaddlePaddle/repos",
+        "note": "Prioritize PaddleNLP releases, ERNIE model cards, framework releases, and material project launches."
+      },
+      {
+        "type": "web-index",
+        "url": "https://github.com/PaddlePaddle/PaddleNLP"
+      }
+    ],
+    "qbitai": [
+      {
+        "type": "web-index",
+        "url": "https://www.qbitai.com/"
+      },
+      {
+        "type": "indexed-search",
+        "query": "site:qbitai.com {editionDate} AI OR 大模型 OR 智能体"
+      }
+    ]
+  }
+}
