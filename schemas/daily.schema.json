@@ -142,10 +142,6 @@
           "type": "array",
           "maxItems": 5,
           "items": { "$ref": "#/$defs/communityVoice" }
-        },
-        "imageId": {
-          "type": ["string", "null"],
-          "pattern": "^[a-z0-9][a-z0-9-]{1,79}$"
         }
       }
     },

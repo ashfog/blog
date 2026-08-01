@@ -127,8 +127,8 @@ test("source scan counts obey the per-source maximum", async () => {
   assert.ok((await validate(edition)).errors.some((error) => error.includes("itemsFetched")));
 });
 
-test("image pool provides 46 unique signal slots", () => {
-  assert.equal(config.storyImageCount, 46);
+test("article image library is available", () => {
+  assert.ok(config.storyImageCount >= 40);
 });
 
 test("every registered source has a validated access plan", () => {
@@ -184,29 +184,16 @@ test("domain rules reject duplicate events", async () => {
   assert.ok((await validate(edition)).errors.some((error) => error.includes("eventId: duplicate")));
 });
 
-test("valid manual image IDs pass", async () => {
+test("valid manual hero image ID passes", async () => {
   const edition = clone();
-  for (const signal of edition.signals.slice(0, 2)) {
-    signal.imageId = [...config.storyImageCategories].find(([, category]) => category === signal.category)[0];
-  }
+  edition.heroImageId = [...config.imageIds][0];
   assert.equal((await validate(edition)).status, "ok");
 });
 
-test("image rules reject unknown, mismatched, and duplicate signal images", async () => {
-  const unknown = clone();
-  unknown.signals[0].imageId = "invented-image";
-  assert.ok((await validate(unknown)).errors.some((error) => error.includes("unknown story image ID")));
-
-  const mismatched = clone();
-  mismatched.signals[0].imageId = [...config.storyImageCategories].find(([, category]) => category !== mismatched.signals[0].category)[0];
-  assert.ok((await validate(mismatched)).errors.some((error) => error.includes("image category must match")));
-
-  const duplicate = clone();
-  duplicate.signals[1].category = duplicate.signals[0].category;
-  const imageId = [...config.storyImageCategories].find(([, category]) => category === duplicate.signals[0].category)[0];
-  duplicate.signals[0].imageId = imageId;
-  duplicate.signals[1].imageId = imageId;
-  assert.ok((await validate(duplicate)).errors.some((error) => error.includes("duplicate image ID")));
+test("unknown hero image ID is rejected", async () => {
+  const edition = clone();
+  edition.heroImageId = "invented-image";
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("unknown image ID")));
 });
 
 test("source URLs are preserved without URL, host, or network validation", async () => {

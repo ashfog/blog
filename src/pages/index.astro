@@ -1,13 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { categoryLabels, formatDate, getLatestEdition, getSignalMap, readingMinutes } from "../lib/daily";
-import { getEditionHeroImage, getEditionStoryImages, getPageImage } from "../lib/images";
+import { categoryLabels, formatDate, getLatestEdition, readingMinutes } from "../lib/daily";
+import { getEditionHeroImage } from "../lib/images";
 
 const edition = getLatestEdition();
-const signalMap = getSignalMap(edition);
-const signalImages = getEditionStoryImages(edition);
-const homeImage = getPageImage("home");
-const seoImage = getEditionHeroImage(edition, signalImages);
+const seoImage = getEditionHeroImage(edition);
 const communityVoiceCount = edition.signals.reduce(
   (total, signal) => total + signal.communityVoices.length + (signal.origin === "community" ? 1 : 0),
   0
@@ -17,16 +14,9 @@ const sourceCount = new Set(edition.signals.flatMap((signal) => [
   ...signal.communityVoices.map((voice) => voice.source.id)
 ])).size;
 const categories = [...new Set(edition.signals.map((signal) => signal.category))];
-const themes = edition.article.sections.map((section) => {
-  const signals = section.signalIds.flatMap((id) => {
-    const signal = signalMap.get(id);
-    return signal ? [signal] : [];
-  });
-  return { ...section, signals, image: signals[0] ? signalImages.get(signals[0].id) : undefined };
-});
 ---
 
-<BaseLayout title="ASHFOG — Daily AI Intelligence" description={edition.description} image={seoImage?.largeSrc ?? homeImage?.largeSrc}>
+<BaseLayout title="ASHFOG — Daily AI Intelligence" description={edition.description} image={seoImage?.largeSrc}>
   <section class="hero page-shell">
     <div class="hero-copy">
       <span class="eyebrow">Daily intelligence · {edition.editionDate}</span>
@@ -34,25 +24,11 @@ const themes = edition.article.sections.map((section) => {
       <p>{edition.description}</p>
       <div class="hero-actions">
         <a class="primary" href={`/daily/${edition.editionDate}`}>Read today&rsquo;s edition <span>→</span></a>
-        <a class="secondary" href="#themes">See today&rsquo;s themes</a>
+        <a class="secondary" href="#today-article">Preview today&rsquo;s article</a>
       </div>
     </div>
 
     <aside class="hero-meta">
-      {homeImage && (
-        <img
-          class="hero-meta-art"
-          src={homeImage.src}
-          srcset={homeImage.srcset}
-          sizes="(max-width: 960px) 100vw, 32vw"
-          width={homeImage.width}
-          height={homeImage.height}
-          alt={homeImage.alt}
-          loading="eager"
-          decoding="async"
-          fetchpriority="high"
-        />
-      )}
       <div class="status">
         <span class="pulse"></span>
         <div>
@@ -63,7 +39,7 @@ const themes = edition.article.sections.map((section) => {
       <dl>
         <div><dt>{edition.signals.length}</dt><dd>source signals</dd></div>
         <div><dt>{sourceCount}</dt><dd>linked sources</dd></div>
-        <div><dt>{themes.length}</dt><dd>connected themes</dd></div>
+        <div><dt>1</dt><dd>daily article</dd></div>
         <div><dt>{communityVoiceCount}</dt><dd>community voices</dd></div>
       </dl>
       <div class="topic-row">
@@ -74,7 +50,7 @@ const themes = edition.article.sections.map((section) => {
     </aside>
   </section>
 
-  <section class="lead page-shell">
+  <section class="lead page-shell" id="today-article">
     <div class="lead-copy">
       <span class="eyebrow">Editor&rsquo;s synthesis</span>
       <p class="issue">ISSUE / {edition.editionDate.replaceAll("-", "")}</p>
@@ -97,42 +73,6 @@ const themes = edition.article.sections.map((section) => {
     )}
   </section>
 
-  <section class="themes page-shell" id="themes">
-    <div class="section-heading">
-      <div>
-        <span class="eyebrow">Inside today&rsquo;s edition</span>
-        <h2>One Article<br />A Connected View</h2>
-      </div>
-      <p>{edition.signals.length} deduplicated events grouped into {themes.length} themes<br />Community observations appear beside the events they illuminate</p>
-    </div>
-
-    <div class="theme-list">
-      {themes.map((theme) => (
-        <a class="theme" href={`/daily/${edition.editionDate}#${theme.id}`}>
-          <span class="theme-number">{String(theme.position).padStart(2, "0")}</span>
-          <div class="theme-copy">
-            <span class="eyebrow">{theme.kicker}</span>
-            <h3>{theme.title}</h3>
-            <p>{theme.signals.length} linked source {theme.signals.length === 1 ? "signal" : "signals"}</p>
-          </div>
-          {theme.image && (
-            <img
-              src={theme.image.src}
-              srcset={theme.image.srcset}
-              sizes="(max-width: 720px) 34vw, 220px"
-              width={theme.image.width}
-              height={theme.image.height}
-              alt={theme.image.alt}
-              loading="lazy"
-              decoding="async"
-            />
-          )}
-          <span class="arrow">↗</span>
-        </a>
-      ))}
-    </div>
-  </section>
-
   <section class="archive-cta page-shell">
     <p class="issue">ASHFOG ARCHIVE / DAILY</p>
     <h2>One Page a Day<br />Build Your Own Industry Timeline</h2>
@@ -150,7 +90,6 @@ const themes = edition.article.sections.map((section) => {
   .primary { padding: 0 22px; background: var(--ink); color: var(--bg); }
   .secondary { color: var(--muted); }
   .hero-meta { padding: 24px 0 6px 28px; border-left: 1px solid var(--line-strong); }
-  .hero-meta-art { display: block; width: 100%; height: auto; margin: 0 0 26px; aspect-ratio: 3 / 2; border: 1px solid var(--line); object-fit: cover; }
   .status { display: flex; align-items: center; gap: 13px; }
   .status div { display: flex; flex-direction: column; }
   .status strong { font-size: 13px; }
@@ -168,31 +107,17 @@ const themes = edition.article.sections.map((section) => {
   .lead-copy > p:not(.issue) { display: -webkit-box; overflow: hidden; color: var(--muted); line-height: 1.75; -webkit-box-orient: vertical; -webkit-line-clamp: 8; }
   .text-link { display: inline-block; margin-top: 22px; font-size: 13px; }
   .lead-art { width: 100%; height: 100%; min-height: 560px; border: 1px solid var(--line); border-radius: 8px; object-fit: cover; }
-  .themes { padding-bottom: 120px; }
-  .theme-list { border-top: 1px solid var(--line-strong); }
-  .theme { position: relative; display: grid; grid-template-columns: 80px minmax(0, 1fr) 220px 24px; gap: 28px; align-items: center; padding: 28px 0; border-bottom: 1px solid var(--line); }
-  .theme:hover h3 { color: var(--accent); }
-  .theme-number { color: var(--accent); font-size: 18px; }
-  .theme h3 { margin: 10px 0 8px; font-size: clamp(26px, 3.5vw, 46px); font-weight: 520; letter-spacing: -.045em; transition: color 180ms ease; }
-  .theme p { margin: 0; color: var(--faint); font-size: 11px; }
-  .theme img { width: 220px; height: 130px; border: 1px solid var(--line); object-fit: cover; }
-  .arrow { color: var(--accent); }
   .archive-cta { display: flex; min-height: 540px; align-items: start; flex-direction: column; justify-content: center; }
   .archive-cta .issue { margin: 0 0 25px; }
   .archive-cta h2 { margin: 0 0 38px; font-size: clamp(44px, 7vw, 88px); font-weight: 510; letter-spacing: -.06em; line-height: .98; }
   @media (max-width: 960px) {
     .hero, .lead { grid-template-columns: 1fr; gap: 40px; }
     .hero-meta { padding: 24px 0 0; border-top: 1px solid var(--line-strong); border-left: 0; }
-    .theme { grid-template-columns: 50px 1fr 160px 20px; }
-    .theme img { width: 160px; height: 100px; }
   }
   @media (max-width: 640px) {
     .hero { min-height: auto; padding-top: 70px; }
     .hero-copy h1 { font-size: clamp(58px, 20vw, 92px); }
     .hero-actions { align-items: start; flex-direction: column; }
-    .theme { grid-template-columns: 34px 1fr 96px; gap: 14px; }
-    .theme img { width: 96px; height: 76px; }
-    .theme .arrow { display: none; }
     .lead-art { min-height: 320px; }
   }
 </style>

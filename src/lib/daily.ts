@@ -32,7 +32,6 @@ export interface DailySignal {
   category: string;
   topics: string[];
   openSource: boolean;
-  imageId?: string | null;
   headline: string;
   brief: string;
   source: DailySource;
