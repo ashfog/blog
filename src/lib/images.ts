@@ -1,5 +1,5 @@
 import imageLibrary from "../../editorial/image-library.json";
-import type { DailyEdition, DailySignal } from "./daily";
+import type { DailyEdition } from "./daily";
 
 type ImageVariant = "main" | "light" | "dark";
 
@@ -30,9 +30,6 @@ export interface LibraryImage {
 
 const storyEntries = imageLibrary.storyImages as StoryImageEntry[];
 const pageEntries = imageLibrary.pageImages as PageImageEntry[];
-const reserveStoryPageIds = new Set(imageLibrary.storyReservePageIds as string[]);
-const reserveStoryEntries = pageEntries.filter((image) => reserveStoryPageIds.has(image.id));
-const storyPoolEntries = [...storyEntries, ...reserveStoryEntries];
 const allEntries = [...storyEntries, ...pageEntries];
 
 function hash(value: string) {
@@ -77,55 +74,18 @@ export function getPageImage(page: string) {
   return entry ? toLibraryImage(entry) : undefined;
 }
 
-function choose(
-  candidates: Array<StoryImageEntry | PageImageEntry>,
-  story: DailySignal,
-  editionDate: string
-) {
-  return candidates[
-    hash(`${editionDate}:${story.id}:${story.category}`) % candidates.length
-  ];
-}
-
-export function getEditionStoryImages(edition: DailyEdition) {
-  const assigned = new Map<string, LibraryImage>();
-  const used = new Set<string>();
-  const orderedStories = [...edition.signals].sort(
-    (first, second) => first.position - second.position
-  );
-
-  for (const story of orderedStories) {
-    const requested = story.imageId
-      ? storyEntries.find((image) => image.id === story.imageId)
-      : undefined;
-    const categoryCandidates = storyEntries.filter(
-      (image) => image.category === story.category && !used.has(image.id)
-    );
-    const fallbackCandidates = storyPoolEntries.filter(
-      (image) => !used.has(image.id)
-    );
-
-    const entry =
-      (requested && !used.has(requested.id) ? requested : undefined) ??
-      (categoryCandidates.length
-        ? choose(categoryCandidates, story, edition.editionDate)
-        : choose(fallbackCandidates, story, edition.editionDate));
-
-    assigned.set(story.id, toLibraryImage(entry));
-    used.add(entry.id);
-  }
-
-  return assigned;
-}
-
-export function getEditionHeroImage(
-  edition: DailyEdition,
-  storyImages = getEditionStoryImages(edition)
-) {
+export function getEditionHeroImage(edition: DailyEdition) {
   const requested = getImageById(edition.heroImageId);
   if (requested) return requested;
-  const featured = edition.signals[0];
-  return storyImages.get(featured.id) ?? getPageImage("daily");
+
+  const orderedPool = [...storyEntries].sort(
+    (first, second) => hash(first.id) - hash(second.id)
+  );
+  const dayNumber = Math.floor(
+    Date.parse(`${edition.editionDate}T00:00:00Z`) / 86_400_000
+  );
+  const entry = orderedPool[((dayNumber % orderedPool.length) + orderedPool.length) % orderedPool.length];
+  return entry ? toLibraryImage(entry) : getPageImage("daily");
 }
 
 export const storyImageIds = new Set(storyEntries.map((image) => image.id));

@@ -303,8 +303,6 @@ export async function validateEdition(
     categories,
     evidenceLabels,
     imageIds,
-    storyImageCategories,
-    storyImageCount,
     sourceIds,
   } = config;
   const cutoff = parseDateTime(edition.cutoffAt);
@@ -340,7 +338,6 @@ export async function validateEdition(
   const origins = { news: 0, community: 0 };
   let communityVoices = 0;
   let openSource = 0;
-  const requestedImageIds = new Set();
   const sourceScanIds = new Set();
   let attemptedSources = 0;
   let availableSources = 0;
@@ -406,10 +403,6 @@ export async function validateEdition(
   if (edition.heroImageId && !imageIds.has(edition.heroImageId)) {
     errors.push("$.heroImageId: unknown image ID");
   }
-  if (edition.signals.length > storyImageCount) {
-    errors.push(`$.signals: ${edition.signals.length} signals exceed the ${storyImageCount}-image pool`);
-  }
-
   const validateSource = (source, at) => {
     sourceLinks.add(source.url);
     if (!evidenceLabels.has(source.evidenceLabel)) {
@@ -443,18 +436,6 @@ export async function validateEdition(
     ids.add(signal.id);
     if (eventIds.has(signal.eventId)) errors.push(`${at}.eventId: duplicate ${signal.eventId}`);
     eventIds.add(signal.eventId);
-
-    if (signal.imageId) {
-      if (!storyImageCategories.has(signal.imageId)) {
-        errors.push(`${at}.imageId: unknown story image ID`);
-      } else if (storyImageCategories.get(signal.imageId) !== signal.category) {
-        errors.push(`${at}.imageId: image category must match signal.category`);
-      }
-      if (requestedImageIds.has(signal.imageId)) {
-        errors.push(`${at}.imageId: duplicate image ID in this edition`);
-      }
-      requestedImageIds.add(signal.imageId);
-    }
 
     if (!categories.has(signal.category)) errors.push(`${at}.category: unknown category`);
     validateSource(signal.source, `${at}.source`);

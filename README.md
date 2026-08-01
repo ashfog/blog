@@ -19,12 +19,12 @@ pnpm run validate:daily -- src/content/daily/YYYY-MM-DD.json
 
 The version 3 content model keeps collection and presentation separate. `signals`
 stores deduplicated events, concise factual briefs, original source links, and
-optional community voices. `article` turns those signals into one editor's
-synthesis and a small set of connected themes. Every signal is assigned exactly
-once to a theme or the compact `otherSignalIds` list.
+optional community voices. `article` turns those signals into exactly one daily
+article with internal subheadings. Every signal is assigned exactly once to an
+article section or the compact `otherSignalIds` list.
 
 When the formal content directory is empty, the site uses
-`tests/fixtures/2026-07-28.json` as a theme preview. The preview fixture is not
+`tests/fixtures/2026-07-28.json` as a site preview. The preview fixture is not
 part of the publication directory. As soon as a formal edition exists, only
 formal editions are rendered.
 
@@ -36,22 +36,18 @@ A collector must try a source's configured routes in order. It records `empty` w
 
 ## Image library
 
-The committed library contains 40 category story artworks and 8 page artworks. Six page artworks are registered as overflow reserves, giving every valid edition 46 unique story-image slots. The daily Schema uses 46 only as an anomaly guard. Each
+The committed library contains 40 article artworks and 8 page artworks. Each
 artwork has 768 px and 1536 px WebP renditions. The canonical manifest is:
 
 ```text
 editorial/image-library.json
 ```
 
-Daily JSON normally omits `imageId`. Astro then assigns images by category
-using `editionDate`, story ID, and category as a stable seed. Assignment is
-deterministic across rebuilds and globally unique within one edition. Stories 41–46 use the six registered reserve artworks, so image assignment remains unique throughout every valid daily edition.
-
-Use a story `imageId` only for an intentional editorial override. It must exist
-in the manifest, match the story category, and not be used by another story in
-the same edition. `heroImageId` can reference any story or page artwork.
-Validation fails before publication when an ID is unknown, mismatched, repeated,
-or when a rendition file is missing.
+Every edition displays exactly one article image. Astro uses the edition date to
+select from a stable shuffled rotation, which keeps rebuilds deterministic and
+avoids repeats across consecutive editions until the 40-image pool cycles.
+Daily JSON normally omits `heroImageId`; use it only for an intentional override
+from the manifest. Signals and internal article sections never receive images.
 
 ## Local development
 

@@ -32,13 +32,15 @@ If more than 46 independent events remain, keep the newest 46 by the timestamp t
 After the signal list is locked, turn the edition into one coherent article:
 
 1. Write a 150–250 word editor's synthesis of the day's overall direction.
-2. Group related signals into 4–7 themes when the day's volume supports it. A quiet day may use fewer themes.
-3. Write each theme as continuous explanatory prose. Explain what changed, connect related events, and describe the practical consequence without ranking events by importance.
+2. Group related signals into 4–7 internal sections when the day's volume supports it. A quiet day may use fewer sections. These are article subheadings, never separate homepage entries or separate articles.
+3. Write the sections as one continuous editorial article. Explain what changed, connect related events, and describe the practical consequence without ranking events by importance.
 4. Reference every theme's supporting signal IDs. Place community voices with the theme they illuminate.
 5. Put valid signals that do not fit a coherent theme in `otherSignalIds`; they remain visible with their source links.
 6. Target 1,500–2,500 English words for a normal edition. Treat this as a readability target, not a reason to invent padding on a quiet day.
 
 Every selected signal must appear exactly once, either in one article section or in `otherSignalIds`.
+
+Each edition uses exactly one editorial image. Astro selects it from the committed article-image library using a stable date-based rotation, so rebuilds do not change the image and consecutive editions do not repeat until the pool cycles. Do not assign images to individual signals or internal sections.
 
 ## Links
 

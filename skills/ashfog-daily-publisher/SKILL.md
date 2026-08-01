@@ -28,19 +28,19 @@ Read `editorial/editorial-policy.md`, `editorial/publishing-rules.json`, `editor
 9. Generate an original English headline and concise factual `brief` for every selected event. Do not generate a long per-item summary or `whyItMatters`; the article provides interpretation once, without repetition.
 10. After the signal list is final, generate one `article`:
     - a 150–250 word `synthesis` with real paragraph breaks;
-    - normally 4–7 thematic `sections`, each with continuous explanatory prose and the exact supporting `signalIds`;
+    - normally 4–7 internal `sections`, each with continuous explanatory prose and the exact supporting `signalIds`;
     - `otherSignalIds` for valid events that do not fit a coherent theme.
-    Reference every signal exactly once across sections and `otherSignalIds`. Integrate community voices into the relevant theme instead of creating a separate community chapter. Target 1,500–2,500 words for a normal edition without padding a quiet day.
+    Reference every signal exactly once across sections and `otherSignalIds`. Treat sections only as subheadings inside the single daily article, never as separate homepage entries or separate articles. Integrate community voices into the relevant section instead of creating a separate community chapter. Target 1,500–2,500 words for a normal edition without padding a quiet day.
 11. Keep `research.sourceScan` and `research.warnings` only. Derive all counts from the source scan and final signals instead of duplicating link, unavailable-source, candidate, or exclusion ledgers.
 12. Validate the temporary candidate locally:
 
 `npm run validate:daily -- <candidate.json>`
 
-Validation checks JSON structure, content lengths, the New York time window, all-source accounting, registered metadata, image assignments, and duplicate event IDs. It never makes network requests.
+Validation checks JSON structure, content lengths, the New York time window, all-source accounting, registered metadata, the optional article-image override, and duplicate event IDs. It never makes network requests.
 
 ## Assign images
 
-Omit `imageId` and `heroImageId` by default so Astro assigns unique registered images deterministically. Use explicit IDs only for intentional overrides found in `editorial/image-library.json`.
+Do not assign images to signals or sections. Omit `heroImageId` by default so Astro selects exactly one article image using the edition date and a stable shuffled rotation of the 40-image article pool. Consecutive editions use different images until the pool cycles. Use `heroImageId` only for an intentional override found in `editorial/image-library.json`.
 
 ## Preview report
 
