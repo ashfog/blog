@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 7,
   "timezone": "America/New_York",
   "selection": {
     "combineRelevanceAndEventDeduplication": true,
@@ -20,6 +20,11 @@
     }
   },
   "article": {
+    "title": {
+      "minWords": 6,
+      "maxWords": 14,
+      "forbidBrandOrDateTemplate": true
+    },
     "sections": {
       "min": 1,
       "max": 7
