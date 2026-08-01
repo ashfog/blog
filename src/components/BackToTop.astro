@@ -1,0 +1,81 @@
+<button class="back-to-top" type="button" data-back-to-top aria-label="Back to top" aria-hidden="true" disabled>
+  <span aria-hidden="true">↑</span>
+  <small>Top</small>
+</button>
+
+<script is:inline>
+  const backToTop = document.querySelector("[data-back-to-top]");
+
+  if (backToTop instanceof HTMLButtonElement) {
+    const updateBackToTop = () => {
+      const visible = window.scrollY > 700;
+      backToTop.dataset.visible = String(visible);
+      backToTop.disabled = !visible;
+      backToTop.setAttribute("aria-hidden", String(!visible));
+    };
+
+    updateBackToTop();
+    window.addEventListener("scroll", updateBackToTop, { passive: true });
+    backToTop.addEventListener("click", () => {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+    });
+  }
+</script>
+
+<style>
+  .back-to-top {
+    position: fixed;
+    right: clamp(16px, 2vw, 32px);
+    bottom: clamp(16px, 2vw, 32px);
+    z-index: 18;
+    display: inline-flex;
+    width: 52px;
+    height: 52px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--surface-raised) 92%, transparent);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 180ms ease, transform 180ms ease, background 180ms ease;
+    backdrop-filter: blur(14px);
+  }
+
+  .back-to-top[data-visible="true"] {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .back-to-top:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .back-to-top span {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .back-to-top small {
+    margin-top: 2px;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 640px) {
+    .back-to-top {
+      width: 46px;
+      height: 46px;
+    }
+  }
+</style>
