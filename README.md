@@ -32,7 +32,7 @@ formal editions are rendered.
 
 `editorial/sources.json` is the stable 54-source editorial registry. Machine-readable endpoints and ordered fallbacks live separately in `editorial/source-access.json`, so RSS, API, GitHub, page, and indexed-search routes can be maintained without changing source IDs or invalidating historical editions. Community collection behavior lives in `editorial/community-policy.md`.
 
-A collector must try a source's configured routes in order. It records `empty` when a working dated route has no entries in the rolling 24-hour window and records `unavailable` only after every configured route fails.
+A collector must try a source's configured routes in order. A broad route with no in-scope entries does not suppress a narrower fallback. It records `collected` when any working route yields in-window entries, `empty` when working dated routes cover the rolling 24-hour window but yield no in-window entries, and `unavailable` only after every configured route fails.
 
 ## Image library
 
@@ -62,9 +62,10 @@ pnpm run dev
 pnpm run build
 ```
 
-The build creates the Astro site, then generates the Pagefind search index.
-It also verifies canonical links, crawl directives, Sitemap output, and
-structured data. A missing SEO artifact fails the deployment build.
+The build first validates every production daily JSON file and runs the editorial
+test suite. It then creates the Astro site, generates the Pagefind search index,
+and verifies canonical links, crawl directives, Sitemap output, and structured
+data. Invalid editorial content or a missing SEO artifact fails deployment.
 
 ## Search indexing
 

@@ -1,6 +1,6 @@
 {
-  "version": 7,
-  "last_reviewed": "2026-07-29",
+  "version": 8,
+  "last_reviewed": "2026-08-01",
   "timezone": "America/New_York",
   "operating_rules": {
     "prefer_machine_readable_access": true,
@@ -441,15 +441,23 @@
     },
     {
       "id": "x-curated-experts",
-      "name": "X Curated AI Experts",
+      "name": "X Curated AI Accounts",
       "kind": "curated-social-list",
       "url": "https://x.com/",
-      "topics": [
-        "researchers",
-        "maintainers",
-        "founders"
+      "collectionHandles": [
+        "OpenAI",
+        "AnthropicAI",
+        "GoogleDeepMind",
+        "huggingface",
+        "AIatMeta",
+        "NVIDIAAI"
       ],
-      "use": "Search selected people around final stories; never scan the general feed or use a post as the sole release source.",
+      "topics": [
+        "official-announcements",
+        "maintainer-updates",
+        "research"
+      ],
+      "use": "Scan the fixed collectionHandles list as a normal daily source; never derive handles from final stories, scan the general feed, or use a post as the sole release source.",
       "region": "global",
       "languages": [
         "en"

@@ -180,12 +180,26 @@ export async function loadEditorialConfig(root = repoRoot) {
     readJson(path.join(root, "editorial", "evidence-labels.json")),
     readJson(path.join(root, "editorial", "image-library.json")),
   ]);
+  const deduplication = rules.selection?.contentDeduplication;
+  for (const field of [
+    "headlineBlockThreshold",
+    "briefBlockThreshold",
+    "combinedHeadlineThreshold",
+    "combinedBriefThreshold",
+    "headlineWarningThreshold",
+  ]) {
+    if (typeof deduplication?.[field] !== "number" || deduplication[field] < 0 || deduplication[field] > 1) {
+      throw new Error(`editorial/publishing-rules.json has invalid contentDeduplication.${field}`);
+    }
+  }
   const seenSourceIds = new Set();
+  const sourcesById = new Map();
   for (const source of sourceData.sources) {
     if (!source.id || seenSourceIds.has(source.id)) {
       throw new Error(`editorial/sources.json contains an invalid or duplicate id: ${source.id}`);
     }
     seenSourceIds.add(source.id);
+    sourcesById.set(source.id, source);
   }
 
   const routeTypes = new Set(sourceAccessData.routeTypes ?? []);
@@ -196,6 +210,8 @@ export async function loadEditorialConfig(root = repoRoot) {
   if (!isObject(accessPlans)) {
     throw new Error("editorial/source-access.json plans must be an object");
   }
+  const configuredVariables = new Set(Object.keys(sourceAccessData.windowVariables ?? {}));
+  configuredVariables.add("configuredHandle");
 
   for (const sourceId of Object.keys(accessPlans)) {
     if (!seenSourceIds.has(sourceId)) {
@@ -216,6 +232,32 @@ export async function loadEditorialConfig(root = repoRoot) {
       const requiredField = requiredFieldByType[route.type] ?? "url";
       if (typeof route[requiredField] !== "string" || !route[requiredField].trim()) {
         throw new Error("editorial/source-access.json route is missing " + requiredField + " at " + sourceId + "[" + index + "]");
+      }
+
+      const variables = [...JSON.stringify(route).matchAll(/\{([A-Za-z][A-Za-z0-9]*)\}/gu)]
+        .map((match) => match[1]);
+      for (const variable of variables) {
+        if (!configuredVariables.has(variable)) {
+          throw new Error(
+            "editorial/source-access.json route has unsupported variable {" + variable + "} at " + sourceId + "[" + index + "]",
+          );
+        }
+        if (variable === "configuredHandle") {
+          const handles = sourcesById.get(sourceId)?.collectionHandles;
+          if (!Array.isArray(handles) || handles.length === 0) {
+            throw new Error(
+              "editorial/sources.json source " + sourceId + " must define collectionHandles for {configuredHandle}",
+            );
+          }
+          if (
+            new Set(handles).size !== handles.length ||
+            handles.some((handle) => typeof handle !== "string" || !/^[A-Za-z0-9_]{1,15}$/u.test(handle))
+          ) {
+            throw new Error(
+              "editorial/sources.json source " + sourceId + " has invalid or duplicate collectionHandles",
+            );
+          }
+        }
       }
     });
   }
@@ -274,7 +316,7 @@ export async function loadEditorialConfig(root = repoRoot) {
   return {
     schema,
     rules,
-    sources: new Map(sourceData.sources.map((source) => [source.id, source])),
+    sources: sourcesById,
     categories: new Set(categoryIds),
     evidenceLabels: new Set(Object.keys(evidenceData.labels)),
     imageIds: new Set(imageIds),
@@ -337,9 +379,18 @@ export async function validateEdition(
     errors.push(`$.title: ${titleWords} words; expected ${titleRules.minWords}-${titleRules.maxWords}`);
   }
   if (titleRules.forbidBrandOrDateTemplate) {
-    const monthDate = /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(?:st|nd|rd|th)?(?:,\s*|\s+)\d{4}\b/iu;
+    const monthName = "(?:January|February|March|April|May|June|July|August|September|October|November|December)";
+    const monthDate = new RegExp(`\\b${monthName}\\s+\\d{1,2}(?:st|nd|rd|th)?(?:,\\s*\\d{4})?\\b`, "iu");
+    const dateMonth = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s+${monthName}(?:\\s+\\d{4})?\\b`, "iu");
     const isoDate = /\b\d{4}-\d{2}-\d{2}\b/u;
-    if (/\bASHFOG\s+Daily\b/iu.test(edition.title) || monthDate.test(edition.title) || isoDate.test(edition.title)) {
+    const issueNumber = /\b(?:issue|edition)\s*#?\s*\d+\b/iu;
+    if (
+      /\bASHFOG\s+Daily\b/iu.test(edition.title) ||
+      monthDate.test(edition.title) ||
+      dateMonth.test(edition.title) ||
+      isoDate.test(edition.title) ||
+      issueNumber.test(edition.title)
+    ) {
       errors.push("$.title: must be an editorial summary headline, not an ASHFOG Daily or date template");
     }
   }
@@ -352,6 +403,8 @@ export async function validateEdition(
   let communityVoices = 0;
   let openSource = 0;
   const sourceScanIds = new Set();
+  const sourceScans = new Map();
+  const selectedBySource = new Map([...sourceIds].map((sourceId) => [sourceId, 0]));
   let attemptedSources = 0;
   let availableSources = 0;
   let fetchedItems = 0;
@@ -364,6 +417,7 @@ export async function validateEdition(
     if (!sourceIds.has(scan.sourceId)) errors.push(`${at}.sourceId: unknown source`);
     if (sourceScanIds.has(scan.sourceId)) errors.push(`${at}.sourceId: duplicate source`);
     sourceScanIds.add(scan.sourceId);
+    sourceScans.set(scan.sourceId, scan);
     if (scan.itemsFetched > rules.collection.perSourceLatestLimit) {
       errors.push(`${at}.itemsFetched: exceeds per-source limit ${rules.collection.perSourceLatestLimit}`);
     }
@@ -418,6 +472,14 @@ export async function validateEdition(
   }
   const validateSource = (source, at) => {
     sourceLinks.add(source.url);
+    try {
+      const parsedUrl = new URL(source.url);
+      if (parsedUrl.protocol !== "https:" && parsedUrl.protocol !== "http:") {
+        errors.push(`${at}.url: only http and https source links are allowed`);
+      }
+    } catch {
+      errors.push(`${at}.url: must be an absolute http or https URL`);
+    }
     if (!evidenceLabels.has(source.evidenceLabel)) {
       errors.push(`${at}.evidenceLabel: unknown label`);
     }
@@ -452,6 +514,9 @@ export async function validateEdition(
 
     if (!categories.has(signal.category)) errors.push(`${at}.category: unknown category`);
     validateSource(signal.source, `${at}.source`);
+    if (selectedBySource.has(signal.source.id)) {
+      selectedBySource.set(signal.source.id, selectedBySource.get(signal.source.id) + 1);
+    }
 
     const briefWords = countEnglishWords(signal.brief);
     const briefRange = rules.contentLengths.signalBriefWords;
@@ -467,6 +532,9 @@ export async function validateEdition(
         errors.push(`${voiceAt}.summary: ${voiceWords} words; expected ${voiceRange.min}-${voiceRange.max}`);
       }
       validateSource(voice.source, `${voiceAt}.source`);
+      if (selectedBySource.has(voice.source.id)) {
+        selectedBySource.set(voice.source.id, selectedBySource.get(voice.source.id) + 1);
+      }
       communityVoices += 1;
     }
 
@@ -474,12 +542,36 @@ export async function validateEdition(
     origins[signal.origin] += 1;
   });
 
+  if (!isThemeFixture) {
+    for (const [sourceId, selectedCount] of selectedBySource) {
+      const scan = sourceScans.get(sourceId);
+      if (scan && scan.selectedCount !== selectedCount) {
+        errors.push(
+          `$.research.sourceScan: ${sourceId} selectedCount is ${scan.selectedCount}; expected ${selectedCount} from final signals`,
+        );
+      }
+    }
+  }
+
   for (let left = 0; left < edition.signals.length; left += 1) {
     for (let right = left + 1; right < edition.signals.length; right += 1) {
-      const score = similarity(edition.signals[left].headline, edition.signals[right].headline);
-      if (score >= 0.82) {
+      const headlineScore = similarity(edition.signals[left].headline, edition.signals[right].headline);
+      const briefScore = similarity(edition.signals[left].brief, edition.signals[right].brief);
+      const deduplication = rules.selection.contentDeduplication;
+      if (
+        headlineScore >= deduplication.headlineBlockThreshold ||
+        briefScore >= deduplication.briefBlockThreshold ||
+        (
+          headlineScore >= deduplication.combinedHeadlineThreshold &&
+          briefScore >= deduplication.combinedBriefThreshold
+        )
+      ) {
+        errors.push(
+          `duplicate event content at positions ${left + 1} and ${right + 1} (headline ${headlineScore.toFixed(2)}, brief ${briefScore.toFixed(2)})`,
+        );
+      } else if (headlineScore >= deduplication.headlineWarningThreshold) {
         warnings.push(
-          `highly similar headlines at positions ${left + 1} and ${right + 1} (${score.toFixed(2)})`,
+          `highly similar headlines at positions ${left + 1} and ${right + 1} (${headlineScore.toFixed(2)})`,
         );
       }
     }

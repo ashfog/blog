@@ -15,7 +15,7 @@ Read `editorial/editorial-policy.md`, `editorial/publishing-rules.json`, `editor
 
 1. Set `editionDate` and `cutoffAt` to 09:30:00 in `America/New_York`. Set `windowStartAt` to exactly 24 hours earlier and use the half-open interval `(windowStartAt, cutoffAt]`. Use `schemaVersion: 3`, create a unique `runId`, and set `generatedAt` when drafting finishes.
 2. Start from a blank candidate. Never copy wording, stories, counts, or research from an existing edition. A Publish retry may replace only the target date after the new candidate passes local validation.
-3. Attempt all 54 registered sources, including every China and community source. Use the ordered routes in `editorial/source-access.json`. Keep at most the newest 15 in-window entries per source and never backfill outside the window.
+3. Attempt all registered sources, including every China and community source. Use the ordered routes in `editorial/source-access.json`. Continue through fallbacks until a route yields in-scope entries or every route has been attempted; a working broad route with zero in-scope entries does not suppress a narrower fallback. Expand only fixed configured account lists, never candidate-derived handles or terms. Keep at most the newest 15 in-window entries per source and never backfill outside the window.
 4. Record exactly one `research.sourceScan` row per source. Use `collected` when a working route yields in-window entries, `empty` when it yields none, and `unavailable` when all routes fail. A source failure never blocks the edition after its attempt is recorded.
 5. Normalize all in-window entries once. In the same pass:
    - discard only entries that are clearly outside the site's AI, open-source, developer-tool, infrastructure, research, policy, or community scope;
@@ -24,7 +24,7 @@ Read `editorial/editorial-policy.md`, `editorial/publishing-rules.json`, `editor
    - attach concrete in-window community reactions, tests, adoption evidence, or maintainer clarifications to the matching signal as `communityVoices` rather than duplicating its event.
 6. Do not score importance, rank materiality, create an exclusion ledger, enforce regional or company quotas, or perform follow-up community searches. Treat configured community sources as normal collection sources and publish independent community events as `origin: "community"`.
 7. When more than 46 independent events remain, keep the newest 46 by the event's publication or material-update timestamp. The limit is an anomaly guard, not an editorial ranking.
-8. Preserve each selected entry's collected source URL exactly as supplied. Do not fetch it again, validate it, inspect its host, resolve redirects, or block publication because of a link.
+8. Preserve each selected entry's collected source URL exactly as supplied after confirming offline that it is an absolute HTTP or HTTPS URL. Do not fetch it again, test reachability, inspect its host, resolve redirects, or block publication because a remote server is slow or unavailable.
 9. Generate an original English headline and concise factual `brief` for every selected event. Do not generate a long per-item summary or `whyItMatters`; the article provides interpretation once, without repetition.
 10. After the signal list is final, generate one `article`:
     - an original 6–14 word edition `title` summarizing the common direction across the selected events; never use `ASHFOG Daily`, a date, or an issue number as the title, and do not headline one company when multiple independent events are present;
@@ -37,7 +37,7 @@ Read `editorial/editorial-policy.md`, `editorial/publishing-rules.json`, `editor
 
 `npm run validate:daily -- <candidate.json>`
 
-Validation checks JSON structure, content lengths, the New York time window, all-source accounting, registered metadata, the optional article-image override, and duplicate event IDs. It never makes network requests.
+Validation checks JSON structure, content lengths, the New York time window, all-source accounting, selected-source totals, registered metadata, offline source URL syntax, the optional article-image override, duplicate event IDs, and duplicate event content. It never makes network requests.
 
 ## Assign images
 
@@ -49,6 +49,6 @@ Report the candidate path, cutoff and window start, attempted/collected/empty/un
 
 ## Publish
 
-After local validation succeeds, replace only `src/content/daily/YYYY-MM-DD.json`, commit that file, and push without force. Allow Cloudflare Pages to build Astro and Pagefind. Do not perform a separate public-link validation step.
+After local validation succeeds, replace only `src/content/daily/YYYY-MM-DD.json`, commit that file, and push without force. Cloudflare Pages runs all-edition validation, editorial tests, Astro, Pagefind, and SEO checks through `pnpm run build`. Do not perform a separate public-link validation step.
 
-Return `blocked` only for an invalid JSON candidate, an incomplete 54-source attempt ledger, a concurrency conflict, or a GitHub write failure. Individual source, article-link, community-platform, build-observation, or deployment-observation failures do not invalidate an otherwise publishable edition.
+Return `blocked` only for an invalid JSON candidate, an incomplete all-registered-source attempt ledger, a concurrency conflict, or a GitHub write failure. Individual source, article-link, community-platform, build-observation, or deployment-observation failures do not invalidate an otherwise publishable edition.
