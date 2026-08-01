@@ -10,6 +10,8 @@ const testDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(testDir, "..");
 const fixturePath = path.join(testDir, "fixtures", "2026-07-28.json");
 const fixture = JSON.parse(await fs.readFile(fixturePath, "utf8"));
+const productionFixturePath = path.join(root, "src", "content", "daily", "2026-07-28.json");
+const productionFixture = JSON.parse(await fs.readFile(productionFixturePath, "utf8"));
 const config = await loadEditorialConfig(root);
 const clone = () => structuredClone(fixture);
 const words = (count) => Array.from({ length: count }, (_, index) => `word${index}`).join(" ");
@@ -30,6 +32,14 @@ test("edition title must summarize the day instead of repeating the brand or dat
   const short = clone();
   short.title = "AI Changes Today";
   assert.ok((await validate(short)).errors.some((error) => error.includes("expected 6-14")));
+
+  const dateWithoutYear = clone();
+  dateWithoutYear.title = "AI Systems Shift Across Markets on July 28";
+  assert.ok((await validate(dateWithoutYear)).errors.some((error) => error.includes("editorial summary headline")));
+
+  const issueNumber = clone();
+  issueNumber.title = "New Models and Infrastructure Define Edition 28";
+  assert.ok((await validate(issueNumber)).errors.some((error) => error.includes("editorial summary headline")));
 });
 
 test("global preview includes China signals", () => {
@@ -137,6 +147,14 @@ test("source scan counts obey the per-source maximum", async () => {
   assert.ok((await validate(edition)).errors.some((error) => error.includes("itemsFetched")));
 });
 
+test("source scan selected counts must match final signals and community voices", async () => {
+  const edition = structuredClone(productionFixture);
+  const scan = edition.research.sourceScan.find((entry) => entry.selectedCount > 0);
+  scan.selectedCount = 0;
+  const report = await validate(edition, { file: productionFixturePath });
+  assert.ok(report.errors.some((error) => error.includes("expected 1 from final signals")));
+});
+
 test("article image library is available", () => {
   assert.ok(config.storyImageCount >= 40);
 });
@@ -144,6 +162,18 @@ test("article image library is available", () => {
 test("every registered source has a validated access plan", () => {
   assert.equal(config.sourceAccessPlanIds.size, config.sourceIds.size);
   assert.deepEqual([...config.sourceAccessPlanIds].sort(), [...config.sourceIds].sort());
+});
+
+test("source access plans use only deterministic configured variables", async () => {
+  const access = JSON.parse(await fs.readFile(path.join(root, "editorial", "source-access.json"), "utf8"));
+  const serialized = JSON.stringify(access.plans);
+  assert.ok(!serialized.includes("{candidateHandle}"));
+  assert.ok(!serialized.includes("{candidateTerms}"));
+  assert.ok(serialized.includes("{configuredHandle}"));
+
+  const sources = JSON.parse(await fs.readFile(path.join(root, "editorial", "sources.json"), "utf8"));
+  const xSource = sources.sources.find((source) => source.id === "x-curated-experts");
+  assert.ok(xSource.collectionHandles.length >= 1);
 });
 
 test("domain rules reject a future publication time", async () => {
@@ -206,16 +236,25 @@ test("unknown hero image ID is rejected", async () => {
   assert.ok((await validate(edition)).errors.some((error) => error.includes("unknown image ID")));
 });
 
-test("source URLs are preserved without URL, host, or network validation", async () => {
-  const edition = clone();
-  edition.signals[0].source.url = "collected-link-as-supplied";
-  assert.equal((await validate(edition)).status, "ok");
+test("source URLs require only offline absolute HTTP or HTTPS syntax", async () => {
+  const relative = clone();
+  relative.signals[0].source.url = "collected-link-as-supplied";
+  assert.ok((await validate(relative)).errors.some((error) => error.includes("absolute http or https URL")));
+
+  const executable = clone();
+  executable.signals[0].source.url = "javascript:alert(1)";
+  assert.ok((await validate(executable)).errors.some((error) => error.includes("only http and https")));
+
+  const valid = clone();
+  valid.signals[0].source.url = "https://example.com/source";
+  assert.equal((await validate(valid)).status, "ok");
 });
 
-test("highly similar headlines warn but do not block distinct event IDs", async () => {
+test("duplicate event content blocks distinct event IDs", async () => {
   const edition = clone();
   edition.signals[1].headline = edition.signals[0].headline;
+  edition.signals[1].brief = edition.signals[0].brief;
   const report = await validate(edition);
-  assert.equal(report.status, "ok");
-  assert.ok(report.warnings.some((warning) => warning.includes("highly similar headlines")));
+  assert.equal(report.status, "error");
+  assert.ok(report.errors.some((error) => error.includes("duplicate event content")));
 });

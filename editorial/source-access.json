@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "lastReviewed": "2026-07-29",
+  "version": 4,
+  "lastReviewed": "2026-08-01",
   "timezone": "America/New_York",
   "purpose": "Machine-readable ordered collection routes and deterministic fallbacks for every registered source in a trailing 24-hour window.",
   "routeTypes": [
@@ -22,7 +22,8 @@
   "collectionRules": {
     "tryRoutesInOrder": true,
     "continueAfterRouteFailure": true,
-    "stopAfterTrustworthyDatedListingCoveringWindow": true,
+    "stopAfterTrustworthyDatedListingCoveringWindow": false,
+    "stopAfterInScopeEntries": true,
     "siteRestrictedSearchIsFallbackOnly": true,
     "searchResultMustResolveToCanonicalSource": true,
     "doNotTreatNoSearchResultsAsAccessFailure": true,
@@ -188,10 +189,6 @@
         "url": "https://www.reddit.com/r/LocalLLaMA/new/.rss"
       },
       {
-        "type": "indexed-search",
-        "query": "site:reddit.com/r/LocalLLaMA {windowDate} {candidateTerms}"
-      },
-      {
         "type": "web-index",
         "url": "https://www.reddit.com/r/LocalLLaMA/new/"
       }
@@ -199,13 +196,13 @@
     "x-curated-experts": [
       {
         "type": "indexed-search",
-        "query": "site:x.com/{candidateHandle} {windowDate} {candidateTerms}",
-        "note": "Run only around an identified candidate and a named official, maintainer, researcher, or founder account."
+        "query": "site:x.com/{configuredHandle} {windowDate}",
+        "note": "Expand once for every fixed collectionHandles entry and inspect only posts inside the edition window."
       },
       {
         "type": "web-index",
-        "url": "https://x.com/",
-        "note": "Use only when an authenticated permitted session is available. Never scan the general feed."
+        "url": "https://x.com/{configuredHandle}",
+        "note": "Expand the fixed handle list only when an authenticated permitted session is available. Never scan the general feed."
       }
     ],
     "phoronix": [

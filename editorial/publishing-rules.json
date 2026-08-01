@@ -1,9 +1,16 @@
 {
-  "version": 7,
+  "version": 8,
   "timezone": "America/New_York",
   "selection": {
     "combineRelevanceAndEventDeduplication": true,
     "deduplicateByEventContent": true,
+    "contentDeduplication": {
+      "headlineBlockThreshold": 0.92,
+      "briefBlockThreshold": 0.9,
+      "combinedHeadlineThreshold": 0.75,
+      "combinedBriefThreshold": 0.72,
+      "headlineWarningThreshold": 0.82
+    },
     "preferOfficialSourceWithinEvent": true,
     "importanceScoring": false,
     "safetyMaxStories": 46,

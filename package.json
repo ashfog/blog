@@ -11,9 +11,10 @@
     "build:astro": "astro build",
     "build:search": "pagefind --site dist",
     "build:seo": "node scripts/validate-seo.mjs",
-    "build": "pnpm run build:astro && pnpm run build:search && pnpm run build:seo",
+    "build": "pnpm run validate:all-daily && pnpm run test:editorial && pnpm run build:astro && pnpm run build:search && pnpm run build:seo",
     "preview": "astro preview",
     "validate:daily": "node scripts/validate-daily.mjs",
+    "validate:all-daily": "node scripts/validate-all-daily.mjs",
     "test:editorial": "node --test tests/validate-daily.test.mjs"
   },
   "dependencies": {
