@@ -6,7 +6,7 @@
   "timezone": "America/New_York",
   "windowStartAt": "2026-07-31T09:30:00-04:00",
   "cutoffAt": "2026-08-01T09:30:00-04:00",
-  "generatedAt": "2026-08-01T13:55:22.753Z",
+  "generatedAt": "2026-08-01T13:57:08.847Z",
   "runId": "publish-2026-08-01-0930-america-new-york",
   "title": "Open Systems Meet Faster Models and Stricter Guardrails",
   "description": "A rolling-day brief on AI research, local-model testing, inference design, developer platforms, open-source maintenance, hardware enablement, and governance.",
@@ -1211,7 +1211,7 @@
       {
         "sourceId": "mcp-spec-releases",
         "status": "empty",
-        "itemsFetched": 15,
+        "itemsFetched": 9,
         "itemsInWindow": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
