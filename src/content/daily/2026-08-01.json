@@ -1,0 +1,1479 @@
+{
+  "schemaVersion": 3,
+  "language": "en",
+  "edition": "global",
+  "editionDate": "2026-08-01",
+  "timezone": "America/New_York",
+  "windowStartAt": "2026-07-31T09:30:00-04:00",
+  "cutoffAt": "2026-08-01T09:30:00-04:00",
+  "generatedAt": "2026-08-01T13:55:22.753Z",
+  "runId": "publish-2026-08-01-0930-america-new-york",
+  "title": "Open Systems Meet Faster Models and Stricter Guardrails",
+  "description": "A rolling-day brief on AI research, local-model testing, inference design, developer platforms, open-source maintenance, hardware enablement, and governance.",
+  "article": {
+    "synthesis": {
+      "title": "Capability is spreading into the surrounding system",
+      "body": "The day’s releases show AI capability moving in two directions at once. OpenAI is claiming substantive mathematical results from an internal model, while local users are testing new DeepSeek and Laguna weights on ordinary workstations. Between those poles, developers are packaging agent architecture, post-training experiments, model downloads, interface inspection, and even game narration into small tools that make advanced techniques easier to try. The common movement is from a single model endpoint toward a whole operational environment.\n\nThat environment is also becoming more opinionated. NVIDIA is translating attention architecture into hardware rules; Vercel is iterating quickly on tool calling and gateway dependencies; GitHub is tightening model policy and npm token privileges. Linux and desktop projects are doing the less glamorous work of hardware support, firmware openness, package security, and review governance. The result is not one dominant launch but a widening stack in which access, performance, maintenance, and control increasingly determine what model capability can become in practice.",
+      "signalIds": [
+        "openai-math-results",
+        "deepseek-v4-flash-tests",
+        "nvidia-attention-codesign",
+        "github-npm-bypass-2fa",
+        "agent-architect-skill"
+      ]
+    },
+    "sections": [
+      {
+        "id": "community-workbench",
+        "position": 1,
+        "kicker": "Community workbench",
+        "title": "Small projects turn agent ideas into usable components",
+        "body": "Community launches concentrated on the connective tissue around models. A new MCP-enabled job board made its listings available to compatible tools, while Agent Architect packaged system-design guidance as a reusable skill. Other builders exposed live .NET interfaces through MCP, proposed a package manager for model weights, and moved machine-learning applications entirely into the browser. These projects are modest in scale, but together they show how the developer surface is being reorganized around agent-readable capabilities rather than isolated web forms.\n\nExperimentation is moving down the hardware curve as well. One project assembled SFT, DPO, and GRPO exercises for an 8GB GPU, and another offered a route for training tiny language models from scratch. An RPG engine kept deterministic rules separate from LLM narration, a useful boundary between flexible language and state that must remain exact. LocalLLaMA provided the messier deployment layer: Laguna gained reported FP8 and NVFP4 weights, while several users tested DeepSeek V4 Flash across streaming, quantization, memory placement, and one-shot evaluation. Their results are early and sometimes contradictory, which is precisely why the attached configurations and negative cases are more useful than a single verdict.\n\nThe connective theme is local composability. Each project takes one piece of an AI workflow—weights, training, inspection, narration, or system guidance—and makes it addressable by developers. That lowers the cost of trying an idea but raises new questions about package integrity, permission boundaries, benchmark discipline, and maintenance. Community announcements are therefore useful discovery evidence, not substitutes for verified release notes or long operating histories. The most reusable projects will be those that publish clear interfaces, disclose test conditions, and make failure visible rather than hiding it behind an agent-friendly surface. That transparency lets later users distinguish a promising prototype from a dependable component before integrating it into larger automated workflows.",
+        "signalIds": [
+          "mcp-developer-jobs",
+          "laguna-weights",
+          "agent-architect-skill",
+          "gpu-posttraining-lab",
+          "deepseek-v4-flash-tests",
+          "llm-rpg-engine",
+          "mcp-ui-inspector",
+          "weightlift-model-manager",
+          "browser-ml-apps",
+          "horus-tiny-llm"
+        ]
+      },
+      {
+        "id": "hardware-aware-inference",
+        "position": 2,
+        "kicker": "Hardware and inference",
+        "title": "Performance work reaches from attention kernels to display stacks",
+        "body": "NVIDIA’s attention analysis makes a direct case for designing models around execution behavior. Dense-attention prefill is largely compute-bound, while decode is constrained by repeatedly reading the KV cache. That leads to practical recommendations: increase grouped-query sharing for decode, prefer head dimensions aligned to 128 or 256, reduce effective KV state, and avoid tensor-parallel layouts that duplicate KV heads. The Video Codec SDK update applies the same systems instinct to media, adding zero-copy paths, richer B-frame support, and frame-accurate seeking while removing legacy interfaces.\n\nThe open hardware stack advanced on several fronts. AMD began publishing DCN6 display patches for future RDNA5 GPUs and released CDNA5 ISA documentation for the MI455X, giving kernel and compiler developers earlier visibility. Open firmware reached a modern AM5 motherboard, while Nouveau moved closer to default atomic mode-setting. KDE targeted stronger multi-GPU and eGPU behavior, and Linux added workarounds for faulty SATA drives. None of these changes is a model release, but they shape the machines on which models, creative tools, and developer workloads actually run.\n\nTaken together, the work spans three time horizons. Architecture guidance affects models being designed now; SDK changes affect applications shipping this quarter; upstream drivers and public documentation prepare for hardware that may not yet be widely available. Performance is therefore a coordination problem across model authors, framework teams, compiler engineers, kernel maintainers, and device vendors. A fast kernel cannot compensate for duplicated state, and capable hardware remains inaccessible when the surrounding software arrives late. Public documentation and early upstream patches shorten that delay by allowing independent tooling work to begin before devices become commonplace.",
+        "signalIds": [
+          "nvidia-attention-codesign",
+          "nvidia-video-codec-13-1",
+          "amd-dcn6-linux",
+          "amd-cdna5-isa",
+          "amd-am5-open-firmware",
+          "kde-egpu-performance",
+          "linux-sata-workaround",
+          "nouveau-atomic-modesetting"
+        ]
+      },
+      {
+        "id": "platform-controls",
+        "position": 3,
+        "kicker": "Platform controls",
+        "title": "Fast release trains acquire more explicit boundaries",
+        "body": "Vercel shipped three AI SDK patches inside the window. The substantive first patch added experimental tool-caller support to streamText and ToolLoopAgent and warned about timeout settings used in the wrong execution mode. Later patches advanced gateway and provider dependencies, with related workflow and xAI packages moving in step. The cadence is a reminder that agent frameworks now behave like infrastructure libraries: small compatibility and metadata changes can propagate quickly through several packages.\n\nGitHub’s changes focused on control. Copilot deprecated Gemini 2.5 Pro and Gemini 3 Flash, forcing teams to revisit pinned model choices, while enterprise administrators gained a preview of user-targeted model policies. npm reduced what bypass-2FA tokens can do, moving sensitive account and package actions back behind an interactive challenge. Open-source communities are facing a parallel governance problem. GNOME is considering an RFC process while maintainers confront weak AI-generated extensions, and Arch Linux paused AUR package adoptions during another malware wave. Faster contribution increases the value of clear review paths, scoped credentials, and policy that can be applied to particular users instead of an entire organization at once.\n\nThese are different layers of the same boundary-setting exercise. Framework maintainers decide which experimental hooks become APIs; enterprise administrators decide which models users can select; package registries decide which credentials may mutate critical state; desktop and distribution communities decide how proposals and submissions earn trust. As agents make more changes on behalf of people, those boundaries need to be machine-readable without becoming invisible to the humans accountable for them. Deprecation notices, scoped tokens, and review procedures are operational documentation for that shared responsibility, not merely administrative overhead.",
+        "signalIds": [
+          "vercel-ai-7-0-47",
+          "vercel-ai-7-0-46",
+          "vercel-ai-7-0-45",
+          "github-gemini-deprecations",
+          "github-model-policy-targeting",
+          "github-npm-bypass-2fa",
+          "gnome-rfc-ai-extensions",
+          "arch-aur-malware"
+        ]
+      },
+      {
+        "id": "research-and-governance",
+        "position": 4,
+        "kicker": "Research and governance",
+        "title": "Research claims arrive alongside economic and regulatory framing",
+        "body": "OpenAI’s most ambitious item was a set of ten claimed advances in mathematics and theoretical computer science produced by an internal Astra model. The company says the problems had resisted main-result progress for at least a decade, that humans prepared manuscripts with the model, and that the model generated Lean certificates. Formal artifacts make scrutiny easier, but they do not replace independent mathematical review; the real significance will depend on how specialists verify, contextualize, or challenge the arguments.\n\nTwo company essays framed the systems around that research. One linked lower model prices to serving efficiency, infrastructure planning, and product demand, citing internal reductions in serving cost and improved speculative decoding. The other described alignment with the EU AI Act and European codes for general-purpose AI and synthetic-content transparency. Together they present capability, economics, and governance as one stack: cheaper inference expands use, wider use raises operational exposure, and that exposure increases pressure for provenance, documentation, and adaptable controls.\n\nThe three announcements also expose a verification asymmetry. Cost reductions can be measured internally and reflected quickly in prices, while research claims require external specialists and regulation develops through public institutions. A company can publish all three on the same day, but confidence accumulates at different speeds. Readers should distinguish a stated operating metric, a formally checkable but not yet broadly reviewed proof, and a description of compliance practices that regulators and customers will test over time. Publishing artifacts helps, but independent scrutiny still determines whether a claim becomes durable knowledge or remains a company assertion.",
+        "signalIds": [
+          "openai-math-results",
+          "openai-abundant-intelligence",
+          "openai-eu-ai-governance"
+        ]
+      },
+      {
+        "id": "maintenance-economy",
+        "position": 5,
+        "kicker": "Maintenance economy",
+        "title": "Open source advances through releases, stewardship, and continuity",
+        "body": "A quieter set of events illustrates the maintenance economy that supports the larger stack. Picolibc updated its compact C runtime for embedded systems, and Shotcut added an integrated stock-asset library to an open video editor. These releases improve practical workflows without changing the direction of the industry, yet they are exactly the kind of incremental work on which durable tooling depends.\n\nThe resignation of a prominent Arch Linux developer after roughly a decade makes the human constraint visible. Projects can automate builds, reviews, and even parts of code generation, but experience, judgment, and responsibility do not appear automatically when a contributor leaves. The same day’s package-security response and GNOME governance discussion reinforce that point. Open systems stay open because communities continually maintain boundaries: who can publish, how changes are reviewed, what compatibility promises mean, and where responsibility moves when maintainers change.\n\nThis maintenance layer is easy to overlook beside frontier-model claims, yet it determines whether software remains installable and understandable years later. Embedded libraries need conservative compatibility work; creative applications need predictable releases; distributions need people who can connect policy decisions to thousands of packages. AI may help with parts of that workload, but the day’s events suggest that automation increases rather than eliminates the need for explicit stewardship, documented processes, and sustainable contributor succession. Continuity is itself a technical capability, built through release discipline, review memory, and enough contributors to share responsibility.",
+        "signalIds": [
+          "arch-maintainer-resigns",
+          "picolibc-1-8-12",
+          "shotcut-26-7"
+        ]
+      }
+    ],
+    "otherSignalIds": []
+  },
+  "signals": [
+    {
+      "id": "mcp-developer-jobs",
+      "eventId": "mcp-developer-jobs",
+      "position": 1,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "mcp",
+        "developer-tools",
+        "jobs"
+      ],
+      "openSource": false,
+      "headline": "A developer job board ships with an MCP search server",
+      "brief": "A Show HN launch introduced a job board focused on AI developers together with an MCP server, making the listings queryable from compatible agent tools. The community post is the available evidence for the launch; its implementation and operating history were not independently verified.",
+      "source": {
+        "id": "show-hn",
+        "name": "Show HN",
+        "url": "https://news.ycombinator.com/item?id=49134249",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T13:25:48Z",
+        "updatedAt": null,
+        "evidenceLabel": "not_independently_verified"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "laguna-weights",
+      "eventId": "laguna-s-2-1-weights",
+      "position": 2,
+      "origin": "community",
+      "region": "global",
+      "category": "models",
+      "topics": [
+        "open-models",
+        "quantization",
+        "inference"
+      ],
+      "openSource": true,
+      "headline": "Laguna S 2.1 gains new FP8 and NVFP4 weights",
+      "brief": "A LocalLLaMA post reported new official FP8 and NVFP4 weight variants for Laguna S 2.1. The announcement points to lower-precision deployment options for compatible accelerators, but the collected community post does not by itself establish benchmark quality, hardware coverage, or provenance beyond the linked release claim.",
+      "source": {
+        "id": "reddit-localllama",
+        "name": "Reddit r/LocalLLaMA",
+        "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vcn9uw/new_official_weights_for_laguna_s_21_fp8_nvfp4/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T13:20:13Z",
+        "updatedAt": null,
+        "evidenceLabel": "community_discussion_suggests"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "agent-architect-skill",
+      "eventId": "agent-architect-skill",
+      "position": 3,
+      "origin": "community",
+      "region": "global",
+      "category": "agents",
+      "topics": [
+        "agents",
+        "skills",
+        "architecture"
+      ],
+      "openSource": true,
+      "headline": "Agent Architect packages design guidance as a reusable skill",
+      "brief": "A Show HN project presented Agent Architect, a reusable skill intended to guide the construction of agentic systems. The launch reflects growing interest in encoding architecture practices as agent-readable instructions, though the community post provides limited evidence about testing, compatibility, or sustained maintenance.",
+      "source": {
+        "id": "show-hn",
+        "name": "Show HN",
+        "url": "https://news.ycombinator.com/item?id=49134004",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T12:50:23Z",
+        "updatedAt": null,
+        "evidenceLabel": "not_independently_verified"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "gpu-posttraining-lab",
+      "eventId": "gpu-posttraining-lab",
+      "position": 4,
+      "origin": "community",
+      "region": "global",
+      "category": "research",
+      "topics": [
+        "post-training",
+        "sft",
+        "dpo",
+        "grpo"
+      ],
+      "openSource": true,
+      "headline": "An 8GB GPU lab compares compact LLM post-training methods",
+      "brief": "A Show HN release shared minimal experiments for supervised fine-tuning, DPO, and GRPO on an 8GB GPU. It offers a small-hardware route for examining post-training workflows, while the thread remains the only collected evidence and does not independently validate the reported results or reproducibility.",
+      "source": {
+        "id": "show-hn",
+        "name": "Show HN",
+        "url": "https://news.ycombinator.com/item?id=49133851",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T12:30:32Z",
+        "updatedAt": null,
+        "evidenceLabel": "not_independently_verified"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "arch-maintainer-resigns",
+      "eventId": "arch-maintainer-resigns",
+      "position": 5,
+      "origin": "news",
+      "region": "global",
+      "category": "open-source",
+      "topics": [
+        "arch-linux",
+        "maintainers",
+        "community"
+      ],
+      "openSource": true,
+      "headline": "A prominent Arch Linux developer ends a decade of work",
+      "brief": "Phoronix reported that a prominent Arch Linux developer resigned after roughly ten years with the project. The personnel change is a reminder that distribution infrastructure depends on sustained maintainer labor, even when the immediate technical impact and succession plan are not yet clear.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/Arch-Linux-Foxboron",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T11:47:02Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "deepseek-v4-flash-tests",
+      "eventId": "deepseek-v4-flash-0731",
+      "position": 6,
+      "origin": "community",
+      "region": "china",
+      "category": "models",
+      "topics": [
+        "deepseek",
+        "open-models",
+        "local-inference",
+        "evaluation"
+      ],
+      "openSource": true,
+      "headline": "Local testers probe DeepSeek V4 Flash across quantizations",
+      "brief": "LocalLLaMA users tested a DeepSeek V4 Flash 0731 build across one-shot evaluations, quantized deployments, streaming, and consumer-workstation setups. Reports disagree on efficiency and reliability, so the signal is best read as early field evidence rather than a settled assessment of the model.",
+      "source": {
+        "id": "reddit-localllama",
+        "name": "Reddit r/LocalLLaMA",
+        "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vcl502/deepseekv4flash0731_oneshot_evals_surprisingly/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T11:41:11Z",
+        "updatedAt": null,
+        "evidenceLabel": "multiple_users_report"
+      },
+      "communityVoices": [
+        {
+          "summary": "One user demonstrated streaming output from the 0731 build, indicating that at least one local serving path was operational without establishing broader compatibility across runtimes or hardware.",
+          "source": {
+            "id": "reddit-localllama",
+            "name": "Reddit r/LocalLLaMA",
+            "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vclokf/streaming_deepseek_v4_flash_0731/",
+            "sourceLanguage": "en",
+            "publishedAt": "2026-08-01T12:07:55Z",
+            "updatedAt": null,
+            "evidenceLabel": "single_community_test"
+          }
+        },
+        {
+          "summary": "A quantized Q3_K_XL test reported a failure on an aquarium-panel prompt, adding a concrete negative case but not a controlled or independently repeated benchmark.",
+          "source": {
+            "id": "reddit-localllama",
+            "name": "Reddit r/LocalLLaMA",
+            "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vckcue/ds4_flash_0731_acquarium_panel_failure_q3_k_xl/",
+            "sourceLanguage": "en",
+            "publishedAt": "2026-08-01T11:00:39Z",
+            "updatedAt": null,
+            "evidenceLabel": "single_community_test"
+          }
+        },
+        {
+          "summary": "Another user reported LM Studio loading behavior that placed the model in system RAM, highlighting practical memory-management questions for local deployments on consumer workstations.",
+          "source": {
+            "id": "reddit-localllama",
+            "name": "Reddit r/LocalLLaMA",
+            "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vci6gz/deepseek_v4_flash_0731_lm_studio_loading_only/",
+            "sourceLanguage": "en",
+            "publishedAt": "2026-08-01T08:56:11Z",
+            "updatedAt": null,
+            "evidenceLabel": "single_community_test"
+          }
+        }
+      ]
+    },
+    {
+      "id": "linux-sata-workaround",
+      "eventId": "linux-7-2-sata-workaround",
+      "position": 7,
+      "origin": "news",
+      "region": "global",
+      "category": "infrastructure",
+      "topics": [
+        "linux",
+        "storage",
+        "kernel"
+      ],
+      "openSource": true,
+      "headline": "Linux 7.2-rc6 adds workarounds for faulty SATA drives",
+      "brief": "Linux 7.2-rc6 incorporated workarounds for several buggy Western Digital SATA drives, according to Phoronix. The change shows the kernel continuing to absorb hardware-specific compatibility fixes so affected systems can remain usable without requiring immediate drive replacement.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/Linux-7.2-rc6-ATA",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T10:49:22Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "gnome-rfc-ai-extensions",
+      "eventId": "gnome-rfc-ai-extensions",
+      "position": 8,
+      "origin": "news",
+      "region": "global",
+      "category": "open-source",
+      "topics": [
+        "gnome",
+        "governance",
+        "ai-generated-code"
+      ],
+      "openSource": true,
+      "headline": "GNOME proposes an RFC process amid weak AI-generated extensions",
+      "brief": "GNOME contributors are working toward a formal RFC process while confronting low-quality extensions produced with generative AI, Phoronix reported. The proposed governance mechanism could give maintainers a clearer path for evaluating architectural changes as inexpensive code generation increases review pressure.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/GNOME-RFC-Process-AI-Extensions",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T10:34:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "llm-rpg-engine",
+      "eventId": "llm-rpg-engine",
+      "position": 9,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "games",
+        "llm",
+        "open-source"
+      ],
+      "openSource": true,
+      "headline": "An RPG engine assigns narration, not rules, to an LLM",
+      "brief": "A Show HN project introduced an RPG engine that uses an LLM to narrate the game master while keeping rules in deterministic code. The separation is a useful design pattern for generative interfaces, although the launch thread does not provide independent evidence on reliability or game quality.",
+      "source": {
+        "id": "show-hn",
+        "name": "Show HN",
+        "url": "https://news.ycombinator.com/item?id=49133025",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T10:26:09Z",
+        "updatedAt": null,
+        "evidenceLabel": "not_independently_verified"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "kde-egpu-performance",
+      "eventId": "kde-plasma-egpu-performance",
+      "position": 10,
+      "origin": "news",
+      "region": "global",
+      "category": "open-source",
+      "topics": [
+        "kde",
+        "linux",
+        "gpu"
+      ],
+      "openSource": true,
+      "headline": "KDE Plasma 6.8 targets major multi-GPU performance gains",
+      "brief": "KDE Plasma 6.8 is expected to deliver large performance improvements for multi-GPU and external-GPU configurations, according to Phoronix. Better compositor behavior on mixed graphics systems can make Linux workstations more practical for development, visualization, and local compute workflows.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/KDE-Plasma-6.8-Faster-eGPU",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T10:18:48Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "mcp-ui-inspector",
+      "eventId": "mcp-ui-inspector",
+      "position": 11,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "mcp",
+        "dotnet",
+        "ui-debugging"
+      ],
+      "openSource": true,
+      "headline": "An MCP inspector exposes live cross-platform .NET interfaces",
+      "brief": "A Show HN launch presented MCP-based inspection for live Avalonia, WPF, WinUI, and MAUI applications. The tool aims to let compatible agents inspect running desktop interfaces, but the community announcement offers no independent verification of framework coverage, safety boundaries, or production readiness.",
+      "source": {
+        "id": "show-hn",
+        "name": "Show HN",
+        "url": "https://news.ycombinator.com/item?id=49132896",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T10:01:55Z",
+        "updatedAt": null,
+        "evidenceLabel": "not_independently_verified"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "picolibc-1-8-12",
+      "eventId": "picolibc-1-8-12",
+      "position": 12,
+      "origin": "news",
+      "region": "global",
+      "category": "open-source",
+      "topics": [
+        "embedded",
+        "c-library",
+        "toolchains"
+      ],
+      "openSource": true,
+      "headline": "Picolibc 1.8.12 updates the embedded C runtime",
+      "brief": "Picolibc 1.8.12 shipped with another set of improvements for the C library aimed at embedded systems. The release advances a compact open-source runtime used where storage, memory, and toolchain constraints matter more than the assumptions of a general-purpose operating system.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/Picolibc-1.8.12-Released",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T10:00:52Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "weightlift-model-manager",
+      "eventId": "weightlift-model-manager",
+      "position": 13,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "model-weights",
+        "package-management",
+        "local-ai"
+      ],
+      "openSource": true,
+      "headline": "Weightlift proposes package management for downloadable model weights",
+      "brief": "A Show HN project called Weightlift described itself as a package manager for downloading model weights. Centralizing identifiers, downloads, and local placement could reduce repeated setup work for local AI users, though the thread does not independently establish integrity verification, registry governance, or long-term maintenance.",
+      "source": {
+        "id": "show-hn",
+        "name": "Show HN",
+        "url": "https://news.ycombinator.com/item?id=49132848",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T09:55:24Z",
+        "updatedAt": null,
+        "evidenceLabel": "not_independently_verified"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "browser-ml-apps",
+      "eventId": "browser-ml-apps",
+      "position": 14,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "browser",
+        "machine-learning",
+        "privacy"
+      ],
+      "openSource": true,
+      "headline": "A developer moves machine-learning apps entirely into browsers",
+      "brief": "A Show HN author said they rewrote machine-learning web applications to execute in the browser and removed the server component. The approach can reduce hosting and data-transfer needs while improving privacy, but the available post does not quantify model limits, device coverage, or performance tradeoffs.",
+      "source": {
+        "id": "show-hn",
+        "name": "Show HN",
+        "url": "https://news.ycombinator.com/item?id=49132735",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T09:33:15Z",
+        "updatedAt": null,
+        "evidenceLabel": "not_independently_verified"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "horus-tiny-llm",
+      "eventId": "horus-tiny-llm",
+      "position": 15,
+      "origin": "community",
+      "region": "global",
+      "category": "research",
+      "topics": [
+        "llm-training",
+        "education",
+        "local-ai"
+      ],
+      "openSource": true,
+      "headline": "Horus offers a local path to train tiny language models",
+      "brief": "A Show HN project introduced Horus Runtime as a way to train a small language model from scratch. It appears aimed at learning and experimentation rather than frontier performance, and the community launch remains unverified for reproducibility, hardware support, and training quality.",
+      "source": {
+        "id": "show-hn",
+        "name": "Show HN",
+        "url": "https://news.ycombinator.com/item?id=49132705",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T09:27:21Z",
+        "updatedAt": null,
+        "evidenceLabel": "not_independently_verified"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "amd-dcn6-linux",
+      "eventId": "amd-dcn6-linux",
+      "position": 16,
+      "origin": "news",
+      "region": "global",
+      "category": "hardware",
+      "topics": [
+        "amd",
+        "linux",
+        "rdna5",
+        "display"
+      ],
+      "openSource": true,
+      "headline": "AMD begins upstreaming DCN6 display support for RDNA5",
+      "brief": "AMD started posting Linux patches for Display Core Next 6, the display block associated with future RDNA5 GPUs, according to Phoronix. Early upstream work gives kernel and graphics developers time to review support before the hardware reaches users.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/AMD-DCN6-Linux-Start",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T00:29:25Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "openai-math-results",
+      "eventId": "openai-astra-math-results",
+      "position": 17,
+      "origin": "news",
+      "region": "north-america",
+      "category": "research",
+      "topics": [
+        "mathematics",
+        "reasoning",
+        "formal-verification"
+      ],
+      "openSource": false,
+      "headline": "OpenAI reports ten long-standing mathematics and theory results",
+      "brief": "OpenAI published ten claimed advances across mathematics and theoretical computer science generated by an internal Astra model, with humans preparing manuscripts and the model producing Lean certificates. The company says the problems had seen no main-result progress for at least a decade and asks researchers to scrutinize the work.",
+      "source": {
+        "id": "openai-news",
+        "name": "OpenAI News",
+        "url": "https://openai.com/index/ten-advances-in-mathematics",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T00:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "vercel-ai-7-0-47",
+      "eventId": "vercel-ai-7-0-47",
+      "position": 18,
+      "origin": "news",
+      "region": "north-america",
+      "category": "developer-tools",
+      "topics": [
+        "ai-sdk",
+        "typescript",
+        "agents"
+      ],
+      "openSource": true,
+      "headline": "Vercel AI SDK 7.0.47 refreshes gateway dependencies",
+      "brief": "Vercel released AI SDK 7.0.47 as a patch that updates provider utilities and the gateway package. The same release train also refreshed related workflow and xAI packages, keeping the TypeScript agent stack aligned around shared response metadata and dependency versions.",
+      "source": {
+        "id": "vercel-ai",
+        "name": "Vercel AI SDK",
+        "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.47",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T22:19:04Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "nvidia-attention-codesign",
+      "eventId": "nvidia-attention-codesign",
+      "position": 19,
+      "origin": "news",
+      "region": "north-america",
+      "category": "infrastructure",
+      "topics": [
+        "attention",
+        "inference",
+        "gpu",
+        "long-context"
+      ],
+      "openSource": false,
+      "headline": "NVIDIA maps attention design choices to long-context inference costs",
+      "brief": "NVIDIA published a hardware-aware analysis of dense attention, recommending larger grouped-query ratios for decode, head dimensions of 128 or 256, and smaller effective KV state. It also argues that tensor parallelism should not exceed KV-head count to avoid duplication and points to alternative attention-parallel strategies.",
+      "source": {
+        "id": "nvidia-developer-blog",
+        "name": "NVIDIA Developer Blog",
+        "url": "https://developer.nvidia.com/blog/co-designing-ai-model-attention-for-fast-interactive-long-context-inference/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T22:16:17Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "amd-cdna5-isa",
+      "eventId": "amd-cdna5-isa",
+      "position": 20,
+      "origin": "news",
+      "region": "global",
+      "category": "hardware",
+      "topics": [
+        "amd",
+        "cdna5",
+        "gpu",
+        "documentation"
+      ],
+      "openSource": true,
+      "headline": "AMD publishes CDNA5 instruction documentation for MI455X",
+      "brief": "AMD released instruction-set documentation for the CDNA5 architecture used by the Instinct MI455X accelerator, Phoronix reported. Public ISA material helps compiler, kernel, and performance-tool developers prepare and validate software support for upcoming compute hardware.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/AMD-CDNA5-ISA-Documentation",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T20:29:05Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "github-gemini-deprecations",
+      "eventId": "github-copilot-gemini-deprecations",
+      "position": 21,
+      "origin": "news",
+      "region": "north-america",
+      "category": "developer-tools",
+      "topics": [
+        "github-copilot",
+        "models",
+        "deprecation"
+      ],
+      "openSource": false,
+      "headline": "GitHub Copilot deprecates two Gemini model options",
+      "brief": "GitHub deprecated Gemini 2.5 Pro and Gemini 3 Flash across Copilot chat, inline edits, agent and ask modes, and code completion. Teams that pinned either model need to move policies and workflows to supported alternatives rather than assuming those selectors will remain stable.",
+      "source": {
+        "id": "github-changelog",
+        "name": "GitHub Changelog",
+        "url": "https://github.blog/changelog/2026-07-31-gemini-2-5-pro-and-gemini-3-flash-deprecated",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T20:04:01Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "vercel-ai-7-0-46",
+      "eventId": "vercel-ai-7-0-46",
+      "position": 22,
+      "origin": "news",
+      "region": "north-america",
+      "category": "developer-tools",
+      "topics": [
+        "ai-sdk",
+        "gateway",
+        "typescript"
+      ],
+      "openSource": true,
+      "headline": "Vercel AI SDK 7.0.46 advances its gateway patch line",
+      "brief": "Vercel published AI SDK 7.0.46 with a dependency update to the 4.0.35 gateway package. Synchronized workflow packages followed the core version, representing a small but distinct maintenance release in the rapidly moving AI SDK 7 line.",
+      "source": {
+        "id": "vercel-ai",
+        "name": "Vercel AI SDK",
+        "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.46",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T20:03:59Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "github-model-policy-targeting",
+      "eventId": "github-model-policy-targeting",
+      "position": 23,
+      "origin": "news",
+      "region": "north-america",
+      "category": "policy",
+      "topics": [
+        "github-copilot",
+        "enterprise",
+        "model-governance"
+      ],
+      "openSource": false,
+      "headline": "GitHub previews user-targeted model policies for enterprise teams",
+      "brief": "GitHub opened a public preview of user-based model-policy targeting for Copilot Business and Enterprise customers. Administrators can establish a baseline and direct model availability more precisely, giving larger organizations a way to separate experimentation from approved production use.",
+      "source": {
+        "id": "github-changelog",
+        "name": "GitHub Changelog",
+        "url": "https://github.blog/changelog/2026-07-31-enterprise-teams-model-policy-targeting-in-public-preview",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T18:11:50Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "amd-am5-open-firmware",
+      "eventId": "amd-am5-open-firmware",
+      "position": 24,
+      "origin": "news",
+      "region": "global",
+      "category": "open-source",
+      "topics": [
+        "firmware",
+        "amd",
+        "coreboot",
+        "security"
+      ],
+      "openSource": true,
+      "headline": "Modern AMD AM5 hardware receives its first open firmware",
+      "brief": "The first open-source firmware for a modern AMD Ryzen AM5 platform was released for an MSI B850 motherboard, according to Phoronix. The work expands auditable boot-firmware options on contemporary consumer hardware, where proprietary initialization has remained a persistent barrier.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/OSS-Firmware-MSI-B850-P-WIFI",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T18:04:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "shotcut-26-7",
+      "eventId": "shotcut-26-7",
+      "position": 25,
+      "origin": "news",
+      "region": "global",
+      "category": "open-source",
+      "topics": [
+        "video-editing",
+        "creative-tools",
+        "release"
+      ],
+      "openSource": true,
+      "headline": "Shotcut 26.7 adds an integrated stock-asset library",
+      "brief": "Shotcut 26.7 shipped with a stock-asset library and other editor improvements, according to Phoronix. Integrating reusable media into an open-source video workflow reduces the need to leave the application for common production inputs while preserving a locally controlled editing stack.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/Shotcut-26.7-Released",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T17:50:05Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "vercel-ai-7-0-45",
+      "eventId": "vercel-ai-7-0-45",
+      "position": 26,
+      "origin": "news",
+      "region": "north-america",
+      "category": "developer-tools",
+      "topics": [
+        "ai-sdk",
+        "tool-calling",
+        "timeouts"
+      ],
+      "openSource": true,
+      "headline": "Vercel AI SDK adds experimental tool-caller support",
+      "brief": "AI SDK 7.0.45 added experimental tool-caller support to streamText and ToolLoopAgent, alongside warnings for streaming-only timeout settings passed to generateText. The patch exposes another way to shape agent tool execution while making timeout misuse more visible to developers.",
+      "source": {
+        "id": "vercel-ai",
+        "name": "Vercel AI SDK",
+        "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.45",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T17:46:32Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "github-npm-bypass-2fa",
+      "eventId": "github-npm-bypass-2fa",
+      "position": 27,
+      "origin": "news",
+      "region": "north-america",
+      "category": "security",
+      "topics": [
+        "npm",
+        "2fa",
+        "supply-chain"
+      ],
+      "openSource": false,
+      "headline": "npm narrows privileges for tokens that bypass two-factor checks",
+      "brief": "GitHub changed npm granular access tokens configured to bypass 2FA so they can no longer perform sensitive account, organization, or package-management actions. Those operations now require an interactive second-factor challenge, reducing the blast radius of a compromised automation token.",
+      "source": {
+        "id": "github-changelog",
+        "name": "GitHub Changelog",
+        "url": "https://github.blog/changelog/2026-07-31-restricting-npm-bypass-2fa-granular-access-tokens",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T16:45:50Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "nouveau-atomic-modesetting",
+      "eventId": "nouveau-atomic-modesetting",
+      "position": 28,
+      "origin": "news",
+      "region": "global",
+      "category": "open-source",
+      "topics": [
+        "nouveau",
+        "linux",
+        "graphics"
+      ],
+      "openSource": true,
+      "headline": "Nouveau prepares atomic mode-setting as the default path",
+      "brief": "Nouveau developers are preparing to enable atomic mode-setting by default, according to Phoronix. Moving the open NVIDIA graphics driver onto the modern display-management path can simplify compositor integration and retire older compatibility behavior after years of incremental kernel work.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/Nouveau-Atomic-Mode-Setting-26",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T15:22:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "nvidia-video-codec-13-1",
+      "eventId": "nvidia-video-codec-13-1",
+      "position": 29,
+      "origin": "news",
+      "region": "north-america",
+      "category": "developer-tools",
+      "topics": [
+        "video",
+        "gpu",
+        "codec",
+        "sdk"
+      ],
+      "openSource": false,
+      "headline": "NVIDIA Video Codec SDK 13.1 expands zero-copy workflows",
+      "brief": "NVIDIA Video Codec SDK 13.1 added application-managed CUDA arrays for encode and decode, hierarchical B-frame support, frame-accurate seeking, and a modular transcode sample. The release also removes several legacy presets and 32-bit sample support, creating migration work for older integrations.",
+      "source": {
+        "id": "nvidia-developer-blog",
+        "name": "NVIDIA Developer Blog",
+        "url": "https://developer.nvidia.com/blog/nvidia-video-codec-sdk-13-1-zero-copy-transcode-av1-b-frames-and-frame-accurate-seek/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T15:13:02Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "openai-abundant-intelligence",
+      "eventId": "openai-abundant-intelligence",
+      "position": 30,
+      "origin": "news",
+      "region": "north-america",
+      "category": "infrastructure",
+      "topics": [
+        "ai-economics",
+        "inference",
+        "efficiency"
+      ],
+      "openSource": false,
+      "headline": "OpenAI frames lower serving costs as an abundance strategy",
+      "brief": "OpenAI described a full-stack strategy linking model capability, serving efficiency, product demand, and infrastructure investment. It cited recent price cuts, a 20% serving-cost reduction, and more than 15% better speculative-decoding efficiency as evidence that systems work can broaden access without relying only on more hardware.",
+      "source": {
+        "id": "openai-news",
+        "name": "OpenAI News",
+        "url": "https://openai.com/index/building-abundant-intelligence",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T15:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "openai-eu-ai-governance",
+      "eventId": "openai-eu-ai-governance",
+      "position": 31,
+      "origin": "news",
+      "region": "europe",
+      "category": "policy",
+      "topics": [
+        "eu-ai-act",
+        "governance",
+        "provenance"
+      ],
+      "openSource": false,
+      "headline": "OpenAI details its approach to the EU AI Act",
+      "brief": "OpenAI outlined how its safety, security, transparency, provenance, and cybersecurity practices align with the EU AI Act and two European codes of practice. The company said it is extending provenance work across modalities while arguing that implementation should remain risk-based and adaptable.",
+      "source": {
+        "id": "openai-news",
+        "name": "OpenAI News",
+        "url": "https://openai.com/index/advancing-responsible-ai-across-europe",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T15:00:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "arch-aur-malware",
+      "eventId": "arch-aur-malware",
+      "position": 32,
+      "origin": "news",
+      "region": "global",
+      "category": "security",
+      "topics": [
+        "arch-linux",
+        "aur",
+        "supply-chain"
+      ],
+      "openSource": true,
+      "headline": "Arch Linux pauses AUR adoptions during another malware wave",
+      "brief": "Arch Linux halted package adoptions in the AUR while responding to another wave of malicious packages, Phoronix reported. The incident again shows how community repositories combine rapid contribution with supply-chain risk, making account controls and package review important operational defenses.",
+      "source": {
+        "id": "phoronix",
+        "name": "Phoronix",
+        "url": "https://www.phoronix.com/news/Arch-Linux-AUR-Adoptions-Halted",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-07-31T13:59:23Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    }
+  ],
+  "research": {
+    "sourceScan": [
+      {
+        "sourceId": "openai-news",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 3,
+        "duplicatesRemoved": 0,
+        "selectedCount": 3,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "anthropic-news",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "deepmind-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "google-ai-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "meta-ai-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "mistral-news",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "microsoft-ai-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "nvidia-developer-blog",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 2,
+        "duplicatesRemoved": 0,
+        "selectedCount": 2,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "hugging-face-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "github-changelog",
+        "status": "collected",
+        "itemsFetched": 10,
+        "itemsInWindow": 3,
+        "duplicatesRemoved": 0,
+        "selectedCount": 3,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "cloudflare-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "github-trending",
+        "status": "unavailable",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Connected searches returned repositories but not exact timestamps or sufficient license/release evidence; the Today fallback has no trustworthy dates."
+      },
+      {
+        "sourceId": "hacker-news",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 15,
+        "duplicatesRemoved": 2,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "show-hn",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 8,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "hugging-face-papers",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "arxiv-cs-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "arxiv-cs-cl",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "arxiv-cs-lg",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "ars-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "mit-tech-review-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "ieee-spectrum-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "reddit-localllama",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 15,
+        "duplicatesRemoved": 6,
+        "selectedCount": 5,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "x-curated-experts",
+        "status": "unavailable",
+        "itemsFetched": 0,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Fixed-handle indexed searches exposed no trustworthy in-window listing, and no authenticated X session was available for the permitted profile routes."
+      },
+      {
+        "sourceId": "phoronix",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 12,
+        "duplicatesRemoved": 0,
+        "selectedCount": 11,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "mcp-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "mcp-spec-releases",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "vercel-ai",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 12,
+        "duplicatesRemoved": 9,
+        "selectedCount": 3,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "ollama-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "ollama-releases",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "langchain-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "llamaindex-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "dify-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "hugging-face-trending-papers",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "chips-and-cheese",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "semianalysis",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "the-batch",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "alphasignal",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "tldr-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "deepseek-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "qwen-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "bytedance-seed",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "zai-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "moonshot-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "minimax-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "modelscope-hub",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "tencent-hunyuan",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "baidu-ernie-paddlepaddle",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "huawei-ascend",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "stepfun-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "china-cac",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "china-miit",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "machine-heart",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "qbitai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "36kr-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      }
+    ],
+    "warnings": [
+      "github-trending could not be assigned collected or empty because its successful search route did not expose exact timestamps and the dated fallback cannot establish window membership.",
+      "x-curated-experts was unavailable after every fixed-handle indexed route failed to expose a trustworthy in-window listing and authenticated profile access was unavailable.",
+      "Remote URL reachability was intentionally not rechecked; repository rules require offline absolute HTTP(S) syntax validation only."
+    ]
+  }
+}
