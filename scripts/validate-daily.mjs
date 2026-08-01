@@ -309,52 +309,36 @@ export async function validateEdition(
   } = config;
   const cutoff = parseDateTime(edition.cutoffAt);
   const generated = parseDateTime(edition.generatedAt);
+  const collectionStart = parseDateTime(edition.windowStartAt);
   const expectedName = `${edition.editionDate}.json`;
   if (file && path.basename(file) !== expectedName) {
     errors.push(`$: filename must be ${expectedName}`);
   }
   if (generated < cutoff) errors.push("$.generatedAt: cannot be before cutoffAt");
 
-  const version2RequiredFrom = rules.collection.schemaVersion2RequiredFrom;
-  if (edition.editionDate >= version2RequiredFrom && edition.schemaVersion !== 2) {
-    errors.push("$.schemaVersion: version 2 is required from " + version2RequiredFrom);
+  const version3RequiredFrom = rules.collection.schemaVersion3RequiredFrom;
+  if (edition.editionDate >= version3RequiredFrom && edition.schemaVersion !== 3) {
+    errors.push("$.schemaVersion: version 3 is required from " + version3RequiredFrom);
   }
 
-  const isRollingWindow = edition.schemaVersion === 2;
-  let collectionStart;
-  if (isRollingWindow) {
-    if (edition.timezone !== "America/New_York") {
-      errors.push("$.timezone: schemaVersion 2 requires America/New_York");
-    }
-    collectionStart = parseDateTime(edition.windowStartAt);
-    if (!collectionStart) {
-      errors.push("$.windowStartAt: required for schemaVersion 2");
-      collectionStart = cutoff;
-    } else {
-      const expectedWindowMs = rules.collection.windowHours * 60 * 60 * 1000;
-      if (cutoff - collectionStart !== expectedWindowMs) {
-        errors.push(`$.windowStartAt: must be exactly ${rules.collection.windowHours} hours before cutoffAt`);
-      }
-    }
-    const cutoffLocal = zonedDateAndTime(cutoff, "America/New_York");
-    if (cutoffLocal.date !== edition.editionDate) {
-      errors.push("$.editionDate: must be the America/New_York date at cutoffAt");
-    }
-    if (cutoffLocal.time !== "09:30:00") {
-      errors.push("$.cutoffAt: must be 09:30:00 in America/New_York");
-    }
-  } else {
-    if (edition.timezone !== "Asia/Shanghai") {
-      errors.push("$.timezone: schemaVersion 1 requires Asia/Shanghai");
-    }
-    collectionStart = new Date(`${edition.editionDate}T00:00:00+08:00`);
+  const expectedWindowMs = rules.collection.windowHours * 60 * 60 * 1000;
+  if (cutoff - collectionStart !== expectedWindowMs) {
+    errors.push(`$.windowStartAt: must be exactly ${rules.collection.windowHours} hours before cutoffAt`);
+  }
+  const cutoffLocal = zonedDateAndTime(cutoff, "America/New_York");
+  if (cutoffLocal.date !== edition.editionDate) {
+    errors.push("$.editionDate: must be the America/New_York date at cutoffAt");
+  }
+  if (cutoffLocal.time !== "09:30:00") {
+    errors.push("$.cutoffAt: must be 09:30:00 in America/New_York");
   }
 
   const ids = new Set();
   const eventIds = new Set();
-  const sourceLinkCount = new Set(edition.stories.map((story) => story.source.url)).size;
-  const kinds = { news: 0, community: 0 };
-  let highlights = 0;
+  const sectionIds = new Set();
+  const sourceLinks = new Set();
+  const origins = { news: 0, community: 0 };
+  let communityVoices = 0;
   let openSource = 0;
   const requestedImageIds = new Set();
   const sourceScanIds = new Set();
@@ -373,14 +357,8 @@ export async function validateEdition(
     if (scan.itemsFetched > rules.collection.perSourceLatestLimit) {
       errors.push(`${at}.itemsFetched: exceeds per-source limit ${rules.collection.perSourceLatestLimit}`);
     }
-    const countField = isRollingWindow ? "itemsInWindow" : "itemsOnEditionDay";
-    if (!Number.isInteger(scan[countField])) {
-      errors.push(`${at}.${countField}: required for schemaVersion ${edition.schemaVersion}`);
-    }
-    if (isRollingWindow && "itemsOnEditionDay" in scan) {
-      errors.push(`${at}.itemsOnEditionDay: use itemsInWindow for schemaVersion 2`);
-    }
-    const inWindowItems = Number.isInteger(scan[countField]) ? scan[countField] : 0;
+    const countField = "itemsInWindow";
+    const inWindowItems = scan.itemsInWindow;
     if (inWindowItems > scan.itemsFetched) {
       errors.push(`${at}.${countField}: cannot exceed itemsFetched`);
     }
@@ -428,88 +406,83 @@ export async function validateEdition(
   if (edition.heroImageId && !imageIds.has(edition.heroImageId)) {
     errors.push("$.heroImageId: unknown image ID");
   }
-  if (edition.stories.length > storyImageCount) {
-    errors.push(`$.stories: ${edition.stories.length} stories exceed the ${storyImageCount}-image pool`);
+  if (edition.signals.length > storyImageCount) {
+    errors.push(`$.signals: ${edition.signals.length} signals exceed the ${storyImageCount}-image pool`);
   }
 
-  edition.stories.forEach((story, index) => {
-    const at = `$.stories[${index}]`;
-    if (story.position !== index + 1) errors.push(`${at}.position: expected ${index + 1}`);
-    if (ids.has(story.id)) errors.push(`${at}.id: duplicate ${story.id}`);
-    ids.add(story.id);
-    if (eventIds.has(story.eventId)) errors.push(`${at}.eventId: duplicate ${story.eventId}`);
-    eventIds.add(story.eventId);
-
-    if (story.imageId) {
-      if (!storyImageCategories.has(story.imageId)) {
-        errors.push(`${at}.imageId: unknown story image ID`);
-      } else if (storyImageCategories.get(story.imageId) !== story.category) {
-        errors.push(`${at}.imageId: image category must match story.category`);
-      }
-      if (requestedImageIds.has(story.imageId)) {
-        errors.push(`${at}.imageId: duplicate image ID in this edition`);
-      }
-      requestedImageIds.add(story.imageId);
+  const validateSource = (source, at) => {
+    sourceLinks.add(source.url);
+    if (!evidenceLabels.has(source.evidenceLabel)) {
+      errors.push(`${at}.evidenceLabel: unknown label`);
     }
-
-    if (!categories.has(story.category)) errors.push(`${at}.category: unknown category`);
-    if (!evidenceLabels.has(story.source.evidenceLabel)) {
-      errors.push(`${at}.source.evidenceLabel: unknown label`);
-    }
-    const registered = sources.get(story.source.id);
-    if (!registered) errors.push(`${at}.source.id: not found in editorial/sources.json`);
+    const registered = sources.get(source.id);
+    if (!registered) errors.push(`${at}.id: not found in editorial/sources.json`);
     else {
-      if (registered.name !== story.source.name) {
-        errors.push(`${at}.source.name: expected ${registered.name}`);
+      if (registered.name !== source.name) {
+        errors.push(`${at}.name: expected ${registered.name}`);
       }
-      if (!registered.languages?.includes(story.source.sourceLanguage)) {
-        errors.push(
-          `${at}.source.sourceLanguage: ${story.source.sourceLanguage} is not registered for ${story.source.id}`,
-        );
+      if (!registered.languages?.includes(source.sourceLanguage)) {
+        errors.push(`${at}.sourceLanguage: ${source.sourceLanguage} is not registered for ${source.id}`);
       }
     }
-
-    const publishedAt = parseDateTime(story.source.publishedAt);
-    if (publishedAt > cutoff) errors.push(`${at}.source.publishedAt: after cutoffAt`);
-    let updatedAt = null;
-    if (story.source.updatedAt) {
-      updatedAt = parseDateTime(story.source.updatedAt);
-      if (updatedAt > cutoff) errors.push(`${at}.source.updatedAt: after cutoffAt`);
-    }
+    const publishedAt = parseDateTime(source.publishedAt);
+    if (publishedAt > cutoff) errors.push(`${at}.publishedAt: after cutoffAt`);
+    const updatedAt = source.updatedAt ? parseDateTime(source.updatedAt) : null;
+    if (updatedAt > cutoff) errors.push(`${at}.updatedAt: after cutoffAt`);
     const currentByPublication = publishedAt > collectionStart && publishedAt <= cutoff;
     const currentByUpdate = updatedAt && updatedAt > collectionStart && updatedAt <= cutoff;
     if (!currentByPublication && !currentByUpdate) {
-      errors.push(`${at}.source.publishedAt: outside collection window`);
+      errors.push(`${at}.publishedAt: outside collection window`);
+    }
+  };
+
+  edition.signals.forEach((signal, index) => {
+    const at = `$.signals[${index}]`;
+    if (signal.position !== index + 1) errors.push(`${at}.position: expected ${index + 1}`);
+    if (ids.has(signal.id)) errors.push(`${at}.id: duplicate ${signal.id}`);
+    ids.add(signal.id);
+    if (eventIds.has(signal.eventId)) errors.push(`${at}.eventId: duplicate ${signal.eventId}`);
+    eventIds.add(signal.eventId);
+
+    if (signal.imageId) {
+      if (!storyImageCategories.has(signal.imageId)) {
+        errors.push(`${at}.imageId: unknown story image ID`);
+      } else if (storyImageCategories.get(signal.imageId) !== signal.category) {
+        errors.push(`${at}.imageId: image category must match signal.category`);
+      }
+      if (requestedImageIds.has(signal.imageId)) {
+        errors.push(`${at}.imageId: duplicate image ID in this edition`);
+      }
+      requestedImageIds.add(signal.imageId);
     }
 
-    const lengths = rules.contentLengths[story.kind];
-    const summaryWords = countEnglishWords(story.summary);
-    const whyWords = countEnglishWords(story.whyItMatters);
-    if (
-      summaryWords < lengths.summaryWords.min ||
-      summaryWords > lengths.summaryWords.max
-    ) {
-      errors.push(
-        `${at}.summary: ${summaryWords} words; expected ${lengths.summaryWords.min}-${lengths.summaryWords.max} for ${story.kind}`,
-      );
-    }
-    if (
-      whyWords < lengths.whyItMattersWords.min ||
-      whyWords > lengths.whyItMattersWords.max
-    ) {
-      errors.push(
-        `${at}.whyItMatters: ${whyWords} words; expected ${lengths.whyItMattersWords.min}-${lengths.whyItMattersWords.max} for ${story.kind}`,
-      );
+    if (!categories.has(signal.category)) errors.push(`${at}.category: unknown category`);
+    validateSource(signal.source, `${at}.source`);
+
+    const briefWords = countEnglishWords(signal.brief);
+    const briefRange = rules.contentLengths.signalBriefWords;
+    if (briefWords < briefRange.min || briefWords > briefRange.max) {
+      errors.push(`${at}.brief: ${briefWords} words; expected ${briefRange.min}-${briefRange.max}`);
     }
 
-    if (story.highlight) highlights += 1;
-    if (story.openSource) openSource += 1;
-    kinds[story.kind] += 1;
+    for (const [voiceIndex, voice] of signal.communityVoices.entries()) {
+      const voiceAt = `${at}.communityVoices[${voiceIndex}]`;
+      const voiceWords = countEnglishWords(voice.summary);
+      const voiceRange = rules.contentLengths.communityVoiceWords;
+      if (voiceWords < voiceRange.min || voiceWords > voiceRange.max) {
+        errors.push(`${voiceAt}.summary: ${voiceWords} words; expected ${voiceRange.min}-${voiceRange.max}`);
+      }
+      validateSource(voice.source, `${voiceAt}.source`);
+      communityVoices += 1;
+    }
+
+    if (signal.openSource) openSource += 1;
+    origins[signal.origin] += 1;
   });
 
-  for (let left = 0; left < edition.stories.length; left += 1) {
-    for (let right = left + 1; right < edition.stories.length; right += 1) {
-      const score = similarity(edition.stories[left].headline, edition.stories[right].headline);
+  for (let left = 0; left < edition.signals.length; left += 1) {
+    for (let right = left + 1; right < edition.signals.length; right += 1) {
+      const score = similarity(edition.signals[left].headline, edition.signals[right].headline);
       if (score >= 0.82) {
         warnings.push(
           `highly similar headlines at positions ${left + 1} and ${right + 1} (${score.toFixed(2)})`,
@@ -518,48 +491,81 @@ export async function validateEdition(
     }
   }
 
-  const highlightTarget = rules.presentation.highlights;
-  if (highlights > highlightTarget.max) {
-    errors.push(`$.stories: highlight count ${highlights} exceeds ${highlightTarget.max}`);
+  const synthesis = edition.article.synthesis;
+  const synthesisIds = new Set(synthesis.signalIds);
+  const requiredSynthesisIds = Math.min(edition.signals.length, rules.article.synthesis.minSignalIds);
+  if (synthesisIds.size < requiredSynthesisIds) {
+    errors.push("$.article.synthesis.signalIds: expected at least " + requiredSynthesisIds + " current signal IDs");
   }
-  if (highlights < highlightTarget.min) {
-    errors.push(`$.stories: at least ${highlightTarget.min} highlight is required`);
+  for (const signalId of synthesisIds) {
+    if (!ids.has(signalId)) errors.push(`$.article.synthesis.signalIds: unknown signal ID ${signalId}`);
+  }
+  const synthesisParagraphs = synthesis.body.trim().split(/\n\s*\n/).filter(Boolean);
+  if (synthesisParagraphs.length < rules.article.synthesis.minParagraphs) {
+    errors.push("$.article.synthesis.body: expected at least " + rules.article.synthesis.minParagraphs + " paragraphs");
+  }
+  const synthesisWords = countEnglishWords(synthesis.body);
+  if (synthesisWords < rules.article.synthesis.minWords) {
+    errors.push(`$.article.synthesis.body: ${synthesisWords} words is below ${rules.article.synthesis.minWords}`);
+  } else if (
+    synthesisWords < rules.article.synthesis.targetWords.min ||
+    synthesisWords > rules.article.synthesis.targetWords.max
+  ) {
+    warnings.push(`editor synthesis has ${synthesisWords} words`);
   }
 
-  const analysisIds = new Set(edition.dailyAnalysis.signalIds);
-  const requiredAnalysisIds = Math.min(edition.stories.length, rules.analysis.minSignalIds);
-  if (analysisIds.size < requiredAnalysisIds) {
-    errors.push("$.dailyAnalysis.signalIds: expected at least " + requiredAnalysisIds + " current story IDs");
+  const assignmentCounts = new Map([...ids].map((id) => [id, 0]));
+  let sectionWords = 0;
+  edition.article.sections.forEach((section, index) => {
+    const at = `$.article.sections[${index}]`;
+    if (section.position !== index + 1) errors.push(`${at}.position: expected ${index + 1}`);
+    if (sectionIds.has(section.id)) errors.push(`${at}.id: duplicate ${section.id}`);
+    sectionIds.add(section.id);
+    const paragraphs = section.body.trim().split(/\n\s*\n/).filter(Boolean);
+    if (paragraphs.length < rules.article.sectionMinParagraphs) {
+      errors.push(`${at}.body: expected at least ${rules.article.sectionMinParagraphs} paragraphs`);
+    }
+    const words = countEnglishWords(section.body);
+    sectionWords += words;
+    if (words < rules.article.sectionWords.min || words > rules.article.sectionWords.max) {
+      errors.push(`${at}.body: ${words} words; expected ${rules.article.sectionWords.min}-${rules.article.sectionWords.max}`);
+    }
+    for (const signalId of section.signalIds) {
+      if (!ids.has(signalId)) errors.push(`${at}.signalIds: unknown signal ID ${signalId}`);
+      else assignmentCounts.set(signalId, assignmentCounts.get(signalId) + 1);
+    }
+  });
+
+  for (const signalId of edition.article.otherSignalIds) {
+    if (!ids.has(signalId)) errors.push(`$.article.otherSignalIds: unknown signal ID ${signalId}`);
+    else assignmentCounts.set(signalId, assignmentCounts.get(signalId) + 1);
   }
-  for (const signalId of analysisIds) {
-    if (!ids.has(signalId)) errors.push(`$.dailyAnalysis.signalIds: unknown story ID ${signalId}`);
+  for (const [signalId, count] of assignmentCounts) {
+    if (count !== 1) {
+      errors.push(`$.article: signal ${signalId} must be assigned exactly once; received ${count}`);
+    }
   }
-  const analysisParagraphs = edition.dailyAnalysis.body.trim().split(/\n\s*\n/).filter(Boolean);
-  if (analysisParagraphs.length < rules.analysis.minParagraphs) {
-    errors.push("$.dailyAnalysis.body: expected at least " + rules.analysis.minParagraphs + " paragraphs");
-  }
-  const analysisWords = countEnglishWords(edition.dailyAnalysis.body);
-  if (analysisWords < rules.analysis.minWords) {
-    errors.push(
-      `$.dailyAnalysis.body: ${analysisWords} words is below ${rules.analysis.minWords}`,
-    );
-  } else if (
-    analysisWords < rules.analysis.targetWords.min ||
-    analysisWords > rules.analysis.targetWords.max
+
+  const articleWords = synthesisWords + sectionWords;
+  if (
+    articleWords < rules.article.targetTotalWords.min ||
+    articleWords > rules.article.targetTotalWords.max
   ) {
-    warnings.push(`daily analysis has ${analysisWords} words`);
+    warnings.push(`article has ${articleWords} words; target is ${rules.article.targetTotalWords.min}-${rules.article.targetTotalWords.max}`);
   }
 
   return {
     status: errors.length ? "error" : "ok",
     editionDate: edition.editionDate,
     counts: {
-      total: edition.stories.length,
-      news: kinds.news,
-      community: kinds.community,
-      highlights,
+      total: edition.signals.length,
+      news: origins.news,
+      community: origins.community,
+      communityVoices,
+      sections: edition.article.sections.length,
+      articleWords,
       openSource,
-      sourceLinks: sourceLinkCount,
+      sourceLinks: sourceLinks.size,
       attemptedSources,
       availableSources,
       fetchedItems,

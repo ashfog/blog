@@ -18,43 +18,59 @@ export interface DailySource {
   evidenceLabel: EvidenceLabel;
 }
 
-export interface DailyStory {
+export interface CommunityVoice {
+  summary: string;
+  source: DailySource;
+}
+
+export interface DailySignal {
   id: string;
   eventId: string;
   position: number;
-  kind: "news" | "community";
-  highlight: boolean;
+  origin: "news" | "community";
   region: "global" | "china" | "north-america" | "europe" | "asia-pacific" | "other";
   category: string;
   topics: string[];
   openSource: boolean;
   imageId?: string | null;
   headline: string;
-  summary: string;
-  whyItMatters: string;
+  brief: string;
   source: DailySource;
+  communityVoices: CommunityVoice[];
+}
 
+export interface ArticleSection {
+  id: string;
+  position: number;
+  kicker: string;
+  title: string;
+  body: string;
+  signalIds: string[];
 }
 
 export interface DailyEdition {
-  schemaVersion: 1 | 2;
+  schemaVersion: 3;
   language: "en";
   edition: "global";
   editionDate: string;
-  timezone: "Asia/Shanghai" | "America/New_York";
-  windowStartAt?: string;
+  timezone: "America/New_York";
+  windowStartAt: string;
   cutoffAt: string;
   generatedAt: string;
   runId: string;
   title: string;
   description: string;
   heroImageId?: string | null;
-  dailyAnalysis: {
-    title: string;
-    body: string;
-    signalIds: string[];
+  article: {
+    synthesis: {
+      title: string;
+      body: string;
+      signalIds: string[];
+    };
+    sections: ArticleSection[];
+    otherSignalIds: string[];
   };
-  stories: DailyStory[];
+  signals: DailySignal[];
   research: {
     sourceScan: Array<{
       sourceId: string;
@@ -91,19 +107,29 @@ export function getEdition(date: string) {
 export function getAllTopics() {
   const topics = new Set<string>();
   for (const edition of editions) {
-    for (const story of edition.stories) {
-      topics.add(story.category);
-    }
+    for (const signal of edition.signals) topics.add(signal.category);
   }
   return [...topics].sort();
 }
 
 export function getStoriesByTopic(topic: string) {
   return editions.flatMap((edition) =>
-    edition.stories
-      .filter((story) => story.category === topic || story.topics.includes(topic))
-      .map((story) => ({ edition, story }))
+    edition.signals
+      .filter((signal) => signal.category === topic || signal.topics.includes(topic))
+      .map((signal) => ({ edition, story: signal }))
   );
+}
+
+export function getSignalMap(edition: DailyEdition) {
+  return new Map(edition.signals.map((signal) => [signal.id, signal]));
+}
+
+export function getSectionSignals(edition: DailyEdition, section: ArticleSection) {
+  const signals = getSignalMap(edition);
+  return section.signalIds.flatMap((id) => {
+    const signal = signals.get(id);
+    return signal ? [signal] : [];
+  });
 }
 
 export function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {
@@ -119,11 +145,12 @@ export function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {
 
 export function readingMinutes(edition: DailyEdition) {
   const words = [
-    edition.dailyAnalysis.body,
-    ...edition.stories.flatMap((story) => [
-      story.summary,
-      story.whyItMatters
-    ])
+    edition.article.synthesis.body,
+    ...edition.article.sections.map((section) => section.body),
+    ...edition.article.otherSignalIds.flatMap((id) => {
+      const signal = edition.signals.find((candidate) => candidate.id === id);
+      return signal ? [signal.brief] : [];
+    })
   ].join(" ").trim().split(/\s+/u).filter(Boolean).length;
   return Math.max(3, Math.ceil(words / 220));
 }

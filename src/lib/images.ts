@@ -1,5 +1,5 @@
 import imageLibrary from "../../editorial/image-library.json";
-import type { DailyEdition, DailyStory } from "./daily";
+import type { DailyEdition, DailySignal } from "./daily";
 
 type ImageVariant = "main" | "light" | "dark";
 
@@ -79,7 +79,7 @@ export function getPageImage(page: string) {
 
 function choose(
   candidates: Array<StoryImageEntry | PageImageEntry>,
-  story: DailyStory,
+  story: DailySignal,
   editionDate: string
 ) {
   return candidates[
@@ -90,7 +90,7 @@ function choose(
 export function getEditionStoryImages(edition: DailyEdition) {
   const assigned = new Map<string, LibraryImage>();
   const used = new Set<string>();
-  const orderedStories = [...edition.stories].sort(
+  const orderedStories = [...edition.signals].sort(
     (first, second) => first.position - second.position
   );
 
@@ -124,8 +124,7 @@ export function getEditionHeroImage(
 ) {
   const requested = getImageById(edition.heroImageId);
   if (requested) return requested;
-  const featured =
-    edition.stories.find((story) => story.highlight) ?? edition.stories[0];
+  const featured = edition.signals[0];
   return storyImages.get(featured.id) ?? getPageImage("daily");
 }
 

@@ -1,10 +1,10 @@
 ---
-import type { DailyStory } from "../lib/daily";
+import type { DailySignal } from "../lib/daily";
 import { categoryLabels, evidenceLabels } from "../lib/daily";
 import type { LibraryImage } from "../lib/images";
 
 interface Props {
-  story: DailyStory;
+  story: DailySignal;
   editionDate: string;
   image: LibraryImage;
   featured?: boolean;
@@ -14,7 +14,7 @@ const { story, editionDate, image, featured = false } = Astro.props;
 const position = String(story.position).padStart(2, "0");
 ---
 
-<article class:list={["story-card", { featured, community: story.kind === "community" }]}>
+<article class:list={["story-card", { featured, community: story.origin === "community" }]}>
   <a class="card-link" href={`/daily/${editionDate}#${story.id}`} aria-label={story.headline}></a>
 
   <div class="card-top">
@@ -43,11 +43,11 @@ const position = String(story.position).padStart(2, "0");
   <div class="card-content">
     <p class="source">{story.source.name} · {evidenceLabels[story.source.evidenceLabel]}</p>
     <h3>{story.headline}</h3>
-    <p class="summary">{story.summary}</p>
+    <p class="summary">{story.brief}</p>
   </div>
 
   <div class="card-footer">
-    <span>{story.kind === "community" ? "COMMUNITY SIGNAL" : "DAILY SIGNAL"}</span>
+    <span>{story.origin === "community" ? "COMMUNITY SIGNAL" : "SOURCE SIGNAL"}</span>
     <span aria-hidden="true">↗</span>
   </div>
 </article>

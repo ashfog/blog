@@ -22,7 +22,7 @@ const pageImage = getPageImage("archive");
     <header>
       <span class="eyebrow">Daily archive</span>
       <h1>One Page a Day<br /><em>See Change Take Shape</em></h1>
-      <p>Review independent signals across AI, open source, and the developer ecosystem by date. Every edition preserves source links and independent community events.</p>
+      <p>Review one connected article per day across AI, open source, and the developer ecosystem. Every edition preserves its underlying source signals and community voices.</p>
     </header>
     {pageImage && <PageArtwork image={pageImage} priority />}
 
@@ -32,7 +32,7 @@ const pageImage = getPageImage("archive");
           <span class="index">{String(index + 1).padStart(2, "0")}</span>
           <span class="date">{formatDate(edition.editionDate, { year: undefined })}</span>
           <strong>{edition.title}</strong>
-          <span class="meta">{edition.stories.length} signals · {readingMinutes(edition)} min</span>
+          <span class="meta">{edition.signals.length} signals · {readingMinutes(edition)} min</span>
           <span class="arrow">↗</span>
         </a>
       ))}
