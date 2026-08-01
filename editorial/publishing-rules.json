@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "timezone": "America/New_York",
   "selection": {
     "combineRelevanceAndEventDeduplication": true,
@@ -10,46 +10,43 @@
     "overflowOrder": "newest-first"
   },
   "contentLengths": {
-    "news": {
-      "summaryWords": {
-        "min": 120,
-        "max": 180
-      },
-      "whyItMattersWords": {
-        "min": 50,
-        "max": 80
-      }
+    "signalBriefWords": {
+      "min": 35,
+      "max": 90
     },
-    "community": {
-      "summaryWords": {
-        "min": 80,
-        "max": 130
-      },
-      "whyItMattersWords": {
-        "min": 35,
-        "max": 60
-      }
+    "communityVoiceWords": {
+      "min": 25,
+      "max": 80
     }
   },
-  "presentation": {
-    "highlights": {
+  "article": {
+    "sections": {
       "min": 1,
-      "max": 5
-    }
-  },
-  "analysis": {
-    "minSignalIds": 3,
-    "minParagraphs": 2,
-    "minWords": 160,
-    "targetWords": {
-      "min": 200,
-      "max": 350
+      "max": 7
+    },
+    "sectionWords": {
+      "min": 180,
+      "max": 450
+    },
+    "sectionMinParagraphs": 2,
+    "targetTotalWords": {
+      "min": 1500,
+      "max": 2500
+    },
+    "synthesis": {
+      "minSignalIds": 3,
+      "minParagraphs": 2,
+      "minWords": 150,
+      "targetWords": {
+        "min": 150,
+        "max": 250
+      }
     }
   },
   "collection": {
     "windowMode": "rolling-hours",
     "windowBoundary": "(windowStartAt, cutoffAt]",
-    "schemaVersion2RequiredFrom": "2026-07-30",
+    "schemaVersion3RequiredFrom": "2026-08-01",
     "windowHours": 24,
     "timezone": "America/New_York",
     "cutoffLocalTime": "09:30",

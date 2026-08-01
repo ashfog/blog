@@ -17,6 +17,12 @@ Every edition must pass:
 pnpm run validate:daily -- src/content/daily/YYYY-MM-DD.json
 ```
 
+The version 3 content model keeps collection and presentation separate. `signals`
+stores deduplicated events, concise factual briefs, original source links, and
+optional community voices. `article` turns those signals into one editor's
+synthesis and a small set of connected themes. Every signal is assigned exactly
+once to a theme or the compact `otherSignalIds` list.
+
 When the formal content directory is empty, the site uses
 `tests/fixtures/2026-07-28.json` as a theme preview. The preview fixture is not
 part of the publication directory. As soon as a formal edition exists, only

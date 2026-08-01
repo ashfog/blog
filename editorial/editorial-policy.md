@@ -19,12 +19,26 @@ Process all in-window entries once:
 
 1. Discard only entries clearly outside AI, open source, developer tools, infrastructure, research, policy, or relevant community activity.
 2. Group reports about the same underlying event by content, not by URL.
-3. Publish one story per event under one `eventId`.
+3. Publish one signal per event under one `eventId`.
 4. Prefer the official announcement, repository, paper, specification, model card, or policy page when the event group contains one.
+5. Attach useful reactions, tests, adoption reports, or maintainer clarifications to that signal as `communityVoices` instead of duplicating the event.
 
 Do not score importance or materiality. Do not exclude a valid independent event because it is small, marketing-oriented, regionally concentrated, or less useful to a particular reader. Do not enforce company, ecosystem, media, regional, or story-count quotas.
 
 If more than 46 independent events remain, keep the newest 46 by the timestamp that placed the event inside the window.
+
+## Article structure
+
+After the signal list is locked, turn the edition into one coherent article:
+
+1. Write a 150–250 word editor's synthesis of the day's overall direction.
+2. Group related signals into 4–7 themes when the day's volume supports it. A quiet day may use fewer themes.
+3. Write each theme as continuous explanatory prose. Explain what changed, connect related events, and describe the practical consequence without ranking events by importance.
+4. Reference every theme's supporting signal IDs. Place community voices with the theme they illuminate.
+5. Put valid signals that do not fit a coherent theme in `otherSignalIds`; they remain visible with their source links.
+6. Target 1,500–2,500 English words for a normal edition. Treat this as a readability target, not a reason to invent padding on a quiet day.
+
+Every selected signal must appear exactly once, either in one article section or in `otherSignalIds`.
 
 ## Links
 
@@ -32,9 +46,9 @@ Preserve the collected source URL exactly as supplied. Do not make a second requ
 
 ## Writing
 
-For every selected event, write an original English headline, summary, and distinct practical consequence within repository word limits. Paraphrase the collected source and preserve uncertainty without inventing facts.
+For every selected event, write an original English headline and concise factual `brief`. The article carries the explanation and practical consequences, so do not repeat a separate long summary and `whyItMatters` for every signal. Paraphrase collected sources and preserve uncertainty without inventing facts.
 
-Do not generate importance scores, factual-claim ledgers, exclusion ledgers, or materiality explanations. Generate the daily analysis only after the final story list is locked, use real paragraph breaks, and reference current story IDs.
+Do not generate importance scores, factual-claim ledgers, exclusion ledgers, or materiality explanations. Generate the article only after the final signal list is locked, use real paragraph breaks, and reference current signal IDs.
 
 ## Copyright and privacy
 

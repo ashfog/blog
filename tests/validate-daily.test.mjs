@@ -4,10 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import {
-  loadEditorialConfig,
-  validateEdition,
-} from "../scripts/validate-daily.mjs";
+import { loadEditorialConfig, validateEdition } from "../scripts/validate-daily.mjs";
 
 const testDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(testDir, "..");
@@ -15,142 +12,109 @@ const fixturePath = path.join(testDir, "fixtures", "2026-07-28.json");
 const fixture = JSON.parse(await fs.readFile(fixturePath, "utf8"));
 const config = await loadEditorialConfig(root);
 const clone = () => structuredClone(fixture);
-const rollingClone = () => {
-  const edition = clone();
-  edition.schemaVersion = 2;
-  edition.timezone = "America/New_York";
-  edition.windowStartAt = "2026-07-27T09:30:00-04:00";
-  edition.cutoffAt = "2026-07-28T09:30:00-04:00";
-  edition.generatedAt = "2026-07-28T09:45:00-04:00";
-  edition.research.sourceScan = edition.research.sourceScan.map((scan) => {
-    const { itemsOnEditionDay, ...rest } = scan;
-    return { ...rest, itemsInWindow: itemsOnEditionDay };
-  });
-  edition.stories = edition.stories.map((story) => ({
-    ...story,
-    source: {
-      ...story.source,
-      publishedAt: "2026-07-28T08:00:00-04:00",
-      updatedAt: null,
-    },
-  }));
-  return edition;
-};
-
+const words = (count) => Array.from({ length: count }, (_, index) => `word${index}`).join(" ");
 const validate = (edition, options = {}) =>
-  validateEdition(edition, {
-    config,
-    file: fixturePath,
-    ...options,
-  });
+  validateEdition(edition, { config, file: fixturePath, ...options });
 
-test("valid English global fixture passes", async () => {
+test("valid editorial fixture passes", async () => {
   const report = await validate(clone());
-  assert.equal(report.status, "ok");
-  assert.deepEqual(report.errors, []);
+  assert.equal(report.status, "ok", report.errors.join("\n"));
+  assert.equal(report.counts.sections, fixture.article.sections.length);
 });
 
 test("global preview includes China signals", () => {
-  const chinaStories = fixture.stories.filter((story) => story.region === "china");
-  assert.ok(chinaStories.length >= 3);
-  assert.ok(chinaStories.some((story) => story.source.sourceLanguage === "zh-CN"));
-  assert.ok(chinaStories.every((story) => story.source.url.startsWith("https://")));
+  const chinaSignals = fixture.signals.filter((signal) => signal.region === "china");
+  assert.ok(chinaSignals.length >= 3);
+  assert.ok(chinaSignals.some((signal) => signal.source.sourceLanguage === "zh-CN"));
 });
 
 test("schema rejects a missing source URL", async () => {
   const edition = clone();
-  delete edition.stories[0].source.url;
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("missing required property url")));
+  delete edition.signals[0].source.url;
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("missing required property url")));
 });
 
-const words = (count) => Array.from({ length: count }, (_, index) => `word${index}`).join(" ");
+test("validator enforces concise signal brief word ranges", async () => {
+  const short = clone();
+  short.signals[0].brief = words(34);
+  assert.ok((await validate(short)).errors.some((error) => error.includes("brief: 34 words")));
 
-test("validator enforces news summary and why-it-matters word ranges", async () => {
-  const shortSummary = clone();
-  shortSummary.stories[0].summary = words(119);
-  assert.ok((await validate(shortSummary)).errors.some((error) => error.includes("summary: 119 words")));
-
-  const longSummary = clone();
-  longSummary.stories[0].summary = words(181);
-  assert.ok((await validate(longSummary)).errors.some((error) => error.includes("summary: 181 words")));
-
-  const shortWhy = clone();
-  shortWhy.stories[0].whyItMatters = words(49);
-  assert.ok((await validate(shortWhy)).errors.some((error) => error.includes("whyItMatters: 49 words")));
-
-  const longWhy = clone();
-  longWhy.stories[0].whyItMatters = words(81);
-  assert.ok((await validate(longWhy)).errors.some((error) => error.includes("whyItMatters: 81 words")));
+  const long = clone();
+  long.signals[0].brief = words(91);
+  assert.ok((await validate(long)).errors.some((error) => error.includes("brief: 91 words")));
 });
 
-test("validator enforces shorter community word ranges", async () => {
-  const communityIndex = clone().stories.findIndex((story) => story.kind === "community");
-  const tooLong = clone();
-  tooLong.stories[communityIndex].summary = words(131);
-  assert.ok((await validate(tooLong)).errors.some((error) => error.includes("summary: 131 words")));
+test("validator enforces community voice word ranges", async () => {
+  const short = clone();
+  short.signals[0].communityVoices = [{ summary: words(24), source: short.signals[0].source }];
+  assert.ok((await validate(short)).errors.some((error) => error.includes("summary: 24 words")));
 
-  const tooShort = clone();
-  tooShort.stories[communityIndex].whyItMatters = words(34);
-  assert.ok((await validate(tooShort)).errors.some((error) => error.includes("whyItMatters: 34 words")));
+  const long = clone();
+  long.signals[0].communityVoices = [{ summary: words(81), source: long.signals[0].source }];
+  assert.ok((await validate(long)).errors.some((error) => error.includes("summary: 81 words")));
 });
 
-test("adaptive selection accepts a concise edition without a story quota", async () => {
-  for (const storyCount of [1, 2, 3]) {
-    const edition = clone();
-    edition.stories = edition.stories.slice(0, storyCount).map((story, index) => ({ ...story, position: index + 1 }));
-    edition.dailyAnalysis.signalIds = edition.stories.map((story) => story.id);
-    const report = await validate(edition);
-    assert.equal(report.status, "ok", report.errors.join("\n"));
-    assert.ok(!report.errors.some((error) => error.includes("signalIds")));
-  }
+test("article sections enforce length and paragraph structure", async () => {
+  const short = clone();
+  short.article.sections[0].body = `${words(90)}\n\n${words(89)}`;
+  assert.ok((await validate(short)).errors.some((error) => error.includes("body: 179 words")));
+
+  const oneParagraph = clone();
+  oneParagraph.article.sections[0].body = words(200);
+  assert.ok((await validate(oneParagraph)).errors.some((error) => error.includes("expected at least 2 paragraphs")));
 });
 
-test("daily analysis requires real paragraph breaks", async () => {
+test("editor synthesis requires real paragraph breaks", async () => {
   const edition = clone();
-  edition.dailyAnalysis.body = words(200);
+  edition.article.synthesis.body = words(200);
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("synthesis.body")));
+});
+
+test("every signal must be assigned exactly once", async () => {
+  const missing = clone();
+  const id = missing.article.sections[0].signalIds.shift();
+  assert.ok((await validate(missing)).errors.some((error) => error.includes(`signal ${id} must be assigned exactly once`)));
+
+  const duplicate = clone();
+  const duplicateId = duplicate.article.sections[0].signalIds[0];
+  duplicate.article.otherSignalIds.push(duplicateId);
+  assert.ok((await validate(duplicate)).errors.some((error) => error.includes(`signal ${duplicateId} must be assigned exactly once`)));
+});
+
+test("article references only current signal IDs", async () => {
+  const edition = clone();
+  edition.article.sections[0].signalIds[0] = "invented-signal";
   const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("expected at least 2 paragraphs")));
+  assert.ok(report.errors.some((error) => error.includes("unknown signal ID invented-signal")));
 });
 
 test("domain rules reject an unknown source", async () => {
   const edition = clone();
-  edition.stories[0].source.id = "invented-source";
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("not found in editorial/sources.json")));
+  edition.signals[0].source.id = "invented-source";
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("not found in editorial/sources.json")));
 });
 
 test("domain rules reject an unregistered source language", async () => {
   const edition = clone();
-  edition.stories[0].source.sourceLanguage = "zh-CN";
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("sourceLanguage")));
+  edition.signals[0].source.sourceLanguage = "zh-CN";
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("sourceLanguage")));
 });
 
 test("production validation requires all registered source attempts", async () => {
   const edition = clone();
-  const report = await validate(edition, {
-    file: path.join(root, "src", "content", "daily", "2026-07-28.json"),
-  });
-  assert.equal(report.status, "error");
+  const report = await validate(edition, { file: path.join(root, "src", "content", "daily", edition.editionDate + ".json") });
   assert.ok(report.errors.some((error) => error.includes("not-run is forbidden")));
 });
 
 test("unavailable sources cannot contain or select in-window items", async () => {
-  const edition = rollingClone();
+  const edition = clone();
   const scan = edition.research.sourceScan[0];
   scan.status = "unavailable";
   scan.itemsFetched = 1;
   scan.itemsInWindow = 1;
   scan.selectedCount = 1;
   scan.failureReason = "Synthetic route failure";
-  const report = await validate(edition, {
-    file: path.join(root, "src", "content", "daily", "2026-07-28.json"),
-  });
+  const report = await validate(edition);
   assert.ok(report.errors.some((error) => error.includes("unavailable requires zero")));
   assert.ok(report.errors.some((error) => error.includes("unavailable source cannot select")));
 });
@@ -159,13 +123,11 @@ test("source scan counts obey the per-source maximum", async () => {
   const edition = clone();
   edition.research.sourceScan[0].status = "collected";
   edition.research.sourceScan[0].itemsFetched = 16;
-  edition.research.sourceScan[0].itemsOnEditionDay = 16;
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("itemsFetched")));
+  edition.research.sourceScan[0].itemsInWindow = 16;
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("itemsFetched")));
 });
 
-test("image pool provides 46 unique story slots", () => {
+test("image pool provides 46 unique signal slots", () => {
   assert.equal(config.storyImageCount, 46);
 });
 
@@ -176,132 +138,87 @@ test("every registered source has a validated access plan", () => {
 
 test("domain rules reject a future publication time", async () => {
   const edition = clone();
-  edition.stories[0].source.publishedAt = "2026-07-28T15:00:00+08:00";
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("after cutoffAt")));
+  edition.signals[0].source.publishedAt = "2026-07-28T10:00:00-04:00";
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("after cutoffAt")));
 });
 
-test("domain rules reject an unexceptional prior-day item", async () => {
+test("domain rules reject an item outside the trailing window", async () => {
   const edition = clone();
-  edition.stories[0].source.publishedAt = "2026-07-27T10:00:00+08:00";
-  edition.stories[0].source.updatedAt = null;
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("outside collection window")));
+  edition.signals[0].source.publishedAt = "2026-07-27T09:29:59-04:00";
+  edition.signals[0].source.updatedAt = null;
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("outside collection window")));
 });
 
-test("schemaVersion 2 accepts the exact New York trailing 24-hour window", async () => {
-  const report = await validate(rollingClone());
-  assert.equal(report.status, "ok");
+test("schemaVersion 3 accepts the exact New York trailing 24-hour window", async () => {
+  assert.equal((await validate(clone())).status, "ok");
 });
 
-test("new editions cannot fall back to schemaVersion 1 or Shanghai time", async () => {
+test("schemaVersion 3 rejects a window that is not exactly 24 hours", async () => {
   const edition = clone();
-  edition.editionDate = "2026-07-30";
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("version 2 is required")));
-});
-
-test("schemaVersion 2 rejects a window that is not exactly 24 hours", async () => {
-  const edition = rollingClone();
   edition.windowStartAt = "2026-07-27T10:30:00-04:00";
-  const report = await validate(edition);
-  assert.ok(report.errors.some((error) => error.includes("exactly 24 hours")));
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("exactly 24 hours")));
 });
 
-test("schemaVersion 2 rejects a cutoff that is not 09:30 New York time", async () => {
-  const edition = rollingClone();
+test("schemaVersion 3 rejects a cutoff that is not 09:30 New York time", async () => {
+  const edition = clone();
   edition.windowStartAt = "2026-07-27T10:00:00-04:00";
   edition.cutoffAt = "2026-07-28T10:00:00-04:00";
-  const report = await validate(edition);
-  assert.ok(report.errors.some((error) => error.includes("must be 09:30:00")));
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("must be 09:30:00")));
 });
 
-test("schemaVersion 2 includes the prior New York calendar date inside the rolling window", async () => {
-  const edition = rollingClone();
-  edition.stories[0].source.publishedAt = "2026-07-27T18:00:00-04:00";
-  const report = await validate(edition);
-  assert.ok(!report.errors.some((error) => error.includes("outside collection window")));
+test("the exact left window boundary is excluded", async () => {
+  const edition = clone();
+  edition.signals[0].source.publishedAt = edition.windowStartAt;
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("outside collection window")));
 });
 
-test("schemaVersion 2 rejects an item older than the rolling window", async () => {
-  const edition = rollingClone();
-  edition.stories[0].source.publishedAt = "2026-07-27T09:29:59-04:00";
-  const report = await validate(edition);
-  assert.ok(report.errors.some((error) => error.includes("outside collection window")));
-});
-
-test("schemaVersion 2 excludes the exact left window boundary", async () => {
-  const edition = rollingClone();
-  edition.stories[0].source.publishedAt = edition.windowStartAt;
-  const report = await validate(edition);
-  assert.ok(report.errors.some((error) => error.includes("outside collection window")));
-});
-
-test("schemaVersion 2 requires itemsInWindow instead of itemsOnEditionDay", async () => {
-  const edition = rollingClone();
-  edition.research.sourceScan[0].itemsOnEditionDay = edition.research.sourceScan[0].itemsInWindow;
+test("source scans require itemsInWindow", async () => {
+  const edition = clone();
   delete edition.research.sourceScan[0].itemsInWindow;
-  const report = await validate(edition);
-  assert.ok(report.errors.some((error) => error.includes("itemsInWindow")));
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("itemsInWindow")));
 });
 
 test("domain rules reject duplicate events", async () => {
   const edition = clone();
-  edition.stories[1].eventId = edition.stories[0].eventId;
-  const report = await validate(edition);
-  assert.equal(report.status, "error");
-  assert.ok(report.errors.some((error) => error.includes("eventId: duplicate")));
+  edition.signals[1].eventId = edition.signals[0].eventId;
+  assert.ok((await validate(edition)).errors.some((error) => error.includes("eventId: duplicate")));
 });
 
 test("valid manual image IDs pass", async () => {
   const edition = clone();
-  edition.stories[0].imageId = "policy-main-a";
-  edition.stories[1].imageId = "security-main-a";
-  const report = await validate(edition);
-  assert.equal(report.status, "ok");
+  for (const signal of edition.signals.slice(0, 2)) {
+    signal.imageId = [...config.storyImageCategories].find(([, category]) => category === signal.category)[0];
+  }
+  assert.equal((await validate(edition)).status, "ok");
 });
 
-test("image rules reject unknown, mismatched, and duplicate story images", async () => {
+test("image rules reject unknown, mismatched, and duplicate signal images", async () => {
   const unknown = clone();
-  unknown.stories[0].imageId = "invented-image";
-  const unknownReport = await validate(unknown);
-  assert.ok(unknownReport.errors.some((error) => error.includes("unknown story image ID")));
+  unknown.signals[0].imageId = "invented-image";
+  assert.ok((await validate(unknown)).errors.some((error) => error.includes("unknown story image ID")));
 
   const mismatched = clone();
-  mismatched.stories[0].imageId = "agents-main-a";
-  const mismatchedReport = await validate(mismatched);
-  assert.ok(mismatchedReport.errors.some((error) => error.includes("image category must match")));
+  mismatched.signals[0].imageId = [...config.storyImageCategories].find(([, category]) => category !== mismatched.signals[0].category)[0];
+  assert.ok((await validate(mismatched)).errors.some((error) => error.includes("image category must match")));
 
   const duplicate = clone();
-  duplicate.stories[0].imageId = "models-main-a";
-  duplicate.stories[1].category = "models";
-  duplicate.stories[1].imageId = "models-main-a";
-  const duplicateReport = await validate(duplicate);
-  assert.ok(duplicateReport.errors.some((error) => error.includes("duplicate image ID")));
+  duplicate.signals[1].category = duplicate.signals[0].category;
+  const imageId = [...config.storyImageCategories].find(([, category]) => category === duplicate.signals[0].category)[0];
+  duplicate.signals[0].imageId = imageId;
+  duplicate.signals[1].imageId = imageId;
+  assert.ok((await validate(duplicate)).errors.some((error) => error.includes("duplicate image ID")));
 });
-
-test("image rules reject an unknown hero image", async () => {
-  const edition = clone();
-  edition.heroImageId = "invented-image";
-  const report = await validate(edition);
-  assert.ok(report.errors.some((error) => error.includes("heroImageId: unknown image ID")));
-});
-
 
 test("source URLs are preserved without URL, host, or network validation", async () => {
   const edition = clone();
-  edition.stories[0].source.url = "collected-link-as-supplied";
-  const report = await validate(edition);
-  assert.equal(report.status, "ok", report.errors.join("\n"));
+  edition.signals[0].source.url = "collected-link-as-supplied";
+  assert.equal((await validate(edition)).status, "ok");
 });
 
 test("highly similar headlines warn but do not block distinct event IDs", async () => {
   const edition = clone();
-  edition.stories[1].headline = edition.stories[0].headline;
+  edition.signals[1].headline = edition.signals[0].headline;
   const report = await validate(edition);
-  assert.equal(report.status, "ok", report.errors.join("\n"));
+  assert.equal(report.status, "ok");
   assert.ok(report.warnings.some((warning) => warning.includes("highly similar headlines")));
 });

@@ -1,728 +1,500 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 3,
   "editionDate": "2026-07-27",
-  "timezone": "Asia/Shanghai",
-  "cutoffAt": "2026-07-27T14:00:00+08:00",
-  "generatedAt": "2026-07-27T14:24:00+08:00",
+  "timezone": "America/New_York",
+  "cutoffAt": "2026-07-27T09:30:00-04:00",
+  "generatedAt": "2026-07-27T09:45:00-04:00",
   "runId": "preview-global-2026-07-27",
   "title": "Policy thresholds, security agents, and runtime correctness",
   "description": "Today’s verified signals track open-weight policy, agent security, AI work patterns, runtime correctness, developer tooling, and community evidence on model reliability.",
   "heroImageId": null,
-  "dailyAnalysis": {
-    "title": "Capability is expanding faster than the control plane",
-    "body": "The day’s evidence points to a widening gap between model capability and operational readiness. Anthropic’s open-weight proposal turns that gap into a governance question: capability thresholds may help target oversight, but testing access, compliance cost, and accountability will determine whether smaller builders can compete. Microsoft’s Project Perception exposes the same problem inside enterprises. An agent that discovers and repairs security issues also needs narrow permissions, visible approval gates, reversible actions, and durable audit records. Runtime details add another layer. Ollama’s MLX correction demonstrates that a single implementation path can change output quality even when the advertised model is unchanged. Community reports about Claude availability and open-model coding performance reinforce the need to test complete systems under realistic workloads. Teams should therefore version model, runtime, hardware, prompts, tools, and routing together; run repeatable task suites; and rehearse provider fallback before incidents. The useful competitive advantage is no longer access to a model alone. It is the ability to operate that model with evidence, controls, observability, and recovery procedures that remain dependable when components fail or policies change.",
-    "signalIds": [
-      "anthropic-open-weights-position",
-      "microsoft-project-perception",
-      "ollama-0325-mlx-quality-fix",
-      "hn-claude-opus5-errors"
-    ]
-  },
-  "stories": [
-    {
-      "id": "anthropic-open-weights-position",
-      "eventId": "anthropic-open-weights-policy-2026-07-27-previous",
-      "position": 1,
-      "kind": "news",
-      "highlight": true,
-      "category": "policy",
-      "topics": [
-        "open-models",
-        "safety",
-        "governance"
-      ],
-      "openSource": false,
-      "headline": "Anthropic opposes a blanket open-weight ban while backing capability-based safety tests",
-      "summary": "Anthropic CEO Dario Amodei said the company is not seeking a categorical ban on open-weight models and does not believe openness alone should trigger regulation. The company’s proposal instead focuses on the movement of advanced chips, industrial-scale distillation, and mandatory safety evaluations for models that cross defined capability thresholds, regardless of whether their weights are open or closed. That makes Anthropic’s position a case for risk-based controls rather than deregulation. The unresolved question is how those controls would work in practice. Community discussion around the statement argued that expensive evaluations, a limited set of approved testing providers, or centralized certification could still create a de facto entry barrier for open developers. That concern is currently a policy-design risk, not evidence that such a restriction already exists, and the final impact would depend on the thresholds, costs, appeals process, and access to testing.",
-      "whyItMatters": "The policy debate is shifting from whether open weights should exist to who defines capability thresholds, who performs evaluations, and who pays for compliance. Open-model teams may need to plan for testing records, distribution controls, and certification costs alongside licensing and release engineering, even if regulation remains formally neutral between open and closed systems.",
-      "source": {
-        "id": "anthropic-news",
-        "name": "Anthropic Newsroom",
-        "url": "https://www.anthropic.com/news/position-open-weights-models",
-        "publishedAt": "2026-07-26T08:00:00Z",
-        "updatedAt": null,
-        "evidenceLabel": "officially_stated",
-        "sourceLanguage": "en"
-      },
-      "region": "global"
-    },
-    {
-      "id": "microsoft-project-perception",
-      "eventId": "microsoft-project-perception-preview-2026-07-previous",
-      "position": 2,
-      "kind": "news",
-      "highlight": true,
-      "category": "security",
-      "topics": [
-        "agent-security",
-        "cybersecurity",
-        "multi-model"
-      ],
-      "openSource": false,
-      "headline": "Microsoft introduces Project Perception, a multi-agent security system entering preview August 3",
-      "summary": "Microsoft announced Project Perception, which it describes as a closed-loop defense system built around cooperating red-team, blue-team, and green-team agents. The roles are intended to continuously find risks, assess them, support remediation, and improve the defensive process, moving beyond one-time scanning or isolated alerts. Microsoft says the first implementation will focus on software vulnerabilities, use a multi-model architecture, and enter public preview on August 3. The official announcement establishes the proposed architecture, initial use case, and preview date, but it does not yet demonstrate production performance. False-positive rates, remediation quality, permission boundaries, escalation behavior, and the effect of model choice will need to be tested after preview access opens. The design should therefore be read as a product and research direction rather than proof that a collection of specialized agents can safely repair software without human review.",
-      "whyItMatters": "Security agents are moving from producing alerts toward participating in remediation. Enterprises evaluating the preview should inspect context provenance, allowed actions, human approval points, rollback behavior, audit logs, and evaluation conditions. A closed feedback loop can improve response speed, but it should not be treated as reliable autonomous repair until those operational controls are verified.",
-      "source": {
-        "id": "microsoft-ai-blog",
-        "name": "Microsoft AI Blog",
-        "url": "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
-        "publishedAt": "2026-07-26T08:00:00Z",
-        "updatedAt": null,
-        "evidenceLabel": "officially_stated",
-        "sourceLanguage": "en"
-      },
-      "region": "global"
-    },
-    {
-      "id": "openai-work-task-crossover",
-      "eventId": "openai-work-at-frontier-task-crossover-2026-previous",
-      "position": 3,
-      "kind": "news",
-      "highlight": false,
-      "category": "research",
-      "topics": [
-        "work",
-        "ai-adoption",
-        "economic-research"
-      ],
-      "openSource": false,
-      "headline": "OpenAI finds 43.5% of occupation-linked AI conversations cross traditional job boundaries",
-      "summary": "OpenAI Economic Research analyzed more than 800,000 messages from United States ChatGPT users and introduced “task crossover” to describe people using AI for work traditionally associated with another occupation. The report says 16.8% of work-related messages in the sample involved crossover. When researchers narrowed the sample to messages that could be mapped to a specific occupation, the share rose to 43.5%. These figures describe the distribution of tasks inside a conversation dataset; they are not direct evidence that jobs have already been replaced, and they do not establish the quality of the resulting work or who remains accountable for it. The analysis instead suggests that AI’s near-term labor impact may appear as tasks moving across role boundaries before entire occupations disappear. That distinction matters when organizations measure adoption, redesign responsibilities, or interpret headline automation estimates.",
-      "whyItMatters": "Organizations should measure more than time saved. They also need to track how task ownership, review responsibility, and required expertise move between roles. Training, access controls, quality assurance, and performance expectations may need to follow those new task boundaries; otherwise apparent efficiency gains can create accountability gaps that conventional job-level metrics will miss.",
-      "source": {
-        "id": "openai-news",
-        "name": "OpenAI News",
-        "url": "https://openai.com/index/how-ai-is-expanding-what-people-do-at-work/",
-        "publishedAt": "2026-07-26T08:00:00Z",
-        "updatedAt": null,
-        "evidenceLabel": "officially_stated",
-        "sourceLanguage": "en"
-      },
-      "region": "global"
-    },
-    {
-      "id": "vercel-ai-sdk-repairtext-stable",
-      "eventId": "vercel-ai-sdk-7-0-39-repairtext-previous",
-      "position": 4,
-      "kind": "news",
-      "highlight": false,
-      "category": "developer-tools",
-      "topics": [
-        "ai-sdk",
-        "structured-output",
-        "typescript"
-      ],
-      "openSource": true,
-      "headline": "Vercel AI SDK 7.0.39 promotes repairText to a stable structured-output option",
-      "summary": "Vercel AI SDK 7.0.39 moved repairText, used by generateObject and streamObject, from an experimental option to a stable API. The previous experimental_repairText name remains available as a backward-compatible alias, allowing applications already using the experimental interface to migrate gradually rather than changing every call during the version upgrade. The option lets developers insert a text-repair step when model output does not match the expected structured format. This release changes the API’s stability status and naming; it does not announce a new repair algorithm or demonstrate higher repair accuracy. Teams upgrading should continue testing with their own JSON Schemas, malformed-output samples, provider combinations, and retry policies. A stable interface means Vercel intends to preserve the contract, but it does not mean every invalid model response can be repaired correctly or that repaired content should bypass final validation.",
-      "whyItMatters": "Applications that depend on structured-output repair can move to a supported interface while using the compatibility alias to reduce migration risk. Schema validation, fail-closed behavior, and regression samples are still required because API stability does not guarantee that a model response—or the repaired version of that response—is semantically correct.",
-      "source": {
-        "id": "vercel-ai",
-        "name": "Vercel AI SDK",
-        "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.39",
-        "publishedAt": "2026-07-26T08:00:00Z",
-        "updatedAt": null,
-        "evidenceLabel": "maintainer_confirmed",
-        "sourceLanguage": "en"
-      },
-      "region": "global"
-    },
-    {
-      "id": "ollama-0325-mlx-quality-fix",
-      "eventId": "ollama-v0-32-5-mlx-nvfp4-fix-previous",
-      "position": 5,
-      "kind": "news",
-      "highlight": true,
-      "category": "infrastructure",
-      "topics": [
-        "local-ai",
-        "mlx",
-        "nvfp4"
-      ],
-      "openSource": true,
-      "headline": "Ollama 0.32.5 fixes an MLX Metal issue that could reduce NVFP4 output quality",
-      "summary": "Ollama v0.32.5 lists a single change: a fix for an MLX Metal execution-path issue that could reduce output quality for NVFP4 models, with the release note calling out a stronger effect on Laguna models. This is not a new model integration, interface feature, or general performance optimization. It is a runtime correction that can affect the quality of generated results. The announcement does not quantify the error, identify every affected task, or provide a before-and-after benchmark, so users cannot infer from the release note alone whether historical outputs were materially degraded. Teams running Apple Silicon with the MLX Metal and NVFP4 combination should treat the update as a correctness release and repeat representative prompts from critical workflows. Versioned regression tests are especially important when a low-level runtime path can change model behavior without an obvious application-level error.",
-      "whyItMatters": "This is a correctness fix rather than a routine speed improvement. Teams using Apple Silicon, MLX Metal, NVFP4, or Laguna models should prioritize the upgrade and rerun critical task suites. Without regression checks, an apparently successful request may continue producing subtly degraded results that ordinary availability monitoring will not detect.",
-      "source": {
-        "id": "ollama-releases",
-        "name": "Ollama Releases",
-        "url": "https://github.com/ollama/ollama/releases/tag/v0.32.5",
-        "publishedAt": "2026-07-26T08:00:00Z",
-        "updatedAt": null,
-        "evidenceLabel": "maintainer_confirmed",
-        "sourceLanguage": "en"
-      },
-      "region": "global"
-    },
-    {
-      "id": "cloudflare-pvcli-open-source",
-      "eventId": "cloudflare-pvcli-open-source-2026-previous",
-      "position": 6,
-      "kind": "news",
-      "highlight": false,
-      "category": "developer-tools",
-      "topics": [
-        "privacy",
-        "ohttp",
-        "rust"
-      ],
-      "openSource": true,
-      "headline": "Cloudflare open-sources pvcli to debug OHTTP privacy-proxy chains from one command line",
-      "summary": "Cloudflare released pvcli as an Apache-2.0-licensed Rust command-line tool intended to provide a curl-like debugging experience for privacy protocols. Its current focus is constructing, sending, and inspecting Oblivious HTTP requests so developers can trace failures across the client, relay, gateway, and destination components of an OHTTP chain without manually assembling each binary layer. The project roadmap also mentions MASQUE, Privacy Pass, and post-quantum cryptography, but those entries describe planned directions rather than functionality that should be assumed to exist today. The immediate value is a reusable diagnostic surface and an open contribution path for implementations that otherwise require protocol-specific tooling. Developers considering pvcli still need to verify the exact protocol coverage, supported message formats, interoperability with their deployment, and the maturity of current releases instead of treating roadmap items as completed features.",
-      "whyItMatters": "OHTTP failures can span several roles and encoding layers, making diagnosis unusually expensive. pvcli gives privacy-proxy implementers a shared end-to-end inspection tool that can shorten that loop. Adoption decisions should still distinguish current commands from roadmap commitments and test interoperability against the exact relay and gateway implementation used in production.",
-      "source": {
-        "id": "cloudflare-blog",
-        "name": "Cloudflare Blog",
-        "url": "https://blog.cloudflare.com/open-sourcing-our-privacy-proxy-cli/",
-        "publishedAt": "2026-07-26T08:00:00Z",
-        "updatedAt": null,
-        "evidenceLabel": "officially_stated",
-        "sourceLanguage": "en"
-      },
-      "region": "global"
-    },
-    {
-      "id": "hn-open-model-practical-use",
-      "eventId": "hn-open-model-practical-coding-experience-2026-07-28-previous",
-      "position": 7,
-      "kind": "community",
-      "highlight": false,
-      "category": "community",
-      "topics": [
-        "open-models",
-        "coding-agents",
-        "cost"
-      ],
-      "openSource": true,
-      "headline": "Developers find smaller open models competitive for iterative coding, but cost and tool use remain unclear",
-      "summary": "A Hacker News discussion offers an early practitioner signal about open models in software work. Several participants argued that smaller open models can be competitive on narrowly defined tasks with clear boundaries and short iteration loops, but that experience should not be generalized to one-shot application generation or every coding workflow. The thread also noted that the original article promoted the author’s own product, that private endpoints and subsidized closed services were not compared on a consistent cost basis, and that tool-calling behavior lacked a reproducible evaluation. These observations are useful for designing an internal benchmark, not for making a procurement decision. The evidence remains a community discussion without fixed model versions, hardware details, or an independently reproduced comparison.",
-      "whyItMatters": "Model selection should use a representative task suite rather than one application demo. Teams should separately measure correctness, tool calling, latency, throughput, and total cost, while treating promotional incentives and missing reproduction details as evidence limits.",
-      "source": {
-        "id": "hacker-news",
-        "name": "Hacker News",
-        "url": "https://news.ycombinator.com/item?id=49078583",
-        "publishedAt": "2026-07-26T08:00:00Z",
-        "updatedAt": null,
-        "evidenceLabel": "community_discussion_suggests",
-        "sourceLanguage": "en"
-      },
-      "region": "global"
-    },
-    {
-      "id": "hn-claude-opus5-errors",
-      "eventId": "claude-opus5-elevated-errors-2026-07-27-previous",
-      "position": 8,
-      "kind": "community",
-      "highlight": true,
-      "category": "community",
-      "topics": [
-        "reliability",
-        "coding-agents",
-        "incident"
-      ],
-      "openSource": false,
-      "headline": "Claude error reports push some agent workflows toward multi-provider fallback paths",
-      "summary": "A Hacker News discussion linked to a Claude status incident contains multiple reports of elevated Opus 5 errors and blocked tool workflows. One participant said an automatic mode could not decide whether a Bash action was safe while the model was unavailable, although read-only operations could continue. Another team reported better qualitative stability when accessing Claude through AWS Bedrock than through Anthropic directly, while other users said outages had led them to keep smaller subscriptions with several providers. Together, the reports show how an endpoint failure can interrupt an agent workflow, but they do not establish a controlled comparison of model quality, Bedrock reliability, or the best fallback design. Request volume, region, client versions, and routing conditions were not consistently disclosed, so the signal is useful but remains provisional.",
-      "whyItMatters": "Production agents should not assume one model endpoint will always be available. Critical workflows need risk-aware action classes, bounded retries, tested provider fallback, and human takeover during incidents. Backup routes must preserve the same permission boundaries instead of restoring availability by silently weakening controls.",
-      "source": {
-        "id": "hacker-news",
-        "name": "Hacker News",
-        "url": "https://news.ycombinator.com/item?id=49068029",
-        "publishedAt": "2026-07-26T08:00:00Z",
-        "updatedAt": null,
-        "evidenceLabel": "multiple_users_report",
-        "sourceLanguage": "en"
-      },
-      "region": "global"
-    }
-  ],
   "research": {
     "sourceScan": [
       {
         "sourceId": "openai-news",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "anthropic-news",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "deepmind-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "google-ai-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "meta-ai-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "mistral-news",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "microsoft-ai-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "nvidia-developer-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "hugging-face-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "github-changelog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "cloudflare-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "github-trending",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "hacker-news",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "show-hn",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "hugging-face-papers",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "arxiv-cs-ai",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "arxiv-cs-cl",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "arxiv-cs-lg",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "ars-ai",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "mit-tech-review-ai",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "ieee-spectrum-ai",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "reddit-localllama",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "x-curated-experts",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "phoronix",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "mcp-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "mcp-spec-releases",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "vercel-ai",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "ollama-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "ollama-releases",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "langchain-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "llamaindex-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "dify-blog",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "hugging-face-trending-papers",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "chips-and-cheese",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "semianalysis",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "the-batch",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "alphasignal",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "tldr-ai",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "deepseek-official",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "qwen-official",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "bytedance-seed",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "zai-official",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "moonshot-ai",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "minimax-official",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "modelscope-hub",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "tencent-hunyuan",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "baidu-ernie-paddlepaddle",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "huawei-ascend",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "stepfun-official",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "china-cac",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "china-miit",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "machine-heart",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "qbitai",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       },
       {
         "sourceId": "36kr-ai",
         "status": "not-run",
         "itemsFetched": 0,
-        "itemsOnEditionDay": 0,
         "duplicatesRemoved": 0,
         "selectedCount": 0,
-        "failureReason": "Theme fixture does not execute network collection."
+        "failureReason": "Theme fixture does not execute network collection.",
+        "itemsInWindow": 0
       }
     ],
     "warnings": [
@@ -732,5 +504,275 @@
     ]
   },
   "language": "en",
-  "edition": "global"
+  "edition": "global",
+  "windowStartAt": "2026-07-26T09:30:00-04:00",
+  "article": {
+    "synthesis": {
+      "title": "Capability is expanding faster than the control plane",
+      "body": "The day’s evidence points to a widening gap between model capability and operational readiness. Anthropic’s open-weight proposal turns that gap into a governance question: capability thresholds may help target oversight, but testing access, compliance cost, and accountability will determine whether smaller builders can compete. Microsoft’s Project Perception exposes the same problem inside enterprises. An agent that discovers and repairs security issues also needs narrow permissions, visible approval gates, reversible actions, and durable audit records. Runtime details add another layer. Ollama’s MLX correction demonstrates that a single implementation path can change output quality even when the advertised model is unchanged. Community reports about Claude availability and open-model coding performance reinforce the need to test complete systems under realistic workloads. Teams should therefore version model, runtime, hardware, prompts, tools, and routing together; run repeatable task suites; and rehearse provider fallback before incidents. The useful competitive advantage is no longer access to a model alone. It is the ability to operate that model with evidence, controls, observability, and recovery procedures that remain dependable when components fail or policies change.",
+      "signalIds": [
+        "anthropic-open-weights-position",
+        "microsoft-project-perception",
+        "ollama-0325-mlx-quality-fix",
+        "hn-claude-opus5-errors"
+      ]
+    },
+    "sections": [
+      {
+        "id": "theme-01-policy",
+        "position": 1,
+        "kicker": "Policy and governance",
+        "title": "Anthropic opposes a blanket open-weight ban while backing capability-based safety tests",
+        "body": "Anthropic CEO Dario Amodei said the company is not seeking a categorical ban on open-weight models and does not believe openness alone should trigger regulation. The company’s proposal instead focuses on the movement of advanced chips, industrial-scale distillation, and mandatory safety evaluations for models that cross defined capability thresholds, regardless of whether their weights are open or closed. That makes Anthropic’s position a case for risk-based controls rather than deregulation. The unresolved question is how those controls would work in practice. Community discussion around the statement argued that expensive evaluations, a limited set of approved testing providers, or centralized certification could still create a de facto entry barrier for open developers. That concern is currently a policy-design risk, not evidence that such a restriction already exists, and the final impact would depend on the thresholds, costs, appeals process, and access to testing.\n\nOllama v0.32.5 lists a single change: a fix for an MLX Metal execution-path issue that could reduce output quality for NVFP4 models, with the release note calling out a stronger effect on Laguna models. This is not a new model integration, interface feature, or general performance optimization. It is a runtime correction that can affect the quality of generated results. The announcement does not quantify the error, identify every affected task, or provide a before-and-after benchmark, so users cannot infer from the release note alone whether historical outputs were materially degraded. Teams running Apple Silicon with the MLX Metal and NVFP4 combination should treat the update as a correctness release and repeat representative prompts from critical workflows. Versioned regression tests are especially important when a low-level runtime path can change model behavior without an obvious application-level error.",
+        "signalIds": [
+          "anthropic-open-weights-position",
+          "ollama-0325-mlx-quality-fix"
+        ]
+      },
+      {
+        "id": "theme-02-security",
+        "position": 2,
+        "kicker": "Security and trust",
+        "title": "Microsoft introduces Project Perception, a multi-agent security system entering preview August 3",
+        "body": "Microsoft announced Project Perception, which it describes as a closed-loop defense system built around cooperating red-team, blue-team, and green-team agents. The roles are intended to continuously find risks, assess them, support remediation, and improve the defensive process, moving beyond one-time scanning or isolated alerts. Microsoft says the first implementation will focus on software vulnerabilities, use a multi-model architecture, and enter public preview on August 3. The official announcement establishes the proposed architecture, initial use case, and preview date, but it does not yet demonstrate production performance. False-positive rates, remediation quality, permission boundaries, escalation behavior, and the effect of model choice will need to be tested after preview access opens. The design should therefore be read as a product and research direction rather than proof that a collection of specialized agents can safely repair software without human review.\n\nCloudflare released pvcli as an Apache-2.0-licensed Rust command-line tool intended to provide a curl-like debugging experience for privacy protocols. Its current focus is constructing, sending, and inspecting Oblivious HTTP requests so developers can trace failures across the client, relay, gateway, and destination components of an OHTTP chain without manually assembling each binary layer. The project roadmap also mentions MASQUE, Privacy Pass, and post-quantum cryptography, but those entries describe planned directions rather than functionality that should be assumed to exist today. The immediate value is a reusable diagnostic surface and an open contribution path for implementations that otherwise require protocol-specific tooling. Developers considering pvcli still need to verify the exact protocol coverage, supported message formats, interoperability with their deployment, and the maturity of current releases instead of treating roadmap items as completed features.",
+        "signalIds": [
+          "microsoft-project-perception",
+          "cloudflare-pvcli-open-source"
+        ]
+      },
+      {
+        "id": "theme-03-research",
+        "position": 3,
+        "kicker": "Research and evaluation",
+        "title": "OpenAI finds 43.5% of occupation-linked AI conversations cross traditional job boundaries",
+        "body": "OpenAI Economic Research analyzed more than 800,000 messages from United States ChatGPT users and introduced “task crossover” to describe people using AI for work traditionally associated with another occupation. The report says 16.8% of work-related messages in the sample involved crossover. When researchers narrowed the sample to messages that could be mapped to a specific occupation, the share rose to 43.5%. These figures describe the distribution of tasks inside a conversation dataset; they are not direct evidence that jobs have already been replaced, and they do not establish the quality of the resulting work or who remains accountable for it. The analysis instead suggests that AI’s near-term labor impact may appear as tasks moving across role boundaries before entire occupations disappear. That distinction matters when organizations measure adoption, redesign responsibilities, or interpret headline automation estimates.\n\nA Hacker News discussion offers an early practitioner signal about open models in software work. Several participants argued that smaller open models can be competitive on narrowly defined tasks with clear boundaries and short iteration loops, but that experience should not be generalized to one-shot application generation or every coding workflow. The thread also noted that the original article promoted the author’s own product, that private endpoints and subsidized closed services were not compared on a consistent cost basis, and that tool-calling behavior lacked a reproducible evaluation. These observations are useful for designing an internal benchmark, not for making a procurement decision. The evidence remains a community discussion without fixed model versions, hardware details, or an independently reproduced comparison.",
+        "signalIds": [
+          "openai-work-task-crossover",
+          "hn-open-model-practical-use"
+        ]
+      },
+      {
+        "id": "theme-04-developer-tools",
+        "position": 4,
+        "kicker": "Developer tools",
+        "title": "Vercel AI SDK 7.0.39 promotes repairText to a stable structured-output option",
+        "body": "Vercel AI SDK 7.0.39 moved repairText, used by generateObject and streamObject, from an experimental option to a stable API. The previous experimental_repairText name remains available as a backward-compatible alias, allowing applications already using the experimental interface to migrate gradually rather than changing every call during the version upgrade. The option lets developers insert a text-repair step when model output does not match the expected structured format. This release changes the API’s stability status and naming; it does not announce a new repair algorithm or demonstrate higher repair accuracy. Teams upgrading should continue testing with their own JSON Schemas, malformed-output samples, provider combinations, and retry policies. A stable interface means Vercel intends to preserve the contract, but it does not mean every invalid model response can be repaired correctly or that repaired content should bypass final validation.\n\nA Hacker News discussion linked to a Claude status incident contains multiple reports of elevated Opus 5 errors and blocked tool workflows. One participant said an automatic mode could not decide whether a Bash action was safe while the model was unavailable, although read-only operations could continue. Another team reported better qualitative stability when accessing Claude through AWS Bedrock than through Anthropic directly, while other users said outages had led them to keep smaller subscriptions with several providers. Together, the reports show how an endpoint failure can interrupt an agent workflow, but they do not establish a controlled comparison of model quality, Bedrock reliability, or the best fallback design. Request volume, region, client versions, and routing conditions were not consistently disclosed, so the signal is useful but remains provisional.",
+        "signalIds": [
+          "vercel-ai-sdk-repairtext-stable",
+          "hn-claude-opus5-errors"
+        ]
+      }
+    ],
+    "otherSignalIds": []
+  },
+  "signals": [
+    {
+      "id": "anthropic-open-weights-position",
+      "eventId": "anthropic-open-weights-policy-2026-07-27-previous",
+      "position": 1,
+      "origin": "news",
+      "region": "global",
+      "category": "policy",
+      "topics": [
+        "open-models",
+        "safety",
+        "governance"
+      ],
+      "openSource": false,
+      "headline": "Anthropic opposes a blanket open-weight ban while backing capability-based safety tests",
+      "brief": "The policy debate is shifting from whether open weights should exist to who defines capability thresholds, who performs evaluations, and who pays for compliance. Open-model teams may need to plan for testing records, distribution controls, and certification costs alongside licensing and release engineering, even if regulation remains formally neutral between open and closed systems.",
+      "source": {
+        "id": "anthropic-news",
+        "name": "Anthropic Newsroom",
+        "url": "https://www.anthropic.com/news/position-open-weights-models",
+        "publishedAt": "2026-07-27T08:00:00-04:00",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "en"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "microsoft-project-perception",
+      "eventId": "microsoft-project-perception-preview-2026-07-previous",
+      "position": 2,
+      "origin": "news",
+      "region": "global",
+      "category": "security",
+      "topics": [
+        "agent-security",
+        "cybersecurity",
+        "multi-model"
+      ],
+      "openSource": false,
+      "headline": "Microsoft introduces Project Perception, a multi-agent security system entering preview August 3",
+      "brief": "Security agents are moving from producing alerts toward participating in remediation. Enterprises evaluating the preview should inspect context provenance, allowed actions, human approval points, rollback behavior, audit logs, and evaluation conditions. A closed feedback loop can improve response speed, but it should not be treated as reliable autonomous repair until those operational controls are verified.",
+      "source": {
+        "id": "microsoft-ai-blog",
+        "name": "Microsoft AI Blog",
+        "url": "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
+        "publishedAt": "2026-07-27T08:00:00-04:00",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "en"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "openai-work-task-crossover",
+      "eventId": "openai-work-at-frontier-task-crossover-2026-previous",
+      "position": 3,
+      "origin": "news",
+      "region": "global",
+      "category": "research",
+      "topics": [
+        "work",
+        "ai-adoption",
+        "economic-research"
+      ],
+      "openSource": false,
+      "headline": "OpenAI finds 43.5% of occupation-linked AI conversations cross traditional job boundaries",
+      "brief": "Organizations should measure more than time saved. They also need to track how task ownership, review responsibility, and required expertise move between roles. Training, access controls, quality assurance, and performance expectations may need to follow those new task boundaries; otherwise apparent efficiency gains can create accountability gaps that conventional job-level metrics will miss.",
+      "source": {
+        "id": "openai-news",
+        "name": "OpenAI News",
+        "url": "https://openai.com/index/how-ai-is-expanding-what-people-do-at-work/",
+        "publishedAt": "2026-07-27T08:00:00-04:00",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "en"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "vercel-ai-sdk-repairtext-stable",
+      "eventId": "vercel-ai-sdk-7-0-39-repairtext-previous",
+      "position": 4,
+      "origin": "news",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "ai-sdk",
+        "structured-output",
+        "typescript"
+      ],
+      "openSource": true,
+      "headline": "Vercel AI SDK 7.0.39 promotes repairText to a stable structured-output option",
+      "brief": "Applications that depend on structured-output repair can move to a supported interface while using the compatibility alias to reduce migration risk. Schema validation, fail-closed behavior, and regression samples are still required because API stability does not guarantee that a model response—or the repaired version of that response—is semantically correct.",
+      "source": {
+        "id": "vercel-ai",
+        "name": "Vercel AI SDK",
+        "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.39",
+        "publishedAt": "2026-07-27T08:00:00-04:00",
+        "updatedAt": null,
+        "evidenceLabel": "maintainer_confirmed",
+        "sourceLanguage": "en"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "ollama-0325-mlx-quality-fix",
+      "eventId": "ollama-v0-32-5-mlx-nvfp4-fix-previous",
+      "position": 5,
+      "origin": "news",
+      "region": "global",
+      "category": "infrastructure",
+      "topics": [
+        "local-ai",
+        "mlx",
+        "nvfp4"
+      ],
+      "openSource": true,
+      "headline": "Ollama 0.32.5 fixes an MLX Metal issue that could reduce NVFP4 output quality",
+      "brief": "This is a correctness fix rather than a routine speed improvement. Teams using Apple Silicon, MLX Metal, NVFP4, or Laguna models should prioritize the upgrade and rerun critical task suites. Without regression checks, an apparently successful request may continue producing subtly degraded results that ordinary availability monitoring will not detect.",
+      "source": {
+        "id": "ollama-releases",
+        "name": "Ollama Releases",
+        "url": "https://github.com/ollama/ollama/releases/tag/v0.32.5",
+        "publishedAt": "2026-07-27T08:00:00-04:00",
+        "updatedAt": null,
+        "evidenceLabel": "maintainer_confirmed",
+        "sourceLanguage": "en"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "cloudflare-pvcli-open-source",
+      "eventId": "cloudflare-pvcli-open-source-2026-previous",
+      "position": 6,
+      "origin": "news",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "privacy",
+        "ohttp",
+        "rust"
+      ],
+      "openSource": true,
+      "headline": "Cloudflare open-sources pvcli to debug OHTTP privacy-proxy chains from one command line",
+      "brief": "OHTTP failures can span several roles and encoding layers, making diagnosis unusually expensive. pvcli gives privacy-proxy implementers a shared end-to-end inspection tool that can shorten that loop. Adoption decisions should still distinguish current commands from roadmap commitments and test interoperability against the exact relay and gateway implementation used in production.",
+      "source": {
+        "id": "cloudflare-blog",
+        "name": "Cloudflare Blog",
+        "url": "https://blog.cloudflare.com/open-sourcing-our-privacy-proxy-cli/",
+        "publishedAt": "2026-07-27T08:00:00-04:00",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated",
+        "sourceLanguage": "en"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "hn-open-model-practical-use",
+      "eventId": "hn-open-model-practical-coding-experience-2026-07-28-previous",
+      "position": 7,
+      "origin": "community",
+      "region": "global",
+      "category": "community",
+      "topics": [
+        "open-models",
+        "coding-agents",
+        "cost"
+      ],
+      "openSource": true,
+      "headline": "Developers find smaller open models competitive for iterative coding, but cost and tool use remain unclear",
+      "brief": "Model selection should use a representative task suite rather than one application demo. Teams should separately measure correctness, tool calling, latency, throughput, and total cost, while treating promotional incentives and missing reproduction details as evidence limits.",
+      "source": {
+        "id": "hacker-news",
+        "name": "Hacker News",
+        "url": "https://news.ycombinator.com/item?id=49078583",
+        "publishedAt": "2026-07-27T08:00:00-04:00",
+        "updatedAt": null,
+        "evidenceLabel": "community_discussion_suggests",
+        "sourceLanguage": "en"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "hn-claude-opus5-errors",
+      "eventId": "claude-opus5-elevated-errors-2026-07-27-previous",
+      "position": 8,
+      "origin": "community",
+      "region": "global",
+      "category": "community",
+      "topics": [
+        "reliability",
+        "coding-agents",
+        "incident"
+      ],
+      "openSource": false,
+      "headline": "Claude error reports push some agent workflows toward multi-provider fallback paths",
+      "brief": "Production agents should not assume one model endpoint will always be available. Critical workflows need risk-aware action classes, bounded retries, tested provider fallback, and human takeover during incidents. Backup routes must preserve the same permission boundaries instead of restoring availability by silently weakening controls.",
+      "source": {
+        "id": "hacker-news",
+        "name": "Hacker News",
+        "url": "https://news.ycombinator.com/item?id=49068029",
+        "publishedAt": "2026-07-27T08:00:00-04:00",
+        "updatedAt": null,
+        "evidenceLabel": "multiple_users_report",
+        "sourceLanguage": "en"
+      },
+      "communityVoices": []
+    }
+  ]
 }
