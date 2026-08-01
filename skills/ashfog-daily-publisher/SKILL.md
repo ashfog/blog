@@ -27,6 +27,7 @@ Read `editorial/editorial-policy.md`, `editorial/publishing-rules.json`, `editor
 8. Preserve each selected entry's collected source URL exactly as supplied. Do not fetch it again, validate it, inspect its host, resolve redirects, or block publication because of a link.
 9. Generate an original English headline and concise factual `brief` for every selected event. Do not generate a long per-item summary or `whyItMatters`; the article provides interpretation once, without repetition.
 10. After the signal list is final, generate one `article`:
+    - an original 6–14 word edition `title` summarizing the common direction across the selected events; never use `ASHFOG Daily`, a date, or an issue number as the title, and do not headline one company when multiple independent events are present;
     - a 150–250 word `synthesis` with real paragraph breaks;
     - normally 4–7 internal `sections`, each with continuous explanatory prose and the exact supporting `signalIds`;
     - `otherSignalIds` for valid events that do not fit a coherent theme.

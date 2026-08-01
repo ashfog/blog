@@ -331,6 +331,19 @@ export async function validateEdition(
     errors.push("$.cutoffAt: must be 09:30:00 in America/New_York");
   }
 
+  const titleWords = countEnglishWords(edition.title);
+  const titleRules = rules.article.title;
+  if (titleWords < titleRules.minWords || titleWords > titleRules.maxWords) {
+    errors.push(`$.title: ${titleWords} words; expected ${titleRules.minWords}-${titleRules.maxWords}`);
+  }
+  if (titleRules.forbidBrandOrDateTemplate) {
+    const monthDate = /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(?:st|nd|rd|th)?(?:,\s*|\s+)\d{4}\b/iu;
+    const isoDate = /\b\d{4}-\d{2}-\d{2}\b/u;
+    if (/\bASHFOG\s+Daily\b/iu.test(edition.title) || monthDate.test(edition.title) || isoDate.test(edition.title)) {
+      errors.push("$.title: must be an editorial summary headline, not an ASHFOG Daily or date template");
+    }
+  }
+
   const ids = new Set();
   const eventIds = new Set();
   const sectionIds = new Set();

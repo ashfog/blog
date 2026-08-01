@@ -22,6 +22,16 @@ test("valid editorial fixture passes", async () => {
   assert.equal(report.counts.sections, fixture.article.sections.length);
 });
 
+test("edition title must summarize the day instead of repeating the brand or date", async () => {
+  const templated = clone();
+  templated.title = "ASHFOG Daily — July 28, 2026";
+  assert.ok((await validate(templated)).errors.some((error) => error.includes("editorial summary headline")));
+
+  const short = clone();
+  short.title = "AI Changes Today";
+  assert.ok((await validate(short)).errors.some((error) => error.includes("expected 6-14")));
+});
+
 test("global preview includes China signals", () => {
   const chinaSignals = fixture.signals.filter((signal) => signal.region === "china");
   assert.ok(chinaSignals.length >= 3);
