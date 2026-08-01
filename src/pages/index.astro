@@ -3,9 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import StoryCard from "../components/StoryCard.astro";
 import {
   categoryLabels,
-  communityFindingCount,
   formatDate,
-  getAdoptedCommunityFindings,
   getLatestEdition,
   readingMinutes
 } from "../lib/daily";
@@ -23,8 +21,7 @@ const seoImage = getEditionHeroImage(edition, storyImages);
 const featured = edition.stories.find((story) => story.highlight) ?? edition.stories[0];
 const news = edition.stories.filter((story) => story.kind === "news" && story.id !== featured.id);
 const community = edition.stories.filter((story) => story.kind === "community");
-const adoptedCommunity = getAdoptedCommunityFindings(edition);
-const communityCount = communityFindingCount(edition);
+const communityCount = community.length;
 const newsCount = edition.stories.filter((story) => story.kind === "news").length;
 const categories = [...new Set(edition.stories.map((story) => story.category))];
 const sourceCount = new Set(edition.stories.map((story) => story.source.id)).size;
@@ -65,7 +62,7 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
         </div>
       </div>
       <dl>
-        <div><dt>{newsCount}</dt><dd> verified news stories</dd></div>
+        <div><dt>{newsCount}</dt><dd> AI news stories</dd></div>
         <div><dt>{sourceCount}</dt><dd> independent sources</dd></div>
         <div><dt>{edition.stories.filter((story) => story.openSource).length}</dt><dd> open-source updates</dd></div>
         <div><dt>{communityCount}</dt><dd> community findings</dd></div>
@@ -111,11 +108,11 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
   <section class="signals page-shell" id="signals">
     <div class="section-heading">
       <div>
-        <span class="eyebrow">Verified signals</span>
+        <span class="eyebrow">Today’s independent events</span>
         <span class="section-count">{newsCount} news stories &middot; {communityCount} community findings</span>
         <h2>What Actually Changed Today</h2>
       </div>
-      <p>Every fact returns to its source<br />Every judgment keeps its evidence boundary</p>
+      <p>Every event keeps its collected source<br />Different readers decide what matters</p>
     </div>
     <div class="signal-grid">
       {news.map((story) => (
@@ -135,19 +132,9 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
           <span class="eyebrow">Community layer</span>
           <h2>Beyond Official Narratives,<br />What Is the Community Testing?</h2>
         </div>
-        <p>Popularity is not evidence<br />Only signals that can change adoption decisions</p>
+        <p>Independent discussions and tests<br />Collected in the same 24-hour window</p>
       </div>
       <div class="community-grid">
-        {adoptedCommunity.map((signal) => (
-          <article class="community-evidence-card">
-            <span class="eyebrow">Community evidence</span>
-            <h3>{signal.finding}</h3>
-            {signal.configuration && <p>{signal.configuration}</p>}
-            <a href={signal.url} target="_blank" rel="noopener noreferrer">
-              {signal.platform} <span>&rarr;</span>
-            </a>
-          </article>
-        ))}
         {community.map((story) => (
           <StoryCard
             story={story}
@@ -420,36 +407,6 @@ const sourceCount = new Set(edition.stories.map((story) => story.source.id)).siz
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
-  }
-
-  .community-evidence-card {
-    min-height: 360px;
-    padding: clamp(28px, 4vw, 48px);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: var(--surface-raised);
-  }
-
-  .community-evidence-card h3 {
-    margin: 28px 0 22px;
-    font-size: clamp(27px, 3vw, 40px);
-    font-weight: 520;
-    letter-spacing: -0.04em;
-    line-height: 1.12;
-  }
-
-  .community-evidence-card p {
-    color: var(--muted);
-    font-size: 13px;
-  }
-
-  .community-evidence-card a {
-    display: inline-flex;
-    gap: 10px;
-    margin-top: 28px;
-    color: var(--accent);
-    font-size: 12px;
-    font-weight: 650;
   }
 
   .archive-cta {

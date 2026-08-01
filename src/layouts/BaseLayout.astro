@@ -25,7 +25,7 @@ interface Props {
 
 const {
   title = "ASHFOG — Daily AI Intelligence",
-  description = "A source-verified daily brief on AI, open source, developer tools, infrastructure, research, policy, and the signals that matter.",
+  description = "A source-linked daily brief on AI, open source, developer tools, infrastructure, research, policy, and the signals collected today.",
   image,
   type = "website",
   pageType = "WebPage",
@@ -50,7 +50,7 @@ const graph: Array<Record<string, unknown>> = [
     name: "ASHFOG",
     url: new URL("/", site).href,
     description:
-      "Source-verified daily intelligence on AI, open source, developer tools, infrastructure, research, and policy."
+      "Source-linked daily intelligence on AI, open source, developer tools, infrastructure, research, and policy."
   },
   {
     "@type": "WebSite",
@@ -58,7 +58,7 @@ const graph: Array<Record<string, unknown>> = [
     url: new URL("/", site).href,
     name: "ASHFOG",
     description:
-      "A source-verified global AI and developer ecosystem briefing, published daily.",
+      "A source-linked global AI and developer ecosystem briefing, published daily.",
     inLanguage: "en",
     publisher: { "@id": organizationId }
   },

@@ -1,22 +1,14 @@
 {
-  "version": 6,
+  "version": 7,
   "last_reviewed": "2026-07-29",
   "timezone": "America/New_York",
-  "tiers": {
-    "A": "Primary facts: official announcements, repositories, releases, specifications, model cards, and papers.",
-    "B": "Engineering evidence: reproducible benchmarks, practitioner reports, technical analysis, and community threads.",
-    "C": "Discovery radar: newsletters, aggregators, and social signals that must lead back to stronger evidence."
-  },
   "operating_rules": {
     "prefer_machine_readable_access": true,
     "use_conditional_requests": true,
     "respect_terms_and_rate_limits": true,
     "community_access_is_best_effort": true,
     "community_outage_is_blocking": false,
-    "tier_c_must_resolve_to_stronger_evidence": true,
     "do_not_bypass_authentication_or_paywalls": true,
-    "candidate_collection_has_no_global_cap": true,
-    "regional_coverage_is_not_a_publication_quota": true,
     "items_per_source_is_a_hard_maximum": true,
     "record_every_source_attempt": true,
     "scan_all_enabled_sources_each_run": true
@@ -70,7 +62,7 @@
       "method": "public newsletter archive or subscribed edition",
       "authentication": "do not bypass subscriber access",
       "rate_policy": "check at source cadence; use only for discovery",
-      "fallback": "none"
+      "fallback": "record empty or unavailable according to the normal source rules"
     }
   },
   "kind_access_defaults": {
@@ -96,7 +88,6 @@
     {
       "id": "openai-news",
       "name": "OpenAI News",
-      "tier": "A",
       "kind": "official",
       "url": "https://openai.com/news/",
       "topics": [
@@ -113,7 +104,6 @@
     {
       "id": "anthropic-news",
       "name": "Anthropic Newsroom",
-      "tier": "A",
       "kind": "official",
       "url": "https://www.anthropic.com/news",
       "topics": [
@@ -130,7 +120,6 @@
     {
       "id": "deepmind-blog",
       "name": "Google DeepMind Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://deepmind.google/discover/blog/",
       "topics": [
@@ -147,7 +136,6 @@
     {
       "id": "google-ai-blog",
       "name": "Google AI Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://blog.google/technology/ai/",
       "topics": [
@@ -163,7 +151,6 @@
     {
       "id": "meta-ai-blog",
       "name": "Meta AI Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://ai.meta.com/blog/",
       "topics": [
@@ -179,7 +166,6 @@
     {
       "id": "mistral-news",
       "name": "Mistral AI News",
-      "tier": "A",
       "kind": "official",
       "url": "https://mistral.ai/news",
       "topics": [
@@ -195,7 +181,6 @@
     {
       "id": "microsoft-ai-blog",
       "name": "Microsoft AI Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://blogs.microsoft.com/ai/",
       "topics": [
@@ -211,7 +196,6 @@
     {
       "id": "nvidia-developer-blog",
       "name": "NVIDIA Developer Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://developer.nvidia.com/blog/",
       "topics": [
@@ -229,7 +213,6 @@
     {
       "id": "hugging-face-blog",
       "name": "Hugging Face Blog",
-      "tier": "A",
       "kind": "official-community",
       "url": "https://huggingface.co/blog",
       "topics": [
@@ -246,7 +229,6 @@
     {
       "id": "github-changelog",
       "name": "GitHub Changelog",
-      "tier": "A",
       "kind": "changelog",
       "url": "https://github.blog/changelog/",
       "topics": [
@@ -263,7 +245,6 @@
     {
       "id": "cloudflare-blog",
       "name": "Cloudflare Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://blog.cloudflare.com/",
       "topics": [
@@ -280,7 +261,6 @@
     {
       "id": "github-trending",
       "name": "GitHub Trending",
-      "tier": "C",
       "kind": "discovery",
       "url": "https://github.com/trending",
       "topics": [
@@ -296,7 +276,6 @@
     {
       "id": "hacker-news",
       "name": "Hacker News",
-      "tier": "C",
       "kind": "community-discovery",
       "url": "https://news.ycombinator.com/",
       "api": "https://hacker-news.firebaseio.com/v0/",
@@ -314,7 +293,6 @@
     {
       "id": "show-hn",
       "name": "Show HN",
-      "tier": "C",
       "kind": "community-discovery",
       "url": "https://news.ycombinator.com/show",
       "api": "https://hacker-news.firebaseio.com/v0/showstories.json",
@@ -332,7 +310,6 @@
     {
       "id": "hugging-face-papers",
       "name": "Hugging Face Papers",
-      "tier": "A",
       "kind": "paper-index",
       "url": "https://huggingface.co/papers",
       "structured_access": "hf papers ls --date YYYY-MM-DD --format json",
@@ -350,7 +327,6 @@
     {
       "id": "arxiv-cs-ai",
       "name": "arXiv cs.AI recent",
-      "tier": "A",
       "kind": "papers",
       "url": "https://arxiv.org/list/cs.AI/recent",
       "api": "https://export.arxiv.org/api/query?search_query=cat:cs.AI",
@@ -368,7 +344,6 @@
     {
       "id": "arxiv-cs-cl",
       "name": "arXiv cs.CL recent",
-      "tier": "A",
       "kind": "papers",
       "url": "https://arxiv.org/list/cs.CL/recent",
       "api": "https://export.arxiv.org/api/query?search_query=cat:cs.CL",
@@ -386,7 +361,6 @@
     {
       "id": "arxiv-cs-lg",
       "name": "arXiv cs.LG recent",
-      "tier": "A",
       "kind": "papers",
       "url": "https://arxiv.org/list/cs.LG/recent",
       "api": "https://export.arxiv.org/api/query?search_query=cat:cs.LG",
@@ -404,7 +378,6 @@
     {
       "id": "ars-ai",
       "name": "Ars Technica AI",
-      "tier": "B",
       "kind": "media",
       "url": "https://arstechnica.com/ai/",
       "topics": [
@@ -420,7 +393,6 @@
     {
       "id": "mit-tech-review-ai",
       "name": "MIT Technology Review AI",
-      "tier": "B",
       "kind": "media",
       "url": "https://www.technologyreview.com/topic/artificial-intelligence/",
       "topics": [
@@ -436,7 +408,6 @@
     {
       "id": "ieee-spectrum-ai",
       "name": "IEEE Spectrum AI",
-      "tier": "B",
       "kind": "media",
       "url": "https://spectrum.ieee.org/artificial-intelligence",
       "topics": [
@@ -452,7 +423,6 @@
     {
       "id": "reddit-localllama",
       "name": "Reddit r/LocalLLaMA",
-      "tier": "B",
       "kind": "community",
       "url": "https://www.reddit.com/r/LocalLLaMA/",
       "topics": [
@@ -472,7 +442,6 @@
     {
       "id": "x-curated-experts",
       "name": "X Curated AI Experts",
-      "tier": "C",
       "kind": "curated-social-list",
       "url": "https://x.com/",
       "topics": [
@@ -489,7 +458,6 @@
     {
       "id": "phoronix",
       "name": "Phoronix",
-      "tier": "B",
       "kind": "independent-benchmark",
       "url": "https://www.phoronix.com/",
       "topics": [
@@ -508,7 +476,6 @@
     {
       "id": "mcp-blog",
       "name": "Model Context Protocol Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://blog.modelcontextprotocol.io/",
       "topics": [
@@ -524,7 +491,6 @@
     {
       "id": "mcp-spec-releases",
       "name": "MCP Specification Releases",
-      "tier": "A",
       "kind": "repository-releases",
       "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases",
       "api": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/releases",
@@ -542,7 +508,6 @@
     {
       "id": "vercel-ai",
       "name": "Vercel AI SDK",
-      "tier": "A",
       "kind": "official-and-repository",
       "url": "https://vercel.com/blog",
       "repository": "https://github.com/vercel/ai",
@@ -562,7 +527,6 @@
     {
       "id": "ollama-blog",
       "name": "Ollama Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://ollama.com/blog",
       "topics": [
@@ -578,7 +542,6 @@
     {
       "id": "ollama-releases",
       "name": "Ollama Releases",
-      "tier": "A",
       "kind": "repository-releases",
       "url": "https://github.com/ollama/ollama/releases",
       "api": "https://api.github.com/repos/ollama/ollama/releases",
@@ -595,7 +558,6 @@
     {
       "id": "langchain-blog",
       "name": "LangChain Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://www.langchain.com/blog",
       "topics": [
@@ -613,7 +575,6 @@
     {
       "id": "llamaindex-blog",
       "name": "LlamaIndex Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://www.llamaindex.ai/blog",
       "topics": [
@@ -631,7 +592,6 @@
     {
       "id": "dify-blog",
       "name": "Dify Blog",
-      "tier": "A",
       "kind": "official",
       "url": "https://dify.ai/blog",
       "topics": [
@@ -649,7 +609,6 @@
     {
       "id": "hugging-face-trending-papers",
       "name": "Hugging Face Trending Papers",
-      "tier": "A",
       "kind": "paper-code-trends",
       "url": "https://huggingface.co/papers/trending",
       "structured_access": "hf papers ls --sort trending --format json",
@@ -667,7 +626,6 @@
     {
       "id": "chips-and-cheese",
       "name": "Chips and Cheese",
-      "tier": "B",
       "kind": "deep-technical-analysis",
       "url": "https://chipsandcheese.com/",
       "cadence": "event-driven",
@@ -685,7 +643,6 @@
     {
       "id": "semianalysis",
       "name": "SemiAnalysis",
-      "tier": "B",
       "kind": "industry-analysis",
       "url": "https://semianalysis.com/",
       "cadence": "event-driven",
@@ -704,7 +661,6 @@
     {
       "id": "the-batch",
       "name": "The Batch",
-      "tier": "C",
       "kind": "newsletter-radar",
       "url": "https://www.deeplearning.ai/the-batch/",
       "cadence": "weekly",
@@ -721,7 +677,6 @@
     {
       "id": "alphasignal",
       "name": "AlphaSignal",
-      "tier": "C",
       "kind": "newsletter-radar",
       "url": "https://alphasignal.ai/",
       "cadence": "daily",
@@ -739,7 +694,6 @@
     {
       "id": "tldr-ai",
       "name": "TLDR AI",
-      "tier": "C",
       "kind": "newsletter-radar",
       "url": "https://tldr.tech/ai",
       "cadence": "weekdays",
@@ -756,7 +710,6 @@
     {
       "id": "deepseek-official",
       "name": "DeepSeek",
-      "tier": "A",
       "kind": "official-and-repository",
       "url": "https://api-docs.deepseek.com/news/",
       "repository": "https://github.com/deepseek-ai",
@@ -776,7 +729,6 @@
     {
       "id": "qwen-official",
       "name": "Qwen",
-      "tier": "A",
       "kind": "official-and-repository",
       "url": "https://qwenlm.github.io/blog/",
       "repository": "https://github.com/QwenLM",
@@ -796,7 +748,6 @@
     {
       "id": "bytedance-seed",
       "name": "ByteDance Seed",
-      "tier": "A",
       "kind": "official-and-repository",
       "url": "https://seed.bytedance.com/en/blog",
       "region": "china",
@@ -817,7 +768,6 @@
     {
       "id": "zai-official",
       "name": "Z.ai",
-      "tier": "A",
       "kind": "official-and-repository",
       "url": "https://z.ai/blog",
       "repository": "https://github.com/zai-org",
@@ -837,7 +787,6 @@
     {
       "id": "moonshot-ai",
       "name": "Moonshot AI",
-      "tier": "A",
       "kind": "official-and-repository",
       "url": "https://www.moonshot.ai/",
       "repository": "https://github.com/MoonshotAI",
@@ -857,7 +806,6 @@
     {
       "id": "minimax-official",
       "name": "MiniMax",
-      "tier": "A",
       "kind": "official",
       "url": "https://www.minimax.io/news",
       "api": "https://platform.minimax.io/docs/release-notes/models",
@@ -878,7 +826,6 @@
     {
       "id": "modelscope-hub",
       "name": "ModelScope",
-      "tier": "A",
       "kind": "official-community",
       "url": "https://www.modelscope.cn/models",
       "region": "china",
@@ -898,7 +845,6 @@
     {
       "id": "tencent-hunyuan",
       "name": "Tencent Hunyuan",
-      "tier": "A",
       "kind": "official-and-repository",
       "url": "https://github.com/Tencent-Hunyuan",
       "region": "china",
@@ -917,7 +863,6 @@
     {
       "id": "baidu-ernie-paddlepaddle",
       "name": "Baidu ERNIE and PaddlePaddle",
-      "tier": "A",
       "kind": "official-and-repository",
       "url": "https://github.com/PaddlePaddle/PaddleNLP",
       "repository": "https://github.com/PaddlePaddle",
@@ -937,7 +882,6 @@
     {
       "id": "huawei-ascend",
       "name": "Huawei Ascend",
-      "tier": "A",
       "kind": "official-and-repository",
       "url": "https://www.hiascend.com/en/",
       "region": "china",
@@ -957,7 +901,6 @@
     {
       "id": "stepfun-official",
       "name": "StepFun",
-      "tier": "A",
       "kind": "official-and-repository",
       "url": "https://www.stepfun.com/",
       "region": "china",
@@ -977,7 +920,6 @@
     {
       "id": "china-cac",
       "name": "Cyberspace Administration of China",
-      "tier": "A",
       "kind": "official",
       "url": "https://www.cac.gov.cn/",
       "region": "china",
@@ -995,7 +937,6 @@
     {
       "id": "china-miit",
       "name": "Ministry of Industry and Information Technology of China",
-      "tier": "A",
       "kind": "official",
       "url": "https://www.miit.gov.cn/",
       "region": "china",
@@ -1015,7 +956,6 @@
     {
       "id": "machine-heart",
       "name": "Synced",
-      "tier": "C",
       "kind": "discovery",
       "url": "https://www.jiqizhixin.com/industry",
       "region": "china",
@@ -1033,7 +973,6 @@
     {
       "id": "qbitai",
       "name": "QbitAI",
-      "tier": "C",
       "kind": "discovery",
       "url": "https://www.qbitai.com/",
       "region": "china",
@@ -1051,7 +990,6 @@
     {
       "id": "36kr-ai",
       "name": "36Kr AI",
-      "tier": "C",
       "kind": "discovery",
       "url": "https://www.36kr.com/search-list/3628",
       "region": "china",
@@ -1074,7 +1012,7 @@
       "china"
     ],
     "china": {
-      "policy": "Scan every enabled China source, then publish only material events that pass the same evidence and relevance standards as every other region.",
+      "policy": "Scan every enabled China source and publish every independent in-scope event after content-level deduplication.",
       "preserve_original_source_url": true,
       "retain_original_title": false,
       "output_language": "en"

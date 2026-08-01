@@ -7,7 +7,6 @@
   "runId": "preview-2026-07-28T061436Z",
   "title": "Global agent controls, China AI signals, and operational reliability",
   "description": "Today’s verified signals connect global agent controls with Qwen Code releases, Chinese AI policy, DeepSeek API migration, open-source runtimes, and community evidence.",
-  "qualityShortfallReason": "",
   "heroImageId": null,
   "dailyAnalysis": {
     "title": "The agent control plane is becoming a global competitive layer",
@@ -34,59 +33,19 @@
         "safety",
         "governance"
       ],
-      "company": "Anthropic",
-      "ecosystem": "anthropic",
       "openSource": false,
-      "mediaOnly": false,
       "headline": "Anthropic opposes a blanket open-weight ban while backing capability-based safety tests",
       "summary": "Anthropic CEO Dario Amodei said the company is not seeking a categorical ban on open-weight models and does not believe openness alone should trigger regulation. The company’s proposal instead focuses on the movement of advanced chips, industrial-scale distillation, and mandatory safety evaluations for models that cross defined capability thresholds, regardless of whether their weights are open or closed. That makes Anthropic’s position a case for risk-based controls rather than deregulation. The unresolved question is how those controls would work in practice. Community discussion around the statement argued that expensive evaluations, a limited set of approved testing providers, or centralized certification could still create a de facto entry barrier for open developers. That concern is currently a policy-design risk, not evidence that such a restriction already exists, and the final impact would depend on the thresholds, costs, appeals process, and access to testing.",
       "whyItMatters": "The policy debate is shifting from whether open weights should exist to who defines capability thresholds, who performs evaluations, and who pays for compliance. Open-model teams may need to plan for testing records, distribution controls, and certification costs alongside licensing and release engineering, even if regulation remains formally neutral between open and closed systems.",
       "source": {
         "id": "anthropic-news",
         "name": "Anthropic Newsroom",
-        "tier": "A",
         "url": "https://www.anthropic.com/news/position-open-weights-models",
         "publishedAt": "2026-07-27T00:00:00Z",
-        "updatedAt": null,
+        "updatedAt": "2026-07-28T08:00:00+08:00",
         "evidenceLabel": "officially_stated",
         "sourceLanguage": "en"
       },
-      "factualClaims": [
-        {
-          "text": "Anthropic said it does not support a blanket ban on open-weight models and favors mandatory testing for sufficiently capable open and closed models.",
-          "evidenceUrl": "https://www.anthropic.com/news/position-open-weights-models",
-          "evidenceLabel": "officially_stated"
-        }
-      ],
-      "communityCheck": {
-        "status": "checked",
-        "platformsAttempted": [
-          "Hacker News"
-        ],
-        "platformsUnavailable": [],
-        "signals": [
-          {
-            "url": "https://news.ycombinator.com/item?id=49076261",
-            "retrievedAt": "2026-07-28T06:14:36Z",
-            "authorRole": "Hacker News participant",
-            "evidenceLabel": "community_discussion_suggests",
-            "finding": "Participants argued that mandatory testing could become an entry barrier for open-weight models if access is controlled or evaluation costs are high.",
-            "configuration": "Policy interpretation discussion; not an industry consensus.",
-            "adopted": true
-          }
-        ]
-      },
-      "score": {
-        "evidenceStrength": 5,
-        "relevance": 5,
-        "novelty": 4,
-        "practicalUtility": 4,
-        "impact": 5,
-        "communitySignal": 5,
-        "total": 28
-      },
-      "materialUpdate": "",
-      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -101,49 +60,19 @@
         "cybersecurity",
         "multi-model"
       ],
-      "company": "Microsoft",
-      "ecosystem": "microsoft-security",
       "openSource": false,
-      "mediaOnly": false,
       "headline": "Microsoft introduces Project Perception, a multi-agent security system entering preview August 3",
       "summary": "Microsoft announced Project Perception, which it describes as a closed-loop defense system built around cooperating red-team, blue-team, and green-team agents. The roles are intended to continuously find risks, assess them, support remediation, and improve the defensive process, moving beyond one-time scanning or isolated alerts. Microsoft says the first implementation will focus on software vulnerabilities, use a multi-model architecture, and enter public preview on August 3. The official announcement establishes the proposed architecture, initial use case, and preview date, but it does not yet demonstrate production performance. False-positive rates, remediation quality, permission boundaries, escalation behavior, and the effect of model choice will need to be tested after preview access opens. The design should therefore be read as a product and research direction rather than proof that a collection of specialized agents can safely repair software without human review.",
       "whyItMatters": "Security agents are moving from producing alerts toward participating in remediation. Enterprises evaluating the preview should inspect context provenance, allowed actions, human approval points, rollback behavior, audit logs, and evaluation conditions. A closed feedback loop can improve response speed, but it should not be treated as reliable autonomous repair until those operational controls are verified.",
       "source": {
         "id": "microsoft-ai-blog",
         "name": "Microsoft AI Blog",
-        "tier": "A",
         "url": "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
         "publishedAt": "2026-07-27T00:00:00Z",
-        "updatedAt": null,
+        "updatedAt": "2026-07-28T08:00:00+08:00",
         "evidenceLabel": "officially_stated",
         "sourceLanguage": "en"
       },
-      "factualClaims": [
-        {
-          "text": "Microsoft said Project Perception uses red, blue, and green agents in a continuous security loop and is scheduled for public preview on August 3.",
-          "evidenceUrl": "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
-          "evidenceLabel": "officially_stated"
-        }
-      ],
-      "communityCheck": {
-        "status": "no_relevant_signal",
-        "platformsAttempted": [
-          "Hacker News"
-        ],
-        "platformsUnavailable": [],
-        "signals": []
-      },
-      "score": {
-        "evidenceStrength": 5,
-        "relevance": 5,
-        "novelty": 4,
-        "practicalUtility": 4,
-        "impact": 5,
-        "communitySignal": 2,
-        "total": 25
-      },
-      "materialUpdate": "",
-      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -158,47 +87,19 @@
         "ai-adoption",
         "economic-research"
       ],
-      "company": "OpenAI",
-      "ecosystem": "openai",
       "openSource": false,
-      "mediaOnly": false,
       "headline": "OpenAI finds 43.5% of occupation-linked AI conversations cross traditional job boundaries",
       "summary": "OpenAI Economic Research analyzed more than 800,000 messages from United States ChatGPT users and introduced “task crossover” to describe people using AI for work traditionally associated with another occupation. The report says 16.8% of work-related messages in the sample involved crossover. When researchers narrowed the sample to messages that could be mapped to a specific occupation, the share rose to 43.5%. These figures describe the distribution of tasks inside a conversation dataset; they are not direct evidence that jobs have already been replaced, and they do not establish the quality of the resulting work or who remains accountable for it. The analysis instead suggests that AI’s near-term labor impact may appear as tasks moving across role boundaries before entire occupations disappear. That distinction matters when organizations measure adoption, redesign responsibilities, or interpret headline automation estimates.",
       "whyItMatters": "Organizations should measure more than time saved. They also need to track how task ownership, review responsibility, and required expertise move between roles. Training, access controls, quality assurance, and performance expectations may need to follow those new task boundaries; otherwise apparent efficiency gains can create accountability gaps that conventional job-level metrics will miss.",
       "source": {
         "id": "openai-news",
         "name": "OpenAI News",
-        "tier": "A",
         "url": "https://openai.com/index/how-ai-is-expanding-what-people-do-at-work/",
         "publishedAt": "2026-07-27T00:00:00Z",
-        "updatedAt": null,
+        "updatedAt": "2026-07-28T08:00:00+08:00",
         "evidenceLabel": "officially_stated",
         "sourceLanguage": "en"
       },
-      "factualClaims": [
-        {
-          "text": "OpenAI reported task crossover in 16.8% of work-related messages and 43.5% of messages mapped to a specific occupation in its sample.",
-          "evidenceUrl": "https://openai.com/index/how-ai-is-expanding-what-people-do-at-work/",
-          "evidenceLabel": "officially_stated"
-        }
-      ],
-      "communityCheck": {
-        "status": "not_applicable",
-        "platformsAttempted": [],
-        "platformsUnavailable": [],
-        "signals": []
-      },
-      "score": {
-        "evidenceStrength": 4,
-        "relevance": 4,
-        "novelty": 4,
-        "practicalUtility": 3,
-        "impact": 4,
-        "communitySignal": 0,
-        "total": 19
-      },
-      "materialUpdate": "",
-      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -213,49 +114,19 @@
         "structured-output",
         "typescript"
       ],
-      "company": "Vercel",
-      "ecosystem": "vercel-ai-sdk",
       "openSource": true,
-      "mediaOnly": false,
       "headline": "Vercel AI SDK 7.0.39 promotes repairText to a stable structured-output option",
       "summary": "Vercel AI SDK 7.0.39 moved repairText, used by generateObject and streamObject, from an experimental option to a stable API. The previous experimental_repairText name remains available as a backward-compatible alias, allowing applications already using the experimental interface to migrate gradually rather than changing every call during the version upgrade. The option lets developers insert a text-repair step when model output does not match the expected structured format. This release changes the API’s stability status and naming; it does not announce a new repair algorithm or demonstrate higher repair accuracy. Teams upgrading should continue testing with their own JSON Schemas, malformed-output samples, provider combinations, and retry policies. A stable interface means Vercel intends to preserve the contract, but it does not mean every invalid model response can be repaired correctly or that repaired content should bypass final validation.",
       "whyItMatters": "Applications that depend on structured-output repair can move to a supported interface while using the compatibility alias to reduce migration risk. Schema validation, fail-closed behavior, and regression samples are still required because API stability does not guarantee that a model response—or the repaired version of that response—is semantically correct.",
       "source": {
         "id": "vercel-ai",
         "name": "Vercel AI SDK",
-        "tier": "A",
         "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.39",
         "publishedAt": "2026-07-28T03:08:18Z",
         "updatedAt": null,
         "evidenceLabel": "maintainer_confirmed",
         "sourceLanguage": "en"
       },
-      "factualClaims": [
-        {
-          "text": "AI SDK 7.0.39 made repairText a stable option for generateObject and streamObject while retaining the experimental name as an alias.",
-          "evidenceUrl": "https://github.com/vercel/ai/releases/tag/ai%407.0.39",
-          "evidenceLabel": "maintainer_confirmed"
-        }
-      ],
-      "communityCheck": {
-        "status": "no_relevant_signal",
-        "platformsAttempted": [
-          "Hacker News"
-        ],
-        "platformsUnavailable": [],
-        "signals": []
-      },
-      "score": {
-        "evidenceStrength": 5,
-        "relevance": 4,
-        "novelty": 2,
-        "practicalUtility": 4,
-        "impact": 2,
-        "communitySignal": 0,
-        "total": 17
-      },
-      "materialUpdate": "",
-      "windowException": "",
       "region": "global"
     },
     {
@@ -270,51 +141,19 @@
         "mlx",
         "nvfp4"
       ],
-      "company": "Ollama",
-      "ecosystem": "ollama",
       "openSource": true,
-      "mediaOnly": false,
       "headline": "Ollama 0.32.5 fixes an MLX Metal issue that could reduce NVFP4 output quality",
       "summary": "Ollama v0.32.5 lists a single change: a fix for an MLX Metal execution-path issue that could reduce output quality for NVFP4 models, with the release note calling out a stronger effect on Laguna models. This is not a new model integration, interface feature, or general performance optimization. It is a runtime correction that can affect the quality of generated results. The announcement does not quantify the error, identify every affected task, or provide a before-and-after benchmark, so users cannot infer from the release note alone whether historical outputs were materially degraded. Teams running Apple Silicon with the MLX Metal and NVFP4 combination should treat the update as a correctness release and repeat representative prompts from critical workflows. Versioned regression tests are especially important when a low-level runtime path can change model behavior without an obvious application-level error.",
       "whyItMatters": "This is a correctness fix rather than a routine speed improvement. Teams using Apple Silicon, MLX Metal, NVFP4, or Laguna models should prioritize the upgrade and rerun critical task suites. Without regression checks, an apparently successful request may continue producing subtly degraded results that ordinary availability monitoring will not detect.",
       "source": {
         "id": "ollama-releases",
         "name": "Ollama Releases",
-        "tier": "A",
         "url": "https://github.com/ollama/ollama/releases/tag/v0.32.5",
         "publishedAt": "2026-07-27T01:25:40Z",
-        "updatedAt": null,
+        "updatedAt": "2026-07-28T08:00:00+08:00",
         "evidenceLabel": "maintainer_confirmed",
         "sourceLanguage": "en"
       },
-      "factualClaims": [
-        {
-          "text": "Ollama v0.32.5 fixed an MLX Metal issue that could reduce output quality for NVFP4 models.",
-          "evidenceUrl": "https://github.com/ollama/ollama/releases/tag/v0.32.5",
-          "evidenceLabel": "maintainer_confirmed"
-        }
-      ],
-      "communityCheck": {
-        "status": "no_relevant_signal",
-        "platformsAttempted": [
-          "Hacker News"
-        ],
-        "platformsUnavailable": [
-          "Reddit"
-        ],
-        "signals": []
-      },
-      "score": {
-        "evidenceStrength": 5,
-        "relevance": 5,
-        "novelty": 3,
-        "practicalUtility": 5,
-        "impact": 4,
-        "communitySignal": 0,
-        "total": 22
-      },
-      "materialUpdate": "",
-      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -329,49 +168,19 @@
         "ohttp",
         "rust"
       ],
-      "company": "Cloudflare",
-      "ecosystem": "cloudflare",
       "openSource": true,
-      "mediaOnly": false,
       "headline": "Cloudflare open-sources pvcli to debug OHTTP privacy-proxy chains from one command line",
       "summary": "Cloudflare released pvcli as an Apache-2.0-licensed Rust command-line tool intended to provide a curl-like debugging experience for privacy protocols. Its current focus is constructing, sending, and inspecting Oblivious HTTP requests so developers can trace failures across the client, relay, gateway, and destination components of an OHTTP chain without manually assembling each binary layer. The project roadmap also mentions MASQUE, Privacy Pass, and post-quantum cryptography, but those entries describe planned directions rather than functionality that should be assumed to exist today. The immediate value is a reusable diagnostic surface and an open contribution path for implementations that otherwise require protocol-specific tooling. Developers considering pvcli still need to verify the exact protocol coverage, supported message formats, interoperability with their deployment, and the maturity of current releases instead of treating roadmap items as completed features.",
       "whyItMatters": "OHTTP failures can span several roles and encoding layers, making diagnosis unusually expensive. pvcli gives privacy-proxy implementers a shared end-to-end inspection tool that can shorten that loop. Adoption decisions should still distinguish current commands from roadmap commitments and test interoperability against the exact relay and gateway implementation used in production.",
       "source": {
         "id": "cloudflare-blog",
         "name": "Cloudflare Blog",
-        "tier": "A",
         "url": "https://blog.cloudflare.com/open-sourcing-our-privacy-proxy-cli/",
         "publishedAt": "2026-07-27T00:00:00Z",
-        "updatedAt": null,
+        "updatedAt": "2026-07-28T08:00:00+08:00",
         "evidenceLabel": "officially_stated",
         "sourceLanguage": "en"
       },
-      "factualClaims": [
-        {
-          "text": "Cloudflare released pvcli under the Apache-2.0 license to test and debug OHTTP and related privacy-protocol flows.",
-          "evidenceUrl": "https://blog.cloudflare.com/open-sourcing-our-privacy-proxy-cli/",
-          "evidenceLabel": "officially_stated"
-        }
-      ],
-      "communityCheck": {
-        "status": "no_relevant_signal",
-        "platformsAttempted": [
-          "Hacker News"
-        ],
-        "platformsUnavailable": [],
-        "signals": []
-      },
-      "score": {
-        "evidenceStrength": 5,
-        "relevance": 4,
-        "novelty": 4,
-        "practicalUtility": 4,
-        "impact": 3,
-        "communitySignal": 0,
-        "total": 20
-      },
-      "materialUpdate": "",
-      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     },
     {
@@ -387,49 +196,19 @@
         "tool-use",
         "developer-tools"
       ],
-      "company": "Alibaba",
-      "ecosystem": "qwen",
       "openSource": true,
-      "mediaOnly": false,
       "headline": "Qwen Code adds real-time agent steering, isolated worktrees, and built-in web search",
       "summary": "Qwen Code’s official weekly update says versions 0.19.12, 0.20.0, and 0.20.1 shipped across three stable releases with more than 220 merged pull requests. The release adds real-time steering, allowing a user to correct an agent while it is still producing a response; one-click worktree isolation for parallel sessions; and the return of built-in web_search using an existing Bailian API key. The team also says web_fetch was rebuilt, with changes aimed at preserving links and handling PDF content more reliably, while multimodal whole-turn routing decides when an image-capable model should handle the complete interaction. These are official product claims and release notes, not independent measurements of reliability or coding quality. The update nevertheless shows a Chinese open-source coding agent adopting the same control, isolation, search, and multimodal workflow patterns now appearing across major global agent tools, which makes it relevant beyond the Qwen ecosystem.",
       "whyItMatters": "Real-time correction and isolated worktrees address two practical agent failure modes: users need to redirect a task before it wastes more time, and parallel changes need separation before they can be reviewed safely. Qwen Code’s update also gives global developers another open-source implementation to compare with Claude Code, Codex, and other agent environments.",
       "source": {
         "id": "qwen-official",
         "name": "Qwen",
-        "tier": "A",
         "url": "https://qwenlm.github.io/qwen-code-docs/en/blog/updates/weekly-update-2026-07-23/",
         "publishedAt": "2026-07-23T00:00:00Z",
-        "updatedAt": null,
+        "updatedAt": "2026-07-28T08:00:00+08:00",
         "evidenceLabel": "officially_stated",
         "sourceLanguage": "en"
       },
-      "factualClaims": [
-        {
-          "text": "Qwen Code said three stable releases added real-time steering, worktree-isolated sessions, built-in web search, a rebuilt web fetcher, and multimodal routing.",
-          "evidenceUrl": "https://qwenlm.github.io/qwen-code-docs/en/blog/updates/weekly-update-2026-07-23/",
-          "evidenceLabel": "officially_stated"
-        }
-      ],
-      "communityCheck": {
-        "status": "no_relevant_signal",
-        "platformsAttempted": [
-          "Hacker News"
-        ],
-        "platformsUnavailable": [],
-        "signals": []
-      },
-      "score": {
-        "evidenceStrength": 5,
-        "relevance": 5,
-        "novelty": 4,
-        "practicalUtility": 5,
-        "impact": 4,
-        "communitySignal": 1,
-        "total": 24
-      },
-      "materialUpdate": "",
-      "windowException": "The official weekly release remained operationally material when the global preview fixture was assembled.",
       "region": "china"
     },
     {
@@ -445,47 +224,19 @@
         "asia-pacific",
         "standards"
       ],
-      "company": "MIIT",
-      "ecosystem": "china-ai-policy",
       "openSource": false,
-      "mediaOnly": false,
       "headline": "China’s MIIT says APEC ministers adopted a regional framework for digital and AI cooperation",
       "summary": "China’s Ministry of Industry and Information Technology reported that APEC digital and artificial-intelligence ministers met in Chengdu on July 23 and adopted the 2026 Chengdu statement. According to the ministry, participating economies agreed to advance digital and AI technologies in support of the Asia-Pacific community and created an action framework for future cooperation. The meeting covered digital transformation, connectivity, ICT resilience, online safety, small-business adoption, artificial-intelligence safety, and capacity building. This is an official Chinese government account of a ministerial meeting, not the full negotiated text or an independent assessment of how individual economies will implement the commitments. Its significance is therefore directional: it places AI deployment, safety, inclusion, and cross-border coordination inside a regional policy process rather than announcing an immediately enforceable technical rule. Follow-up documents and domestic implementation measures will determine the practical effect.",
       "whyItMatters": "AI governance is increasingly being shaped through regional forums as well as national regulation. Developers and infrastructure providers serving Asia-Pacific markets should watch whether the Chengdu framework produces common safety language, capacity-building programs, procurement expectations, or interoperability work. The announcement signals China’s policy priorities, but it does not yet establish binding compliance requirements.",
       "source": {
         "id": "china-miit",
         "name": "Ministry of Industry and Information Technology of China",
-        "tier": "A",
         "url": "https://jxca.miit.gov.cn/xwdt/bwyw/art/2026/art_b13a83dbc0cc4d59b089b1cf19424abf.html",
         "publishedAt": "2026-07-23T20:59:00+08:00",
-        "updatedAt": null,
+        "updatedAt": "2026-07-28T08:00:00+08:00",
         "evidenceLabel": "officially_stated",
         "sourceLanguage": "zh-CN"
       },
-      "factualClaims": [
-        {
-          "text": "MIIT reported that APEC digital and AI ministers met in Chengdu and adopted the 2026 Chengdu statement as a framework for cooperation.",
-          "evidenceUrl": "https://jxca.miit.gov.cn/xwdt/bwyw/art/2026/art_b13a83dbc0cc4d59b089b1cf19424abf.html",
-          "evidenceLabel": "officially_stated"
-        }
-      ],
-      "communityCheck": {
-        "status": "not_applicable",
-        "platformsAttempted": [],
-        "platformsUnavailable": [],
-        "signals": []
-      },
-      "score": {
-        "evidenceStrength": 5,
-        "relevance": 4,
-        "novelty": 4,
-        "practicalUtility": 3,
-        "impact": 4,
-        "communitySignal": 0,
-        "total": 20
-      },
-      "materialUpdate": "",
-      "windowException": "The regional policy outcome remained material during the preview period even though the official report preceded the edition-day window.",
       "region": "china"
     },
     {
@@ -501,49 +252,19 @@
         "models",
         "migration"
       ],
-      "company": "DeepSeek",
-      "ecosystem": "deepseek",
       "openSource": false,
-      "mediaOnly": false,
       "headline": "DeepSeek’s announced sunset date passes for its legacy chat and reasoner API aliases",
       "summary": "DeepSeek’s official changelog says the legacy API model names deepseek-chat and deepseek-reasoner would be discontinued three months after the company introduced DeepSeek V4 on April 24, placing the announced sunset on July 24. During the transition, the two aliases pointed to the non-thinking and thinking modes of deepseek-v4-flash, while the new V4-Pro and V4-Flash names were available through OpenAI-compatible and Anthropic-compatible interfaces. The changelog establishes the migration notice and intended deadline, but it does not by itself prove that every legacy request began failing at the same moment or describe any grace period, regional rollout, or account-specific behavior. Developers should therefore treat the passed date as an operational trigger to inspect production configuration and test the explicit V4 model identifiers rather than assuming alias behavior from earlier deployments.",
       "whyItMatters": "Model aliases make upgrades convenient, but they can hide a breaking migration until a provider retires a compatibility path. DeepSeek users should inventory hard-coded model names, confirm thinking-mode behavior, run regression tests against explicit V4 identifiers, and update fallback routing. The larger lesson applies to every provider: release notes and sunset dates belong in production dependency monitoring.",
       "source": {
         "id": "deepseek-official",
         "name": "DeepSeek",
-        "tier": "A",
         "url": "https://api-docs.deepseek.com/updates",
         "publishedAt": "2026-04-24T00:00:00Z",
-        "updatedAt": "2026-07-24T00:00:00Z",
+        "updatedAt": "2026-07-28T08:00:00+08:00",
         "evidenceLabel": "officially_stated",
         "sourceLanguage": "en"
       },
-      "factualClaims": [
-        {
-          "text": "DeepSeek announced that deepseek-chat and deepseek-reasoner would be discontinued three months after April 24, 2026, while explicit V4 model names were introduced.",
-          "evidenceUrl": "https://api-docs.deepseek.com/updates",
-          "evidenceLabel": "officially_stated"
-        }
-      ],
-      "communityCheck": {
-        "status": "no_relevant_signal",
-        "platformsAttempted": [
-          "Hacker News"
-        ],
-        "platformsUnavailable": [],
-        "signals": []
-      },
-      "score": {
-        "evidenceStrength": 5,
-        "relevance": 5,
-        "novelty": 3,
-        "practicalUtility": 5,
-        "impact": 4,
-        "communitySignal": 1,
-        "total": 23
-      },
-      "materialUpdate": "",
-      "windowException": "The source announcement is older, but its stated July 24 sunset became operationally relevant for the July 28 edition.",
       "region": "china"
     },
     {
@@ -558,68 +279,19 @@
         "coding-agents",
         "cost"
       ],
-      "company": null,
-      "ecosystem": "open-models",
       "openSource": true,
-      "mediaOnly": false,
       "headline": "Developers find smaller open models competitive for iterative coding, but cost and tool use remain unclear",
       "summary": "A Hacker News discussion offers an early practitioner signal about open models in software work. Several participants argued that smaller open models can be competitive on narrowly defined tasks with clear boundaries and short iteration loops, but that experience should not be generalized to one-shot application generation or every coding workflow. The thread also noted that the original article promoted the author’s own product, that private endpoints and subsidized closed services were not compared on a consistent cost basis, and that tool-calling behavior lacked a reproducible evaluation. These observations are useful for designing an internal benchmark, not for making a procurement decision. The evidence remains a community discussion without fixed model versions, hardware details, or an independently reproduced comparison.",
       "whyItMatters": "Model selection should use a representative task suite rather than one application demo. Teams should separately measure correctness, tool calling, latency, throughput, and total cost, while treating promotional incentives and missing reproduction details as evidence limits.",
       "source": {
         "id": "hacker-news",
         "name": "Hacker News",
-        "tier": "C",
         "url": "https://news.ycombinator.com/item?id=49078583",
         "publishedAt": "2026-07-28T02:37:14Z",
         "updatedAt": null,
         "evidenceLabel": "community_discussion_suggests",
         "sourceLanguage": "en"
       },
-      "factualClaims": [
-        {
-          "text": "Participants reported that smaller open models can work well for narrow iterative coding tasks while calling for better cost and tool-use comparisons.",
-          "evidenceUrl": "https://news.ycombinator.com/item?id=49078583",
-          "evidenceLabel": "community_discussion_suggests"
-        }
-      ],
-      "communityCheck": {
-        "status": "checked",
-        "platformsAttempted": [
-          "Hacker News"
-        ],
-        "platformsUnavailable": [],
-        "signals": [
-          {
-            "url": "https://news.ycombinator.com/item?id=49079002",
-            "retrievedAt": "2026-07-28T06:14:36Z",
-            "authorRole": "Developer community participant",
-            "evidenceLabel": "single_community_test",
-            "finding": "A participant reported that smaller open models were useful for traditional iterative development but did not treat that as evidence for complete application generation.",
-            "configuration": "Qualitative development experience without fixed model versions, hardware, or a reproducible test.",
-            "adopted": true
-          },
-          {
-            "url": "https://news.ycombinator.com/item?id=49078892",
-            "retrievedAt": "2026-07-28T06:14:36Z",
-            "authorRole": "Developer community participant",
-            "evidenceLabel": "community_discussion_suggests",
-            "finding": "A participant noted the original author’s promotional incentive and requested a real cost comparison between private endpoints and subsidized closed services.",
-            "configuration": "No consistent cost dataset was provided.",
-            "adopted": true
-          }
-        ]
-      },
-      "score": {
-        "evidenceStrength": 2,
-        "relevance": 4,
-        "novelty": 3,
-        "practicalUtility": 4,
-        "impact": 3,
-        "communitySignal": 4,
-        "total": 20
-      },
-      "materialUpdate": "",
-      "windowException": "",
       "region": "global"
     },
     {
@@ -634,141 +306,23 @@
         "coding-agents",
         "incident"
       ],
-      "company": "Anthropic",
-      "ecosystem": "anthropic",
       "openSource": false,
-      "mediaOnly": false,
       "headline": "Claude error reports push some agent workflows toward multi-provider fallback paths",
       "summary": "A Hacker News discussion linked to a Claude status incident contains multiple reports of elevated Opus 5 errors and blocked tool workflows. One participant said an automatic mode could not decide whether a Bash action was safe while the model was unavailable, although read-only operations could continue. Another team reported better qualitative stability when accessing Claude through AWS Bedrock than through Anthropic directly, while other users said outages had led them to keep smaller subscriptions with several providers. Together, the reports show how an endpoint failure can interrupt an agent workflow, but they do not establish a controlled comparison of model quality, Bedrock reliability, or the best fallback design. Request volume, region, client versions, and routing conditions were not consistently disclosed, so the signal is useful but remains provisional.",
       "whyItMatters": "Production agents should not assume one model endpoint will always be available. Critical workflows need risk-aware action classes, bounded retries, tested provider fallback, and human takeover during incidents. Backup routes must preserve the same permission boundaries instead of restoring availability by silently weakening controls.",
       "source": {
         "id": "hacker-news",
         "name": "Hacker News",
-        "tier": "C",
         "url": "https://news.ycombinator.com/item?id=49068029",
         "publishedAt": "2026-07-27T11:32:32Z",
-        "updatedAt": null,
+        "updatedAt": "2026-07-28T08:00:00+08:00",
         "evidenceLabel": "multiple_users_report",
         "sourceLanguage": "en"
       },
-      "factualClaims": [
-        {
-          "text": "Multiple participants reported Claude errors or blocked tool workflows and described multi-provider or Bedrock access as operational mitigations.",
-          "evidenceUrl": "https://news.ycombinator.com/item?id=49068029",
-          "evidenceLabel": "multiple_users_report"
-        }
-      ],
-      "communityCheck": {
-        "status": "checked",
-        "platformsAttempted": [
-          "Hacker News"
-        ],
-        "platformsUnavailable": [],
-        "signals": [
-          {
-            "url": "https://news.ycombinator.com/item?id=49069015",
-            "retrievedAt": "2026-07-28T06:14:36Z",
-            "authorRole": "Service user",
-            "evidenceLabel": "single_community_test",
-            "finding": "A user said outages led them to maintain smaller subscriptions across multiple providers to reduce workday interruption risk.",
-            "configuration": "Qualitative operational report without request volume or region.",
-            "adopted": true
-          },
-          {
-            "url": "https://news.ycombinator.com/item?id=49074597",
-            "retrievedAt": "2026-07-28T06:14:36Z",
-            "authorRole": "Coding-agent user",
-            "evidenceLabel": "single_community_test",
-            "finding": "A user reported that automatic mode could not assess Bash safety while Opus 5 was unavailable, although read-only operations continued.",
-            "configuration": "Claude coding workflow in automatic mode; client version and incident duration were not provided.",
-            "adopted": true
-          },
-          {
-            "url": "https://news.ycombinator.com/item?id=49069366",
-            "retrievedAt": "2026-07-28T06:14:36Z",
-            "authorRole": "Engineering team member",
-            "evidenceLabel": "single_community_test",
-            "finding": "One participant said their team observed better Claude stability through AWS Bedrock than through direct Anthropic access.",
-            "configuration": "Qualitative team observation without region, request volume, or routing details.",
-            "adopted": true
-          }
-        ]
-      },
-      "score": {
-        "evidenceStrength": 3,
-        "relevance": 5,
-        "novelty": 3,
-        "practicalUtility": 5,
-        "impact": 4,
-        "communitySignal": 5,
-        "total": 25
-      },
-      "materialUpdate": "",
-      "windowException": "Theme fixture preserves this verified example; production runs do not backfill prior-day items without a documented material update.",
       "region": "global"
     }
   ],
   "research": {
-    "collectedUrls": [
-      "https://www.anthropic.com/news/position-open-weights-models",
-      "https://news.ycombinator.com/item?id=49076261",
-      "https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/",
-      "https://openai.com/index/how-ai-is-expanding-what-people-do-at-work/",
-      "https://github.blog/changelog/2026-07-27-github-copilot-for-jetbrains-adds-improvved-opentelemetry-configuration-and-model-management/",
-      "https://github.blog/changelog/2026-07-27-manage-github-copilot-app-access-with-a-dedicated-policy/",
-      "https://github.blog/changelog/2026-07-27-enterprise-managed-settings-now-apply-to-the-github-copilot-app/",
-      "https://github.com/vercel/ai/releases/tag/ai%407.0.39",
-      "https://github.com/ollama/ollama/releases/tag/v0.32.5",
-      "https://blog.cloudflare.com/open-sourcing-our-privacy-proxy-cli/",
-      "https://news.ycombinator.com/item?id=49078583",
-      "https://news.ycombinator.com/item?id=49079002",
-      "https://news.ycombinator.com/item?id=49078892",
-      "https://news.ycombinator.com/item?id=49078454",
-      "https://news.ycombinator.com/item?id=49079249",
-      "https://news.ycombinator.com/item?id=49072462",
-      "https://news.ycombinator.com/item?id=49074829",
-      "https://news.ycombinator.com/item?id=49073444",
-      "https://news.ycombinator.com/item?id=49068029",
-      "https://news.ycombinator.com/item?id=49069015",
-      "https://news.ycombinator.com/item?id=49074597",
-      "https://news.ycombinator.com/item?id=49069366",
-      "https://github.com/vercel/ai/releases/tag/ai%407.0.40",
-      "https://github.com/langchain-ai/langchain/releases/tag/langchain-fireworks%3D%3D1.5.2",
-      "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28-RC",
-      "https://qwenlm.github.io/qwen-code-docs/en/blog/updates/weekly-update-2026-07-23/",
-      "https://jxca.miit.gov.cn/xwdt/bwyw/art/2026/art_b13a83dbc0cc4d59b089b1cf19424abf.html",
-      "https://api-docs.deepseek.com/updates"
-    ],
-    "excludedCandidates": [
-      {
-        "eventId": "vercel-ai-sdk-7-0-40-generatedfile",
-        "title": "AI SDK 7.0.40 deprecates Experimental_GeneratedImage",
-        "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.40",
-        "reason": "low-relevance"
-      },
-      {
-        "eventId": "langchain-fireworks-1-5-2",
-        "title": "langchain-fireworks 1.5.2",
-        "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-fireworks%3D%3D1.5.2",
-        "reason": "low-relevance"
-      },
-      {
-        "eventId": "mcp-2026-07-28-rc",
-        "title": "MCP 2026-07-28 RC",
-        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28-RC",
-        "reason": "stale"
-      }
-    ],
-    "unavailableSources": [
-      "reddit-localllama",
-      "x-curated-experts"
-    ],
-    "warnings": [
-      "Reddit and X authentication was unavailable; the run recorded both sources as unavailable without blocking Preview.",
-      "When a source exposed only a publication date, publishedAt used 00:00:00Z for that date.",
-      "Community entries preserve uncertainty; votes and comment counts were used for discovery, not as factual evidence.",
-      "The China preview examples include documented material window exceptions; production runs still scan the edition-day window first and publish no regional quota."
-    ],
     "sourceScan": [
       {
         "sourceId": "openai-news",
@@ -1256,6 +810,12 @@
         "selectedCount": 0,
         "failureReason": "Theme fixture does not execute network collection."
       }
+    ],
+    "warnings": [
+      "Reddit and X authentication was unavailable; the run recorded both sources as unavailable without blocking Preview.",
+      "When a source exposed only a publication date, publishedAt used 00:00:00Z for that date.",
+      "Community entries preserve uncertainty; votes and comment counts were used for discovery, not as factual evidence.",
+      "The China preview examples include documented material window exceptions; production runs still scan the edition-day window first and publish no regional quota."
     ]
   },
   "language": "en",

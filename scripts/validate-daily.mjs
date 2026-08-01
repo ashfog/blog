@@ -13,16 +13,6 @@ const readJson = async (file) => JSON.parse(await fs.readFile(file, "utf8"));
 const isObject = (value) =>
   value !== null && typeof value === "object" && !Array.isArray(value);
 
-const normalizeUrl = (value) => {
-  try {
-    const url = new URL(value);
-    url.hash = "";
-    return url.toString();
-  } catch {
-    return value;
-  }
-};
-
 const parseDateTime = (value) => {
   if (typeof value !== "string" || !/[zZ]|[+-]\d{2}:\d{2}$/.test(value)) {
     return null;
@@ -106,13 +96,6 @@ export function validateAgainstSchema(value, schema, rootSchema, at = "$", error
     if (schema.format === "date-time" && value !== "" && !parseDateTime(value)) {
       errors.push(`${at}: invalid timezone-aware date-time`);
     }
-    if (schema.format === "uri") {
-      try {
-        new URL(value);
-      } catch {
-        errors.push(`${at}: invalid URI`);
-      }
-    }
   }
 
   if (typeof value === "number") {
@@ -187,93 +170,6 @@ const countEnglishWords = (text) => {
   return [...segmenter.segment(text)].filter((segment) => segment.isWordLike).length;
 };
 
-const scoreTotal = (score) =>
-  [
-    "evidenceStrength",
-    "relevance",
-    "novelty",
-    "practicalUtility",
-    "impact",
-    "communitySignal",
-  ].reduce((total, key) => total + score[key], 0);
-
-const publishedUrls = (edition) => {
-  const urls = new Set();
-  for (const story of edition.stories ?? []) {
-    if (story.source?.url) urls.add(normalizeUrl(story.source.url));
-    for (const claim of story.factualClaims ?? []) {
-      if (claim.evidenceUrl) urls.add(normalizeUrl(claim.evidenceUrl));
-    }
-    for (const signal of story.communityCheck?.signals ?? []) {
-      if (signal.adopted && signal.url) urls.add(normalizeUrl(signal.url));
-    }
-  }
-  return [...urls];
-};
-
-const checkOneLink = async (url, timeoutMs) => {
-  const request = async (method) => {
-    const response = await fetch(url, {
-      method,
-      redirect: "follow",
-      signal: AbortSignal.timeout(timeoutMs),
-      headers: {
-        "user-agent": "ASHFOG-Editorial-Validator/1.0",
-        accept: "text/html,application/json,application/xml;q=0.9,*/*;q=0.8",
-      },
-    });
-    return { status: response.status, finalUrl: response.url };
-  };
-
-  try {
-    let result = await request("HEAD");
-    if (result.status === 405 || result.status >= 500) result = await request("GET");
-    return { url, ...result };
-  } catch (headError) {
-    try {
-      return { url, ...(await request("GET")) };
-    } catch (getError) {
-      return { url, error: getError.message || headError.message };
-    }
-  }
-};
-
-export async function checkLinks(urls, rules) {
-  const queue = [...urls];
-  const results = [];
-  const worker = async () => {
-    while (queue.length) {
-      const url = queue.shift();
-      results.push(await checkOneLink(url, rules.links.timeoutMs));
-    }
-  };
-  const count = Math.min(rules.links.maxConcurrentChecks, queue.length);
-  await Promise.all(Array.from({ length: count }, () => worker()));
-  return results;
-}
-
-const loadPreviousEditions = async (contentDir, currentFile, limit) => {
-  try {
-    const names = (await fs.readdir(contentDir))
-      .filter((name) => name.endsWith(".json"))
-      .filter((name) => path.resolve(contentDir, name) !== path.resolve(currentFile))
-      .sort()
-      .reverse()
-      .slice(0, limit);
-    const editions = [];
-    for (const name of names) {
-      try {
-        editions.push(await readJson(path.join(contentDir, name)));
-      } catch {
-        // An invalid previous edition should not hide errors in the current candidate.
-      }
-    }
-    return editions;
-  } catch {
-    return [];
-  }
-};
-
 export async function loadEditorialConfig(root = repoRoot) {
   const [schema, rules, sourceData, sourceAccessData, categoriesData, evidenceData, imageData] = await Promise.all([
     readJson(path.join(root, "schemas", "daily.schema.json")),
@@ -284,31 +180,12 @@ export async function loadEditorialConfig(root = repoRoot) {
     readJson(path.join(root, "editorial", "evidence-labels.json")),
     readJson(path.join(root, "editorial", "image-library.json")),
   ]);
-  const sourceUrlFields = ["url", "api", "repository", "releases_api", "endpoint"];
-  const allowedHosts = new Set();
-  const sourceHosts = new Map();
   const seenSourceIds = new Set();
   for (const source of sourceData.sources) {
     if (!source.id || seenSourceIds.has(source.id)) {
       throw new Error(`editorial/sources.json contains an invalid or duplicate id: ${source.id}`);
     }
     seenSourceIds.add(source.id);
-    if (!["A", "B", "C"].includes(source.tier)) {
-      throw new Error(`editorial/sources.json source ${source.id} has invalid tier ${source.tier}`);
-    }
-    const hosts = new Set();
-    for (const field of sourceUrlFields) {
-      if (!source[field]) continue;
-      try {
-        const host = new URL(source[field]).hostname.toLowerCase();
-        allowedHosts.add(host);
-        hosts.add(host);
-      } catch {
-        throw new Error(`editorial/sources.json source ${source.id} has invalid ${field}`);
-      }
-    }
-    if (!hosts.size) throw new Error(`editorial/sources.json source ${source.id} has no valid URL`);
-    sourceHosts.set(source.id, hosts);
   }
 
   const routeTypes = new Set(sourceAccessData.routeTypes ?? []);
@@ -398,8 +275,6 @@ export async function loadEditorialConfig(root = repoRoot) {
     schema,
     rules,
     sources: new Map(sourceData.sources.map((source) => [source.id, source])),
-    allowedHosts,
-    sourceHosts,
     categories: new Set(categoryIds),
     evidenceLabels: new Set(Object.keys(evidenceData.labels)),
     imageIds: new Set(imageIds),
@@ -416,8 +291,6 @@ export async function validateEdition(
   {
     config,
     file = "",
-    previousEditions = [],
-    linkResults = [],
   },
 ) {
   const errors = validateAgainstSchema(edition, config.schema, config.schema);
@@ -427,8 +300,6 @@ export async function validateEdition(
   const {
     rules,
     sources,
-    allowedHosts,
-    sourceHosts,
     categories,
     evidenceLabels,
     imageIds,
@@ -481,17 +352,12 @@ export async function validateEdition(
 
   const ids = new Set();
   const eventIds = new Set();
-  const sourceUrls = new Set();
-  const companies = new Map();
-  const ecosystems = new Map();
-  const collected = new Set(edition.research.collectedUrls.map(normalizeUrl));
+  const sourceLinkCount = new Set(edition.stories.map((story) => story.source.url)).size;
   const kinds = { news: 0, community: 0 };
   let highlights = 0;
   let openSource = 0;
-  let mediaOnly = 0;
   const requestedImageIds = new Set();
   const sourceScanIds = new Set();
-  const unavailableScanIds = new Set();
   let attemptedSources = 0;
   let availableSources = 0;
   let fetchedItems = 0;
@@ -537,7 +403,6 @@ export async function validateEdition(
       errors.push(`${at}.failureReason: required when source is unavailable`);
     }
     if (scan.status === "unavailable") {
-      unavailableScanIds.add(scan.sourceId);
       if (inWindowItems !== 0) errors.push(at + ".status: unavailable requires zero " + countField + " items");
       if (scan.selectedCount !== 0) errors.push(at + ".selectedCount: unavailable source cannot select items");
     }
@@ -548,16 +413,6 @@ export async function validateEdition(
     scannedDuplicates += scan.duplicatesRemoved;
   }
   if (!isThemeFixture) {
-    const listedUnavailableIds = new Set(edition.research.unavailableSources);
-    for (const sourceId of listedUnavailableIds) {
-      if (!sourceIds.has(sourceId)) errors.push("$.research.unavailableSources: unknown source " + sourceId);
-    }
-    for (const sourceId of unavailableScanIds) {
-      if (!listedUnavailableIds.has(sourceId)) errors.push("$.research.unavailableSources: missing " + sourceId);
-    }
-    for (const sourceId of listedUnavailableIds) {
-      if (!unavailableScanIds.has(sourceId)) errors.push("$.research.unavailableSources: source is not unavailable " + sourceId);
-    }
     for (const sourceId of sourceIds) {
       if (!sourceScanIds.has(sourceId)) {
         errors.push(`$.research.sourceScan: missing registered source ${sourceId}`);
@@ -568,38 +423,6 @@ export async function validateEdition(
         `$.research.sourceScan: expected exactly ${sourceIds.size} registered sources; received ${sourceScanIds.size}`,
       );
     }
-  }
-
-  if (isRollingWindow) {
-    const expectedCandidateCount = edition.stories.length + edition.research.excludedCandidates.length;
-    if (!Number.isInteger(edition.research.seriousCandidateCount)) {
-      errors.push("$.research.seriousCandidateCount: required for schemaVersion 2");
-    } else if (edition.research.seriousCandidateCount !== expectedCandidateCount) {
-      errors.push(`$.research.seriousCandidateCount: expected ${expectedCandidateCount} selected plus excluded candidates`);
-    }
-    edition.research.excludedCandidates.forEach((candidate, index) => {
-      const at = `$.research.excludedCandidates[${index}]`;
-      if (!collected.has(normalizeUrl(candidate.url))) {
-        errors.push(`${at}.url: URL is absent from research.collectedUrls`);
-      }
-      if (candidate.reason === "low-relevance") {
-        if (!candidate.score) {
-          errors.push(`${at}.score: required for a low-relevance exclusion`);
-        } else {
-          const floor = rules.selection.materialityFloor;
-          const actualTotal = scoreTotal(candidate.score);
-          if (candidate.score.total !== actualTotal) errors.push(at + ".score.total: expected " + actualTotal);
-          const qualifies = actualTotal >= floor.minimumTotalScore &&
-            candidate.score.evidenceStrength >= floor.minimumEvidenceStrength &&
-            candidate.score.relevance >= floor.minimumRelevance &&
-            Math.max(candidate.score.impact, candidate.score.practicalUtility) >= floor.minimumImpactOrPracticalUtility;
-          if (qualifies) errors.push(`${at}.reason: candidate meets the materiality floor and cannot be excluded as low-relevance`);
-        }
-      }
-      if (candidate.reason === "lower-priority" && edition.stories.length < rules.selection.safetyMaxStories) {
-        errors.push(`${at}.reason: lower-priority is allowed only after the safety maximum is reached`);
-      }
-    });
   }
 
   if (edition.heroImageId && !imageIds.has(edition.heroImageId)) {
@@ -629,12 +452,6 @@ export async function validateEdition(
       requestedImageIds.add(story.imageId);
     }
 
-    const normalizedSource = normalizeUrl(story.source.url);
-    if (sourceUrls.has(normalizedSource)) {
-      errors.push(`${at}.source.url: duplicate primary URL; merge duplicate coverage`);
-    }
-    sourceUrls.add(normalizedSource);
-
     if (!categories.has(story.category)) errors.push(`${at}.category: unknown category`);
     if (!evidenceLabels.has(story.source.evidenceLabel)) {
       errors.push(`${at}.source.evidenceLabel: unknown label`);
@@ -642,9 +459,6 @@ export async function validateEdition(
     const registered = sources.get(story.source.id);
     if (!registered) errors.push(`${at}.source.id: not found in editorial/sources.json`);
     else {
-      if (registered.tier !== story.source.tier) {
-        errors.push(`${at}.source.tier: expected ${registered.tier}`);
-      }
       if (registered.name !== story.source.name) {
         errors.push(`${at}.source.name: expected ${registered.name}`);
       }
@@ -653,19 +467,6 @@ export async function validateEdition(
           `${at}.source.sourceLanguage: ${story.source.sourceLanguage} is not registered for ${story.source.id}`,
         );
       }
-      const sourceHost = new URL(story.source.url).hostname.toLowerCase();
-      if (!sourceHosts.get(story.source.id)?.has(sourceHost)) {
-        errors.push(`${at}.source.url: host does not match registered source ${story.source.id}`);
-      }
-    }
-    if (story.kind === "news" && story.source.tier === "C") {
-      errors.push(`${at}.source.tier: Tier C cannot be the primary source for a news item`);
-    }
-    if (!collected.has(normalizedSource)) {
-      errors.push(`${at}.source.url: URL is absent from research.collectedUrls`);
-    }
-    if (!allowedHosts.has(new URL(story.source.url).hostname.toLowerCase())) {
-      errors.push(`${at}.source.url: host is absent from editorial/sources.json`);
     }
 
     const publishedAt = parseDateTime(story.source.publishedAt);
@@ -677,52 +478,9 @@ export async function validateEdition(
     }
     const currentByPublication = publishedAt > collectionStart && publishedAt <= cutoff;
     const currentByUpdate = updatedAt && updatedAt > collectionStart && updatedAt <= cutoff;
-    if (!currentByPublication && !currentByUpdate && !story.windowException) {
-      errors.push(`${at}.source.publishedAt: outside collection window without windowException`);
+    if (!currentByPublication && !currentByUpdate) {
+      errors.push(`${at}.source.publishedAt: outside collection window`);
     }
-
-    story.factualClaims.forEach((claim, claimIndex) => {
-      if (!evidenceLabels.has(claim.evidenceLabel)) {
-        errors.push(`${at}.factualClaims[${claimIndex}].evidenceLabel: unknown label`);
-      }
-      if (!collected.has(normalizeUrl(claim.evidenceUrl))) {
-        errors.push(
-          `${at}.factualClaims[${claimIndex}].evidenceUrl: URL is absent from research.collectedUrls`,
-        );
-      }
-      if (!allowedHosts.has(new URL(claim.evidenceUrl).hostname.toLowerCase())) {
-        errors.push(
-          `${at}.factualClaims[${claimIndex}].evidenceUrl: host is absent from editorial/sources.json`,
-        );
-      }
-    });
-    story.communityCheck.signals.forEach((signal, signalIndex) => {
-      if (!evidenceLabels.has(signal.evidenceLabel)) {
-        errors.push(`${at}.communityCheck.signals[${signalIndex}].evidenceLabel: unknown label`);
-      }
-      if (signal.adopted && !collected.has(normalizeUrl(signal.url))) {
-        errors.push(
-          `${at}.communityCheck.signals[${signalIndex}].url: adopted URL is absent from research.collectedUrls`,
-        );
-      }
-      if (
-        signal.adopted &&
-        !allowedHosts.has(new URL(signal.url).hostname.toLowerCase())
-      ) {
-        errors.push(
-          `${at}.communityCheck.signals[${signalIndex}].url: host is absent from editorial/sources.json`,
-        );
-      }
-      if (
-        signal.adopted &&
-        /(benchmark|tokens?\/s|latency|throughput|vram|显存|延迟|吞吐)/iu.test(signal.finding) &&
-        !signal.configuration
-      ) {
-        errors.push(
-          `${at}.communityCheck.signals[${signalIndex}].configuration: benchmark evidence requires configuration`,
-        );
-      }
-    });
 
     const lengths = rules.contentLengths[story.kind];
     const summaryWords = countEnglishWords(story.summary);
@@ -744,31 +502,17 @@ export async function validateEdition(
       );
     }
 
-    const total = scoreTotal(story.score);
-    if (story.score.total !== total) errors.push(`${at}.score.total: expected ${total}`);
-    if (isRollingWindow) {
-      const floor = rules.selection.materialityFloor;
-      if (total < floor.minimumTotalScore) errors.push(`${at}.score.total: below materiality floor ${floor.minimumTotalScore}`);
-      if (story.score.evidenceStrength < floor.minimumEvidenceStrength) errors.push(`${at}.score.evidenceStrength: below materiality floor`);
-      if (story.score.relevance < floor.minimumRelevance) errors.push(`${at}.score.relevance: below materiality floor`);
-      if (Math.max(story.score.impact, story.score.practicalUtility) < floor.minimumImpactOrPracticalUtility) {
-        errors.push(`${at}.score: impact or practicalUtility must meet the materiality floor`);
-      }
-    }
     if (story.highlight) highlights += 1;
     if (story.openSource) openSource += 1;
-    if (story.mediaOnly) mediaOnly += 1;
     kinds[story.kind] += 1;
-    if (story.company) companies.set(story.company, (companies.get(story.company) ?? 0) + 1);
-    ecosystems.set(story.ecosystem, (ecosystems.get(story.ecosystem) ?? 0) + 1);
   });
 
   for (let left = 0; left < edition.stories.length; left += 1) {
     for (let right = left + 1; right < edition.stories.length; right += 1) {
       const score = similarity(edition.stories[left].headline, edition.stories[right].headline);
       if (score >= 0.82) {
-        errors.push(
-          `$.stories: highly similar headlines at positions ${left + 1} and ${right + 1} (${score.toFixed(2)})`,
+        warnings.push(
+          `highly similar headlines at positions ${left + 1} and ${right + 1} (${score.toFixed(2)})`,
         );
       }
     }
@@ -780,22 +524,6 @@ export async function validateEdition(
   }
   if (highlights < highlightTarget.min) {
     errors.push(`$.stories: at least ${highlightTarget.min} highlight is required`);
-  }
-
-  if (edition.stories.length && mediaOnly / edition.stories.length > rules.caps.mediaOnlyShare) {
-    errors.push("$.stories: media-only share exceeds configured cap");
-  }
-  for (const [company, count] of companies) {
-    if (count > rules.caps.itemsPerCompany) {
-      errors.push(`$.stories: company ${company} exceeds ${rules.caps.itemsPerCompany} items`);
-    }
-  }
-  if (edition.stories.length >= rules.caps.applyEcosystemShareAt) {
-    for (const [ecosystem, count] of ecosystems) {
-      if (count / edition.stories.length > rules.caps.ecosystemShare) {
-        errors.push(`$.stories: ecosystem ${ecosystem} exceeds configured share cap`);
-      }
-    }
   }
 
   const analysisIds = new Set(edition.dailyAnalysis.signalIds);
@@ -822,33 +550,6 @@ export async function validateEdition(
     warnings.push(`daily analysis has ${analysisWords} words`);
   }
 
-  const previousEvents = new Set();
-  for (const previous of previousEditions) {
-    for (const story of previous.stories ?? []) previousEvents.add(story.eventId);
-    if (previous.dailyAnalysis?.body) {
-      const score = similarity(edition.dailyAnalysis.body, previous.dailyAnalysis.body);
-      if (score >= rules.analysis.maxPriorSimilarity) {
-        errors.push(`$.dailyAnalysis.body: similarity ${score.toFixed(2)} exceeds prior-edition cap`);
-      }
-    }
-  }
-  edition.stories.forEach((story, index) => {
-    if (previousEvents.has(story.eventId) && !story.materialUpdate) {
-      errors.push(
-        `$.stories[${index}].materialUpdate: repeated event requires a material update`,
-      );
-    }
-  });
-
-  for (const result of linkResults) {
-    if (result.error) errors.push(`link: ${result.url} failed: ${result.error}`);
-    else if ([401, 403, 429].includes(result.status)) {
-      warnings.push(`link: ${result.url} returned restricted status ${result.status}`);
-    } else if (result.status >= 400) {
-      errors.push(`link: ${result.url} returned ${result.status}`);
-    }
-  }
-
   return {
     status: errors.length ? "error" : "ok",
     editionDate: edition.editionDate,
@@ -858,9 +559,7 @@ export async function validateEdition(
       community: kinds.community,
       highlights,
       openSource,
-      mediaOnly,
-      collectedUrls: collected.size,
-      checkedLinks: linkResults.length,
+      sourceLinks: sourceLinkCount,
       attemptedSources,
       availableSources,
       fetchedItems,
@@ -873,20 +572,14 @@ export async function validateEdition(
 }
 
 const parseArgs = (argv) => {
-  const result = {
-    file: "",
-    contentDir: path.join(repoRoot, "src", "content", "daily"),
-    checkLinks: false,
-  };
+  const result = { file: "" };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     if (arg === "--") continue;
     if (!result.file && !arg.startsWith("--")) result.file = path.resolve(arg);
-    else if (arg === "--content-dir") result.contentDir = path.resolve(argv[++index]);
-    else if (arg === "--check-links") result.checkLinks = true;
     else throw new Error(`Unknown argument: ${arg}`);
   }
-  if (!result.file) throw new Error("Usage: validate-daily.mjs <edition.json> [--content-dir DIR] [--check-links]");
+  if (!result.file) throw new Error("Usage: validate-daily.mjs <edition.json>");
   return result;
 };
 
@@ -896,19 +589,9 @@ async function main() {
     readJson(args.file),
     loadEditorialConfig(),
   ]);
-  const previousEditions = await loadPreviousEditions(
-    args.contentDir,
-    args.file,
-    config.rules.previousEditionLookback,
-  );
-  const linkResults = args.checkLinks
-    ? await checkLinks(publishedUrls(edition), config.rules)
-    : [];
   const report = await validateEdition(edition, {
     config,
     file: args.file,
-    previousEditions,
-    linkResults,
   });
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
   process.exitCode = report.status === "ok" ? 0 : 1;

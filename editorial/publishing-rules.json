@@ -1,22 +1,13 @@
 {
-  "version": 4,
+  "version": 5,
   "timezone": "America/New_York",
-  "previousEditionLookback": 7,
   "selection": {
-    "collectAllMaterialCandidates": true,
-    "noGlobalCandidateCap": true,
-    "noRoutineStoryQuota": true,
-    "publishEveryMaterialEvent": true,
-    "neverPadToReachACount": true,
+    "combineRelevanceAndEventDeduplication": true,
+    "deduplicateByEventContent": true,
+    "preferOfficialSourceWithinEvent": true,
+    "importanceScoring": false,
     "safetyMaxStories": 46,
-    "materialityFloor": {
-      "minimumTotalScore": 16,
-      "minimumEvidenceStrength": 3,
-      "minimumRelevance": 3,
-      "minimumImpactOrPracticalUtility": 3
-    },
-    "recordEverySeriousCandidate": true,
-    "recordExplicitExclusionForEveryUnselectedCandidate": true
+    "overflowOrder": "newest-first"
   },
   "contentLengths": {
     "news": {
@@ -46,12 +37,6 @@
       "max": 5
     }
   },
-  "caps": {
-    "itemsPerCompany": 3,
-    "ecosystemShare": 0.3,
-    "applyEcosystemShareAt": 8,
-    "mediaOnlyShare": 0.15
-  },
   "analysis": {
     "minSignalIds": 3,
     "minParagraphs": 2,
@@ -59,13 +44,7 @@
     "targetWords": {
       "min": 200,
       "max": 350
-    },
-    "maxPriorSimilarity": 0.72
-  },
-  "links": {
-    "httpsOnly": true,
-    "timeoutMs": 12000,
-    "maxConcurrentChecks": 6
+    }
   },
   "collection": {
     "windowMode": "rolling-hours",

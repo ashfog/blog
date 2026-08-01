@@ -11,7 +11,6 @@ export type EvidenceLabel =
 export interface DailySource {
   id: string;
   name: string;
-  tier: "A" | "B" | "C";
   url: string;
   publishedAt: string;
   updatedAt: string | null;
@@ -28,38 +27,13 @@ export interface DailyStory {
   region: "global" | "china" | "north-america" | "europe" | "asia-pacific" | "other";
   category: string;
   topics: string[];
-  company: string | null;
-  ecosystem: string;
   openSource: boolean;
-  mediaOnly: boolean;
   imageId?: string | null;
   headline: string;
   summary: string;
   whyItMatters: string;
   source: DailySource;
-  score: { total: number };
-  communityCheck?: {
-    status: "checked" | "no_relevant_signal" | "unavailable" | "not_applicable";
-    platformsAttempted: string[];
-    platformsUnavailable: string[];
-    signals: DailyCommunitySignal[];
-  };
-}
 
-export interface DailyCommunitySignal {
-  url: string;
-  retrievedAt: string;
-  authorRole: string;
-  evidenceLabel: EvidenceLabel;
-  finding: string;
-  configuration: string;
-  adopted: boolean;
-}
-
-export interface AdoptedCommunityFinding extends DailyCommunitySignal {
-  platform: string;
-  parentStoryId: string;
-  parentHeadline: string;
 }
 
 export interface DailyEdition {
@@ -82,8 +56,10 @@ export interface DailyEdition {
   };
   stories: DailyStory[];
   research: {
-    collectedUrls: string[];
-    unavailableSources: string[];
+    sourceScan: Array<{
+      sourceId: string;
+      status: "collected" | "empty" | "unavailable" | "not-run";
+    }>;
     warnings: string[];
   };
 }
@@ -139,28 +115,6 @@ export function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {
     timeZone: "UTC",
     ...options
   }).format(new Date(Date.UTC(year, month - 1, day, 12)));
-}
-
-export function getAdoptedCommunityFindings(edition: DailyEdition) {
-  return edition.stories
-    .filter((story) => story.kind === "news")
-    .flatMap((story) =>
-      (story.communityCheck?.signals ?? [])
-        .filter((signal) => signal.adopted)
-        .map((signal) => ({
-          ...signal,
-          platform: new URL(signal.url).hostname.replace(/^www\./u, ""),
-          parentStoryId: story.id,
-          parentHeadline: story.headline
-        }))
-    );
-}
-
-export function communityFindingCount(edition: DailyEdition) {
-  return (
-    edition.stories.filter((story) => story.kind === "community").length +
-    getAdoptedCommunityFindings(edition).length
-  );
 }
 
 export function readingMinutes(edition: DailyEdition) {
