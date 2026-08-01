@@ -55,16 +55,16 @@ const pageImage = getPageImage("about");
 
 <style>
   .about {
-    padding-top: 130px;
+    padding-top: 76px;
   }
 
   header {
     display: grid;
-    min-height: 610px;
-    grid-template-columns: 2fr 1fr;
+    min-height: 390px;
+    grid-template-columns: 1.5fr .7fr;
     gap: 60px;
     align-items: end;
-    padding-bottom: 80px;
+    padding-bottom: 58px;
   }
 
   .eyebrow {
@@ -74,10 +74,10 @@ const pageImage = getPageImage("about");
 
   h1 {
     margin: 0;
-    font-size: clamp(62px, 9vw, 120px);
+    font-size: clamp(50px, 6.5vw, 80px);
     font-weight: 510;
     letter-spacing: -0.075em;
-    line-height: .88;
+    line-height: .96;
   }
 
   h1 em {
@@ -89,7 +89,8 @@ const pageImage = getPageImage("about");
   header p {
     margin: 0;
     color: var(--muted);
-    font-size: 17px;
+    font-size: 16px;
+    line-height: 1.7;
   }
 
   .principles {
@@ -100,8 +101,8 @@ const pageImage = getPageImage("about");
   }
 
   .principles article {
-    min-height: 340px;
-    padding: 26px;
+    min-height: 280px;
+    padding: 24px;
     border-right: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
     background: var(--surface);
@@ -113,8 +114,8 @@ const pageImage = getPageImage("about");
   }
 
   article h2 {
-    margin: 120px 0 14px;
-    font-size: 26px;
+    margin: 72px 0 14px;
+    font-size: 23px;
     font-weight: 540;
     letter-spacing: -.04em;
   }
@@ -125,8 +126,8 @@ const pageImage = getPageImage("about");
   }
 
   .manifesto {
-    min-height: 700px;
-    padding-top: 140px;
+    min-height: 520px;
+    padding-top: 100px;
   }
 
   .manifesto > p {
@@ -137,7 +138,7 @@ const pageImage = getPageImage("about");
   .manifesto h2 {
     margin: 35px 0;
     font-family: var(--font-serif);
-    font-size: clamp(42px, 6.5vw, 86px);
+    font-size: clamp(38px, 5vw, 62px);
     font-weight: 430;
     letter-spacing: -.05em;
     line-height: 1.08;
@@ -151,6 +152,8 @@ const pageImage = getPageImage("about");
   @media (max-width: 800px) {
     header {
       grid-template-columns: 1fr;
+      min-height: 0;
+      gap: 26px;
     }
 
     .principles {
