@@ -1,0 +1,1155 @@
+{
+  "schemaVersion": 3,
+  "language": "en",
+  "edition": "global",
+  "editionDate": "2026-08-02",
+  "timezone": "America/New_York",
+  "windowStartAt": "2026-08-01T09:30:00-04:00",
+  "cutoffAt": "2026-08-02T09:30:00-04:00",
+  "generatedAt": "2026-08-02T13:49:54.499Z",
+  "runId": "publish-2026-08-02-0930-america-new-york",
+  "title": "Local Agent Systems Favor Evidence, Boundaries, and Smaller Machines",
+  "description": "A rolling-day brief on agent control planes, local inference, open-source tooling, document intelligence, applied machine learning, and developer maintenance.",
+  "article": {
+    "synthesis": {
+      "title": "The weekend’s signal is integration under constraint",
+      "body": "The strongest movement in this window came from builders assembling practical boundaries around models rather than from a new frontier-model announcement. New repositories made testing, bug fixing, notification triage, document parsing, geospatial work, and collaborative writing addressable to agents. Several of them deliberately separated model judgment from deterministic control: Forger leaves stage transitions to verification modules, Vibeguard runs static checks before optional AI review, and Kanyu exposes declared geospatial operations instead of arbitrary code execution. Those choices matter because capability is increasingly expressed through the surrounding workflow, not only through the model at its center.\n\nLocal inference supplied the other coherent thread. Community releases explored native MLX quantization, SSD-streamed experts, and llama.cpp support for DeepSeek’s speculative drafter, while an intentionally empty 16.5-trillion-parameter repository exposed how easily model-size rankings can describe metadata rather than intelligence. The evidence is uneven: maintainers provided configurations and benchmark details, but independent replication is still sparse. Taken together, the day favors inspectable interfaces, explicit limits, and reproducible measurements over grand capability claims. The maintenance-only Vercel release train reinforces that quieter pattern: much of the useful work is dependency propagation, compatibility, and control-plane design. The common standard is modest but important: publish enough detail for another builder to inspect the boundary, repeat the test, or reject the claim today.",
+      "signalIds": [
+        "forger-bug-pipeline",
+        "vibeguard-code-scanner",
+        "kanyu-geospatial-os",
+        "wintermix-mlx-quants",
+        "llamacpp-deepseek-dspark",
+        "vacuum-16t-metric-test"
+      ]
+    },
+    "sections": [
+      {
+        "id": "agent-control-planes",
+        "position": 1,
+        "kicker": "Agent control planes",
+        "title": "Builders put verification and policy around model action",
+        "body": "Forger, TestPilot AI, Vibeguard, and Message Notification Router all treat a model as one component inside a larger decision system. Forger is the clearest architectural statement: a coding runner can propose work at each bug-fixing stage, but filesystem evidence and Python verification modules determine whether the pipeline advances. TestPilot AI packages an adjacent quality workflow—test cases, bug reports, API plans, and code review—while preserving a deterministic mock path for demonstrations. Vibeguard moves still earlier, blocking recognizable defects and secret-handling mistakes before its optional AI studio performs a broader review.\n\nThe notification router divides context gathering, rules, policy validation, and formatting into explicit steps. AlphaMatrix applies a similar layered idea to governance dashboards, combining explanation views, bias thresholds, approval queues, and audit exports. None of these projects proves production reliability, regulatory compliance, or security merely by presenting the interface. Their shared value is structural: model output is made reviewable, interruptible, and subordinate to gates that can be inspected. The recursive instruction ruleset operates at the input end of the same chain, auditing prompts and plans before execution. Together these releases show a community trying to replace one-shot prompting with controlled processes whose failures have named locations and whose claims can be tested separately.\n\nThat separation also clarifies accountability. A generated test plan can be reviewed without accepting its proposed code changes; a notification policy can be evaluated against labeled examples before it interrupts anyone; and a governance dashboard can distinguish an explanation graphic from an enforceable control. The repositories are early, and several are portfolio or challenge projects, but they expose contracts that later systems can strengthen. The useful design question is no longer whether an agent can complete a task once. It is whether the surrounding system records inputs, constrains side effects, verifies outcomes, and leaves a person enough evidence to challenge the result. Clear recovery procedures and durable audit records will decide whether these prototypes can support repeated, unattended work.",
+        "signalIds": [
+          "forger-bug-pipeline",
+          "testpilot-ai",
+          "vibeguard-code-scanner",
+          "message-notification-router",
+          "alphamatrix-governance",
+          "recursive-agent-rules"
+        ]
+      },
+      {
+        "id": "local-inference",
+        "position": 2,
+        "kicker": "Local inference",
+        "title": "Quantization and streaming push large models onto smaller machines",
+        "body": "WinterMix and Mference attack local-model constraints from different directions. WinterMix keeps Qwen3.5-122B-A10B in native MLX while assigning precision selectively; its author reports that the 82 GiB build edges larger native quants on paired measurements and that a 68 GiB option leaves room for multiple long-context sessions on a 128 GB Mac. Mference instead keeps shared components resident and streams selected mixture-of-experts weights from SSD, reporting DeepSeek V4 Flash operation at roughly 5.3 GB of typical memory use, with disk I/O still dominating decode time.\n\nllama.cpp’s merged DSpark support extends the same effort into speculative decoding, although community comments noted that compatible GGUF packaging and visible speedups were not yet settled. Vacuum 16T provides a useful counterweight to performance theater: its zero-filled tensors demonstrate that a Hub parameter count can be technically accurate while saying nothing about capability, and that deduplicated transfer cost can diverge sharply from logical storage quota. Xberg’s Rust document engine broadens the systems story beyond inference, combining layout reconstruction, OCR and VLM backends, retrieval primitives, and mobile bindings. Each project publishes enough machinery to examine, but the benchmark claims remain maintainer evidence until other users reproduce them under comparable conditions.\n\nThe engineering tradeoffs are unusually concrete. WinterMix spends more memory to preserve native-format quality; Mference accepts SSD traffic to lower resident memory; DSpark aims to spend extra draft computation to reduce decode latency; and Xberg replaces broad Python stacks with Rust, ONNX, Candle, and tract paths selected by deployment target. None is a universal optimum. Hardware bandwidth, context length, model architecture, and runtime compatibility determine whether the claimed gain survives outside the author’s machine. Publishing those conditions is therefore part of the release, not an optional appendix. The community is most valuable when it exposes bottlenecks alongside headline numbers. Repeated tests across machines will show whether these techniques generalize or merely optimize one carefully chosen setup.",
+        "signalIds": [
+          "wintermix-mlx-quants",
+          "mference-deepseek-streaming",
+          "llamacpp-deepseek-dspark",
+          "vacuum-16t-metric-test",
+          "xberg-v1"
+        ]
+      },
+      {
+        "id": "interfaces-and-workspaces",
+        "position": 3,
+        "kicker": "Interfaces and workspaces",
+        "title": "Agent tools become local applications with explicit surfaces",
+        "body": "Several new projects turn agent behavior into a visible, local application. xharness gives a macOS assistant direct access to selected codebases, shows each command and file operation, and accepts screenshots alongside compatible model providers. Clone Chat builds a persona from imported message history, retrieval evidence, timing statistics, and feedback; its local storage reduces data exposure but does not remove the need for consent or safeguards against impersonation. Multi-Model Writers’ Room lets independently configured models share a transcript and evidence table without forcing a vote or single synthetic voice.\n\nThe Visuals skill addresses a narrower interface gap by converting screenshots, charts, scans, and documents into structured text for models that lack native vision. ErikrafT experiments with the outer shell—streaming chat, provider routing, offline behavior, and custom skill loading in a static web application. Kanyu carries the interface question into geospatial computing, where typed MCP tools expose a Rust kernel without granting arbitrary code execution. Across these projects, “local” means more than running weights on a laptop. It also means making permissions, artifacts, tool calls, and state legible to the person operating the system. That legibility will be more important as agents retain context and act across longer sessions.\n\nThese interfaces also reveal different answers to the state problem. Writers’ Room makes the shared transcript and evidence table durable while keeping model personas separate. Clone Chat builds state from private historical records and user feedback, which makes provenance and revocation central concerns. xharness attaches state to a chosen project and displays the operations that modify it. Visuals turns otherwise opaque images into textual artifacts that can be stored and cited. A local application can still call remote models, leak sensitive context, or execute a harmful command; locality is not a security guarantee. What it can provide is a narrower, more inspectable place to enforce consent, permissions, retention, and recovery. Defaults for deletion, export, and access review deserve as much design attention as the chat surface itself.",
+        "signalIds": [
+          "xharness-coding-agent",
+          "clone-chat-agent",
+          "multi-model-writers-room",
+          "claude-visuals-skill",
+          "erikraft-ai-shell",
+          "kanyu-geospatial-os"
+        ]
+      },
+      {
+        "id": "applied-and-educational",
+        "position": 4,
+        "kicker": "Applied and educational work",
+        "title": "New repositories connect AI to teaching, hardware, and domain demos",
+        "body": "The remaining releases stretch from education to physical instrumentation. A worked-through version of Karpathy’s neural-network course rebuilds bigrams, multilayer models, attention, and a small transformer without hiding the mechanics behind a high-level transformer module. AI Medical Imaging Assistant combines an EfficientNet classifier, Grad-CAM, generated report text, and PDF output for chest X-rays, while clearly warning that the application is educational rather than diagnostic. The NIR microplastic analyzer connects a six-channel spectroscopy prototype to a classical classifier and a small application stack.\n\nAwesome AI Hardware approaches the physical layer as curation, requiring projects to disclose licenses, evidence, and reproducibility details across robotics, wearables, edge inference, and device integrations. That kind of index can make fragmented work easier to audit, though its entries still require individual verification. Vercel’s synchronized AI SDK patch train sits at the opposite end of the maturity curve: multiple package versions moved together mainly to propagate gateway and harness dependencies. The contrast is healthy. A daily record should capture both early experiments and routine maintenance without pretending they carry equal certainty. What links them is evidence that can be followed: notebooks, schematics, source code, release notes, and explicit disclaimers provide a stronger starting point than polished claims alone.\n\nApplied demos require especially careful labels. A chest X-ray classifier can teach model serving and explainability without being clinically validated. A microplastic instrument can document a complete hardware and software path without establishing laboratory-grade accuracy. A course workbook can make transformer mechanics visible without claiming novel research. The same discipline applies to curation and maintenance: an index’s review policy is evidence about its process, while a package changelog is evidence about what changed. Keeping those scopes explicit lets experimental work remain useful without inflating it into a production claim. That restraint makes later comparison possible when stronger evaluations, deployments, or user reports arrive.",
+        "signalIds": [
+          "karpathy-course-workbook",
+          "medical-imaging-assistant",
+          "microplastic-analyzer",
+          "awesome-ai-hardware",
+          "vercel-ai-patch-train"
+        ]
+      }
+    ],
+    "otherSignalIds": []
+  },
+  "signals": [
+    {
+      "id": "recursive-agent-rules",
+      "eventId": "recursive-agent-rules",
+      "position": 1,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "agent-skills",
+        "prompt-engineering",
+        "evaluation"
+      ],
+      "openSource": true,
+      "headline": "A recursive ruleset audits prompts, plans, and agent skills",
+      "brief": "A LocalLLaMA author released a recursive ruleset for drafting and auditing prompts, implementation plans, skills, and related agent instructions. The project applies its own review structure to instruction artifacts, aiming to expose stylistic habits and weak requirements before another model executes them. The claims come from the maintainer’s community announcement and linked repository.",
+      "source": {
+        "id": "reddit-localllama",
+        "name": "Reddit r/LocalLLaMA",
+        "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vdhto7/i_made_airecursive_ruleset_for_writing_and/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T13:15:04Z",
+        "updatedAt": null,
+        "evidenceLabel": "maintainer_confirmed"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "llamacpp-deepseek-dspark",
+      "eventId": "llamacpp-deepseek-dspark",
+      "position": 2,
+      "origin": "community",
+      "region": "china",
+      "category": "infrastructure",
+      "topics": [
+        "llama-cpp",
+        "deepseek",
+        "speculative-decoding"
+      ],
+      "openSource": true,
+      "headline": "llama.cpp lands DSpark support for DeepSeek V4 Flash",
+      "brief": "A LocalLLaMA thread reported merged llama.cpp support for DeepSeek V4 Flash’s multi-token prediction drafter, followed by a tagged build. Commenters cautioned that existing GGUF files may not yet include the drafter and reported uncertainty about observed speedups. The implementation signal is concrete, but deployment benefits remain community-reported and configuration-dependent.",
+      "source": {
+        "id": "reddit-localllama",
+        "name": "Reddit r/LocalLLaMA",
+        "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vdhgq9/llamacpp_just_added_mtp_dspark_support_for/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T12:58:52Z",
+        "updatedAt": null,
+        "evidenceLabel": "community_discussion_suggests"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "vacuum-16t-metric-test",
+      "eventId": "vacuum-16t-metric-test",
+      "position": 3,
+      "origin": "community",
+      "region": "global",
+      "category": "models",
+      "topics": [
+        "hugging-face",
+        "model-metadata",
+        "storage"
+      ],
+      "openSource": true,
+      "headline": "An empty 16.5-trillion-parameter model tests Hub metrics",
+      "brief": "Vacuum 16T deliberately published zero-filled safetensors whose headers declare 16.5 trillion parameters, demonstrating that Hub parameter rankings can reflect tensor metadata rather than useful model content. The author also measured a sharp split between deduplicated transfer volume and logical storage quota. It is satire, but the reproducible repository exposes a real metadata and accounting edge case.",
+      "source": {
+        "id": "reddit-localllama",
+        "name": "Reddit r/LocalLLaMA",
+        "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vdh1us/vacuum_16t/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T12:39:00Z",
+        "updatedAt": null,
+        "evidenceLabel": "maintainer_confirmed"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "testpilot-ai",
+    "eventId": "testpilot-ai",
+      "position": 4,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "testing",
+        "gemini",
+        "quality-assurance"
+      ],
+      "openSource": true,
+      "headline": "TestPilot AI turns requirements and code into testing artifacts",
+      "brief": "TestPilot AI packages Gemini-assisted test generation, bug-report drafting, API planning, and code review into a React and REST application. Its repository also includes authentication, persisted reports, PDF export, and a deterministic mock mode when no model key is configured. The release is a new community project; its quality claims have not been independently tested.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/Nehashellikeri/testpilot-ai",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T11:41:52Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "karpathy-course-workbook",
+    "eventId": "karpathy-course-workbook",
+      "position": 5,
+      "origin": "community",
+      "region": "global",
+      "category": "research",
+      "topics": [
+        "education",
+        "transformers",
+        "pytorch"
+      ],
+      "openSource": true,
+      "headline": "A worked course rebuilds neural networks without black boxes",
+      "brief": "A new educational repository works through Andrej Karpathy’s neural-network course from count-based bigrams to a decoder-only transformer. The notebooks implement attention, backpropagation, and successive language-model architectures directly rather than delegating to high-level transformer modules. It is a learning artifact, not a new research result or production framework.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/pop123-ux/andrej-karpathy-full-course",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T11:01:52Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "medical-imaging-assistant",
+    "eventId": "medical-imaging-assistant",
+      "position": 6,
+      "origin": "community",
+      "region": "global",
+      "category": "models",
+      "topics": [
+        "medical-ai",
+        "computer-vision",
+        "explainability"
+      ],
+      "openSource": true,
+      "headline": "A chest X-ray demo combines classification and Grad-CAM",
+      "brief": "AI Medical Imaging Assistant combines an EfficientNet-B0 chest X-ray classifier with Grad-CAM visualization, a Streamlit interface, generated report text, and PDF export. The repository explicitly labels the application as educational and not a substitute for diagnosis. Its model performance and clinical suitability were not independently verified during collection.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/Mohith2801/AI-Medical-Imaging-Assistant",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T10:24:54Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "xberg-v1",
+      "eventId": "xberg-v1",
+      "position": 7,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "document-processing",
+        "ocr",
+        "rust"
+      ],
+      "openSource": true,
+      "headline": "Xberg v1 expands document intelligence across 368 formats",
+      "brief": "Xberg’s maintainer announced a Rust content-intelligence engine spanning documents, code, data, media, and web inputs. Version 1 adds layout-aware PDF processing, multiple OCR and VLM paths, structured extraction, retrieval components, mobile bindings, and security hardening. The post includes reproducible benchmark references, although the performance comparisons remain maintainer-reported.",
+      "source": {
+        "id": "reddit-localllama",
+        "name": "Reddit r/LocalLLaMA",
+        "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vdd795/xberg_v1_is_out/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T09:06:51Z",
+        "updatedAt": null,
+        "evidenceLabel": "maintainer_confirmed"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "forger-bug-pipeline",
+    "eventId": "forger-bug-pipeline",
+      "position": 8,
+      "origin": "community",
+      "region": "global",
+      "category": "agents",
+      "topics": [
+        "coding-agents",
+        "verification",
+        "orchestration"
+      ],
+      "openSource": true,
+      "headline": "Forger gives verification modules control of bug-fixing stages",
+      "brief": "Forger introduces an experimental bug-fixing orchestrator that moves issues through analysis, proof, implementation, review, and push stages. Each stage may invoke a configurable coding runner, but Python verification modules—not the model—decide whether the pipeline advances. That separation offers an inspectable control boundary, while the v0.1 release warns that interfaces will change.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/DimmuR/forger",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T08:53:29Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "wintermix-mlx-quants",
+      "eventId": "wintermix-mlx-quants",
+      "position": 9,
+      "origin": "community",
+      "region": "china",
+      "category": "models",
+      "topics": [
+        "qwen",
+        "mlx",
+        "quantization"
+      ],
+      "openSource": true,
+      "headline": "WinterMix publishes native MLX quants for Qwen3.5 122B",
+      "brief": "WinterMix released 82 GiB and 68 GiB native-MLX quantizations of Qwen3.5-122B-A10B under Apache 2.0. The author reports paired perplexity, long-context state tracking, and trace review across 18 variants on an M5 Max, while acknowledging that source GGUF quality remains slightly higher. Independent replication has not yet been presented.",
+      "source": {
+        "id": "reddit-localllama",
+        "name": "Reddit r/LocalLLaMA",
+        "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vdcs8e/release_wintermix_qwen35122ba10b_in_native_mlx_an/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T08:42:03Z",
+        "updatedAt": null,
+        "evidenceLabel": "maintainer_confirmed"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "message-notification-router",
+    "eventId": "message-notification-router",
+      "position": 10,
+      "origin": "community",
+      "region": "global",
+      "category": "agents",
+      "topics": [
+        "messaging",
+        "classification",
+        "multi-agent"
+      ],
+      "openSource": true,
+      "headline": "A modular router triages messages into notify, digest, or mute",
+      "brief": "Message Notification Router is a challenge project that classifies WhatsApp messages into immediate notifications, digests, or muted items. Its pipeline separates intake, contextual retrieval, rule-based reasoning, policy validation, and output formatting, with an evaluation stage and structured records. The repository demonstrates an architecture pattern rather than verified production notification performance.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/Harikarthik7124/Message-Notification-Router",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T07:17:35Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "erikraft-ai-shell",
+    "eventId": "erikraft-ai-shell",
+      "position": 11,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "chat-ui",
+        "skills",
+        "pwa"
+      ],
+      "openSource": true,
+      "headline": "ErikrafT packages chat, routing, and skills in a static shell",
+      "brief": "ErikrafT AI presents a framework-free web interface for multi-turn model chat, streaming reasoning, custom skill loading, provider routing, and offline PWA behavior. The repository is primarily a front-end implementation and can run from a simple static server. Its README makes broad production claims that were not independently evaluated during this edition.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/erikraft/ErikrafT-AI",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T07:12:57Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "vibeguard-code-scanner",
+    "eventId": "vibeguard-code-scanner",
+      "position": 12,
+      "origin": "community",
+      "region": "global",
+      "category": "security",
+      "topics": [
+        "code-scanning",
+        "pre-commit",
+        "ai-review"
+      ],
+      "openSource": true,
+      "headline": "Vibeguard adds deterministic checks before AI-assisted review",
+      "brief": "Vibeguard combines a zero-dependency pre-commit guard with an optional browser AI studio for code and website review. The local guard targets patterns such as swallowed errors, invented environment variables, and embedded secrets before a model is involved. The project reports 48 passing tests, but its security coverage and hosted scanner behavior were not independently audited.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/thesajidalam/vibeguard",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T05:57:48Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "claude-visuals-skill",
+    "eventId": "claude-visuals-skill",
+      "position": 13,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "vision",
+        "document-parsing",
+        "agent-skills"
+      ],
+      "openSource": true,
+      "headline": "A CLI skill gives text-only models structured visual input",
+      "brief": "The Visuals project bridges text-only reasoning models to screenshots, charts, scanned documents, and PDFs through a self-contained CLI and Claude Code skill. It combines a vision model for descriptive analysis with a document parser for structured extraction, returning machine-readable text to the calling agent. Accuracy, privacy, and provider behavior remain dependent on the configured services.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/nanwulan/claude-visuals-skill",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T03:16:04Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "clone-chat-agent",
+    "eventId": "clone-chat-agent",
+      "position": 14,
+      "origin": "community",
+      "region": "global",
+      "category": "agents",
+      "topics": [
+        "persona-agents",
+        "local-first",
+        "privacy"
+      ],
+      "openSource": true,
+      "headline": "Clone Chat builds a local persona agent from message history",
+      "brief": "Clone Chat imports real conversation history to derive style, timing, media preferences, and retrieval evidence for a local-first persona agent. It supports text, stickers, voice, delayed replies, feedback, and an import skill that normalizes chat exports. The concept carries obvious consent and impersonation risks even though the repository emphasizes local data storage.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/AFan4724/clone-chat",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T21:19:13Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "alphamatrix-governance",
+    "eventId": "alphamatrix-governance",
+      "position": 15,
+      "origin": "community",
+      "region": "global",
+      "category": "policy",
+      "topics": [
+        "responsible-ai",
+        "explainability",
+        "governance"
+      ],
+      "openSource": true,
+      "headline": "AlphaMatrix prototypes explainability and human review workflows",
+      "brief": "AlphaMatrix is a new responsible-AI dashboard prototype combining SHAP and LIME displays, demographic-parity checks, threshold policies, role-based approval queues, and audit exports. The repository frames these controls as an eight-layer enterprise governance system. They demonstrate interface and workflow ideas, not independently certified compliance, fairness, or cryptographic assurance.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/GAURAVI-19/AlphaMatrix-AI",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T18:56:41Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "microplastic-analyzer",
+    "eventId": "microplastic-analyzer",
+      "position": 16,
+      "origin": "community",
+      "region": "global",
+      "category": "hardware",
+      "topics": [
+        "spectroscopy",
+        "edge-ai",
+        "environmental-monitoring"
+      ],
+      "openSource": true,
+      "headline": "A portable NIR system classifies microplastic polymers",
+      "brief": "NIR-Based Microplastic Analyzer documents an ESP32-connected six-channel spectroscopy prototype with an RBF-SVM classifier, OLED interface, and Python application stack. The project pairs physical instrumentation with a machine-learning workflow for polymer identification and includes extensive implementation documentation. Its reported measurement performance and publication claims were not independently reproduced.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/Immanueal1/NIR-Based-Microplastic-Analyzer",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T18:11:49Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "kanyu-geospatial-os",
+    "eventId": "kanyu-geospatial-os",
+      "position": 17,
+      "origin": "community",
+      "region": "global",
+      "category": "infrastructure",
+      "topics": [
+        "geospatial",
+        "mcp",
+        "rust"
+      ],
+      "openSource": true,
+      "headline": "Kanyu exposes a Rust geospatial kernel through MCP tools",
+      "brief": "Kanyu introduces a Rust geospatial kernel, CLI, and MCP server built around structured, auditable operations instead of arbitrary code execution. Its current v0.1 capabilities include GeoJSON loading, an Arrow-compatible memory model, project archives, and declared tool interfaces; GPU rendering, vector editing, and self-evolving WASM components remain roadmap items.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/DaoMingyuan/Kanyu",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T16:32:35Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "multi-model-writers-room",
+    "eventId": "multi-model-writers-room",
+      "position": 18,
+      "origin": "community",
+      "region": "global",
+      "category": "agents",
+      "topics": [
+        "multi-model",
+        "collaboration",
+        "local-first"
+      ],
+      "openSource": true,
+      "headline": "Writers’ Room gives independent models one shared workspace",
+      "brief": "Multi-Model Writers’ Room creates a persistent local conversation in which separately configured models share a transcript and evidence table while retaining independent prompts, contexts, and provider settings. A fatigue-aware arbiter manages optional autonomous turns without forcing consensus. The repository emphasizes inspectable generation and local storage, but operating behavior was not independently tested.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/axAilotl/multi-model-writers-room",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T15:50:07Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "awesome-ai-hardware",
+    "eventId": "awesome-ai-hardware",
+      "position": 19,
+      "origin": "community",
+      "region": "global",
+      "category": "hardware",
+      "topics": [
+        "edge-ai",
+        "robotics",
+        "curation"
+      ],
+      "openSource": true,
+      "headline": "A curated index applies evidence rules to AI hardware projects",
+      "brief": "Awesome AI Hardware launched as a bilingual catalog of open projects across smart devices, wearables, robotics, edge inference, and hardware bridges. Its contribution rules require licensing, relevance, evidence, and reproducibility information, and automated validation checks the index structure. The collection’s individual projects were not re-audited during this run.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/s87343472/awesome-ai-hardware",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T15:06:37Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "xharness-coding-agent",
+    "eventId": "xharness-coding-agent",
+      "position": 20,
+      "origin": "community",
+      "region": "global",
+      "category": "developer-tools",
+      "topics": [
+        "coding-agents",
+        "macos",
+        "local-tools"
+      ],
+      "openSource": true,
+      "headline": "xharness brings visible coding-agent work to macOS",
+      "brief": "xharness is a macOS coding assistant that reads and edits selected projects, runs commands, accepts screenshots, and exposes each tool step in its interface. It supports several compatible model services, skills, and explicit risk controls for local file access. The repository targets Apple Silicon and notes that distributed builds are not notarized.",
+      "source": {
+        "id": "github-trending",
+        "name": "GitHub New & Active AI Repositories",
+        "url": "https://github.com/linearuncle/xharness",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T14:38:20Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "vercel-ai-patch-train",
+      "eventId": "vercel-ai-2026-08-01-patch-train",
+      "position": 21,
+      "origin": "news",
+      "region": "north-america",
+      "category": "developer-tools",
+      "topics": [
+        "ai-sdk",
+        "maintenance",
+        "releases"
+      ],
+      "openSource": true,
+      "headline": "Vercel AI SDK ships a coordinated dependency patch train",
+      "brief": "Vercel published a coordinated set of patch releases across AI SDK 5, 6, and 7 plus framework, workflow, sandbox, and interface packages. The notes largely propagate gateway or harness dependency updates rather than introducing a new feature. Grouping the tags as one maintenance event avoids treating synchronized package versions as separate stories.",
+      "source": {
+        "id": "vercel-ai",
+        "name": "Vercel AI SDK",
+        "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.48",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-01T22:26:13Z",
+        "updatedAt": null,
+        "evidenceLabel": "officially_stated"
+      },
+      "communityVoices": []
+    },
+    {
+      "id": "mference-deepseek-streaming",
+      "eventId": "mference-deepseek-streaming",
+      "position": 22,
+      "origin": "community",
+      "region": "china",
+      "category": "infrastructure",
+      "topics": [
+        "deepseek",
+        "weight-streaming",
+        "apple-silicon"
+      ],
+      "openSource": true,
+      "headline": "Mference streams DeepSeek experts from SSD on small Macs",
+      "brief": "A LocalLLaMA developer introduced Mference, an MLX engine that keeps shared mixture-of-experts components resident while streaming selected experts from SSD. The author reports DeepSeek V4 Flash at roughly 5.3 GB typical memory and up to 4.8 tokens per second on a 24 GB M5 Pro, with short context and heavy I/O still limiting usefulness.",
+      "source": {
+        "id": "reddit-localllama",
+        "name": "Reddit r/LocalLLaMA",
+        "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vdbix4/deepseekv4flash_284b_on_53gb_of_memory/",
+        "sourceLanguage": "en",
+        "publishedAt": "2026-08-02T07:28:04Z",
+        "updatedAt": null,
+        "evidenceLabel": "maintainer_confirmed"
+      },
+      "communityVoices": []
+    }
+  ],
+  "research": {
+    "sourceScan": [
+      {
+        "sourceId": "openai-news",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "anthropic-news",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "deepmind-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "google-ai-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "meta-ai-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "mistral-news",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "microsoft-ai-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "nvidia-developer-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "hugging-face-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "github-changelog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "cloudflare-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "github-trending",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 15,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "hacker-news",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "show-hn",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 1,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "hugging-face-papers",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "arxiv-cs-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "arxiv-cs-cl",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "arxiv-cs-lg",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "ars-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "mit-tech-review-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "ieee-spectrum-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "reddit-localllama",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 15,
+        "duplicatesRemoved": 0,
+        "selectedCount": 6,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "x-curated-experts",
+        "status": "unavailable",
+        "itemsFetched": 0,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Indexed searches for OpenAI, AnthropicAI, GoogleDeepMind, huggingface, AIatMeta, and NVIDIAAI returned older or undated posts rather than trustworthy timestamps inside the exact window; no authenticated permitted X session was available for the fixed-profile web route."
+      },
+      {
+        "sourceId": "phoronix",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 6,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "mcp-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "mcp-spec-releases",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "vercel-ai",
+        "status": "collected",
+        "itemsFetched": 15,
+        "itemsInWindow": 15,
+        "duplicatesRemoved": 14,
+        "selectedCount": 1,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "ollama-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "ollama-releases",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "langchain-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "llamaindex-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "dify-blog",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "hugging-face-trending-papers",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "chips-and-cheese",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "semianalysis",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "the-batch",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "alphasignal",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "tldr-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "deepseek-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "qwen-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "bytedance-seed",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "zai-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "moonshot-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "minimax-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "modelscope-hub",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "tencent-hunyuan",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "baidu-ernie-paddlepaddle",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "huawei-ascend",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "stepfun-official",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "china-cac",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "china-miit",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      },
+      {
+        "sourceId": "machine-heart",
+        "status": "unavailable",
+        "itemsFetched": 0,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "Both configured Machine Heart listing routes returned HTTP 502, and the site-restricted indexed-search fallback returned no canonical dated results for either window date."
+      },
+      {
+        "sourceId": "qbitai",
+        "status": "unavailable",
+        "itemsFetched": 0,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": "The QbitAI web index returned HTTP 502, and the site-restricted indexed-search fallback returned no canonical dated results for either window date."
+      },
+      {
+        "sourceId": "36kr-ai",
+        "status": "empty",
+        "itemsFetched": 15,
+        "itemsInWindow": 0,
+        "duplicatesRemoved": 0,
+        "selectedCount": 0,
+        "failureReason": ""
+      }
+    ],
+    "warnings": [
+      "Three registered sources were unavailable after all configured routes were attempted; failures are nonblocking under the repository rules."
+    ]
+  }
+}
