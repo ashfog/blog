@@ -1,6 +1,6 @@
 {
-  "version": 8,
-  "last_reviewed": "2026-08-01",
+  "version": 9,
+  "last_reviewed": "2026-08-02",
   "timezone": "America/New_York",
   "operating_rules": {
     "prefer_machine_readable_access": true,
@@ -260,14 +260,14 @@
     },
     {
       "id": "github-trending",
-      "name": "GitHub Trending",
+      "name": "GitHub New & Active AI Repositories",
       "kind": "discovery",
-      "url": "https://github.com/trending",
+      "url": "https://github.com/search",
       "topics": [
         "open-source",
         "repositories"
       ],
-      "use": "Discover candidates, then verify repository activity, license, releases, and maintainer history.",
+      "use": "Use connected GitHub search with exact created_at, pushed_at, or release timestamps; the undated Trending page is not an evidence source.",
       "region": "global",
       "languages": [
         "en"
@@ -457,7 +457,7 @@
         "maintainer-updates",
         "research"
       ],
-      "use": "Scan the fixed collectionHandles list as a normal daily source; never derive handles from final stories, scan the general feed, or use a post as the sole release source.",
+      "use": "Best-effort supplement only. Scan the fixed collectionHandles list when trustworthy dated access exists; never derive handles from final stories, scan the general feed, request credentials, or use a post as the sole release source.",
       "region": "global",
       "languages": [
         "en"

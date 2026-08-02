@@ -5,6 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 import { loadEditorialConfig, validateEdition } from "../scripts/validate-daily.mjs";
+import { summarizeSourceHealth } from "../scripts/source-health.mjs";
 
 const testDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(testDir, "..");
@@ -174,6 +175,60 @@ test("source access plans use only deterministic configured variables", async ()
   const sources = JSON.parse(await fs.readFile(path.join(root, "editorial", "sources.json"), "utf8"));
   const xSource = sources.sources.find((source) => source.id === "x-curated-experts");
   assert.ok(xSource.collectionHandles.length >= 1);
+});
+
+test("source collection is metadata-first with dedicated adapters", async () => {
+  const access = JSON.parse(await fs.readFile(path.join(root, "editorial", "source-access.json"), "utf8"));
+  assert.equal(access.collectionRules.metadataFirst, true);
+  assert.equal(access.collectionPhases.metadata.fetchArticleBody, false);
+  assert.equal(access.collectionPhases.content.fetchOnlyPotentialEventRepresentatives, true);
+  assert.equal(access.healthHistory.neverSkipRegisteredSource, true);
+  assert.equal(access.sourceAdapters["hacker-news"], "community-api");
+  assert.equal(access.sourceAdapters["machine-heart"], "china-discovery");
+  assert.equal(access.sourceAdapters["x-curated-experts"], "x-best-effort");
+});
+
+test("GitHub discovery and China repository sources start with exact-timestamp GitHub routes", async () => {
+  const access = JSON.parse(await fs.readFile(path.join(root, "editorial", "source-access.json"), "utf8"));
+  const discovery = access.plans["github-trending"];
+  assert.equal(discovery.length, 1);
+  assert.equal(discovery[0].type, "connected-github");
+  assert.ok(discovery[0].queries.every((query) => query.includes("{windowStartDate}..{editionDate}")));
+
+  for (const sourceId of ["deepseek-official", "qwen-official", "bytedance-seed", "zai-official"]) {
+    assert.equal(access.plans[sourceId][0].type, "connected-github", sourceId);
+  }
+  assert.ok(access.adapterProfiles["china-discovery"].queryTerms.includes("人工智能"));
+  assert.ok(access.adapterProfiles["china-discovery"].queryTerms.includes("大模型"));
+});
+
+test("source health summarizes recent cadence without dropping sources", () => {
+  const edition = (editionDate, status) => ({
+    editionDate,
+    research: {
+      sourceScan: [{ sourceId: "example", status }],
+    },
+  });
+  const summary = summarizeSourceHealth(
+    [
+      edition("2026-08-01", "empty"),
+      edition("2026-07-31", "empty"),
+      edition("2026-07-30", "collected"),
+      edition("2026-07-29", "unavailable"),
+    ],
+    ["example", "always-attempted"],
+    3,
+  );
+  assert.deepEqual(summary[0], {
+    sourceId: "example",
+    editionsObserved: 3,
+    lastStatus: "empty",
+    lastSuccessfulEdition: "2026-08-01",
+    consecutiveEmpty: 2,
+    counts: { collected: 1, empty: 2, unavailable: 0, "not-run": 0, missing: 0 },
+  });
+  assert.equal(summary[1].lastStatus, "missing");
+  assert.equal(summary[1].counts.missing, 3);
 });
 
 test("domain rules reject a future publication time", async () => {

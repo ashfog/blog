@@ -206,6 +206,43 @@ export async function loadEditorialConfig(root = repoRoot) {
   if (!routeTypes.size) {
     throw new Error("editorial/source-access.json has no supported route types");
   }
+  for (const field of [
+    "metadataFirst",
+    "fetchBodiesAfterWindowAndScopeFilter",
+    "fetchOnlyDeduplicatedEventRepresentatives",
+    "stopAfterAuthoritativeDatedRouteCoversWindow",
+  ]) {
+    if (sourceAccessData.collectionRules?.[field] !== true) {
+      throw new Error(`editorial/source-access.json must enable collectionRules.${field}`);
+    }
+  }
+  if (
+    sourceAccessData.collectionPhases?.metadata?.fetchArticleBody !== false ||
+    sourceAccessData.collectionPhases?.content?.fetchOnlyPotentialEventRepresentatives !== true
+  ) {
+    throw new Error("editorial/source-access.json must use metadata-first two-phase collection");
+  }
+  if (
+    !Number.isInteger(sourceAccessData.healthHistory?.lookbackEditions) ||
+    sourceAccessData.healthHistory.lookbackEditions < 1 ||
+    sourceAccessData.healthHistory.neverSkipRegisteredSource !== true
+  ) {
+    throw new Error("editorial/source-access.json has invalid healthHistory rules");
+  }
+  const adapterProfiles = sourceAccessData.adapterProfiles;
+  if (!isObject(adapterProfiles) || !Object.keys(adapterProfiles).length) {
+    throw new Error("editorial/source-access.json has no adapter profiles");
+  }
+  for (const [profileId, profile] of Object.entries(adapterProfiles)) {
+    if (
+      !isObject(profile) ||
+      !Array.isArray(profile.preferredRouteTypes) ||
+      !profile.preferredRouteTypes.length ||
+      profile.preferredRouteTypes.some((type) => !routeTypes.has(type))
+    ) {
+      throw new Error(`editorial/source-access.json has invalid adapter profile: ${profileId}`);
+    }
+  }
   const accessPlans = sourceAccessData.plans;
   if (!isObject(accessPlans)) {
     throw new Error("editorial/source-access.json plans must be an object");
@@ -260,6 +297,33 @@ export async function loadEditorialConfig(root = repoRoot) {
         }
       }
     });
+  }
+
+  const sourceAdapters = sourceAccessData.sourceAdapters;
+  if (!isObject(sourceAdapters) || !Object.keys(sourceAdapters).length) {
+    throw new Error("editorial/source-access.json has no source adapter assignments");
+  }
+  for (const [sourceId, profileId] of Object.entries(sourceAdapters)) {
+    if (!seenSourceIds.has(sourceId)) {
+      throw new Error(`editorial/source-access.json adapter has unknown source: ${sourceId}`);
+    }
+    const profile = adapterProfiles[profileId];
+    if (!profile) {
+      throw new Error(`editorial/source-access.json adapter has unknown profile: ${profileId}`);
+    }
+    if (!profile.preferredRouteTypes.includes(accessPlans[sourceId][0].type)) {
+      throw new Error(
+        `editorial/source-access.json plan ${sourceId} must start with a preferred ${profileId} route`,
+      );
+    }
+  }
+  const chinaTerms = adapterProfiles["china-discovery"]?.queryTerms;
+  if (
+    !Array.isArray(chinaTerms) ||
+    chinaTerms.length < 4 ||
+    chinaTerms.some((term) => typeof term !== "string" || !/[\u3400-\u9fff]/u.test(term))
+  ) {
+    throw new Error("editorial/source-access.json china-discovery queryTerms must preserve Chinese text");
   }
 
   if (sourceAccessData.timezone !== rules.collection.timezone) {
