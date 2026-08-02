@@ -30,9 +30,11 @@ formal editions are rendered.
 
 ## Source collection
 
-`editorial/sources.json` is the stable 54-source editorial registry. Machine-readable endpoints and ordered fallbacks live separately in `editorial/source-access.json`, so RSS, API, GitHub, page, and indexed-search routes can be maintained without changing source IDs or invalidating historical editions. Community collection behavior lives in `editorial/community-policy.md`.
+`editorial/sources.json` is the stable 54-source editorial registry. Machine-readable endpoints, two-phase collection rules, dedicated source adapters, health-history behavior, and ordered fallbacks live in `editorial/source-access.json`, so RSS, API, GitHub, page, and indexed-search routes can be maintained without changing source IDs or invalidating historical editions. Community collection behavior lives in `editorial/community-policy.md`.
 
-A collector must try a source's configured routes in order. A broad route with no in-scope entries does not suppress a narrower fallback. It records `collected` when any working route yields in-window entries, `empty` when working dated routes cover the rolling 24-hour window but yield no in-window entries, and `unavailable` only after every configured route fails.
+A collector first reads only titles, URLs, and timestamps, filters the exact window, and removes cheap duplicates. It reads article bodies only for retained event candidates. An authoritative dated feed or API may establish an empty result without opening expensive fallbacks; a broad discovery page may not. Every registered source is still attempted on every run.
+
+Run `pnpm run source:health` for a compact 14-edition source cadence report or add `--json` for machine-readable output. Health history guides route efficiency but never removes a source from the daily scan.
 
 ## Image library
 

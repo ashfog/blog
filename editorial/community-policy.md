@@ -9,4 +9,5 @@ Treat registered community sources as ordinary daily sources rather than a secon
 - Do not attach posts that merely restate a headline or add no concrete observation.
 - Preserve the collected community URL exactly as supplied after confirming offline that it is an absolute HTTP or HTTPS URL.
 - Do not perform candidate-driven follow-up searches, platform availability checks, popularity scoring, or evidence scoring. A configured fixed account list is a normal source route, not a follow-up search.
+- Treat X as a best-effort supplement. Use only canonical posts with trustworthy in-window timestamps from indexed results or an already-authenticated permitted cloud session; never request credentials or rely on a local browser login. X failure never blocks publication.
 - Zero community voices is valid when configured sources contain no useful in-window observations. Never manufacture community consensus.

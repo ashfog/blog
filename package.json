@@ -15,6 +15,7 @@
     "preview": "astro preview",
     "validate:daily": "node scripts/validate-daily.mjs",
     "validate:all-daily": "node scripts/validate-all-daily.mjs",
+    "source:health": "node scripts/source-health.mjs",
     "test:editorial": "node --test tests/validate-daily.test.mjs"
   },
   "dependencies": {

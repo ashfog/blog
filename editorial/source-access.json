@@ -1,6 +1,6 @@
 {
-  "version": 4,
-  "lastReviewed": "2026-08-01",
+  "version": 5,
+  "lastReviewed": "2026-08-02",
   "timezone": "America/New_York",
   "purpose": "Machine-readable ordered collection routes and deterministic fallbacks for every registered source in a trailing 24-hour window.",
   "routeTypes": [
@@ -22,8 +22,12 @@
   "collectionRules": {
     "tryRoutesInOrder": true,
     "continueAfterRouteFailure": true,
-    "stopAfterTrustworthyDatedListingCoveringWindow": false,
+    "stopAfterAuthoritativeDatedRouteCoversWindow": true,
+    "continueAfterBroadRouteHasNoInWindowEntries": true,
     "stopAfterInScopeEntries": true,
+    "metadataFirst": true,
+    "fetchBodiesAfterWindowAndScopeFilter": true,
+    "fetchOnlyDeduplicatedEventRepresentatives": true,
     "siteRestrictedSearchIsFallbackOnly": true,
     "searchResultMustResolveToCanonicalSource": true,
     "doNotTreatNoSearchResultsAsAccessFailure": true,
@@ -35,6 +39,94 @@
     "mergeThenSortFilterAndLimit": true,
     "maxEntriesPerSource": 15,
     "outsideWindowBackfill": false
+  },
+  "collectionPhases": {
+    "metadata": {
+      "fields": [
+        "sourceId",
+        "title",
+        "url",
+        "publishedAt",
+        "updatedAt"
+      ],
+      "fetchArticleBody": false,
+      "applyWindowFilterBeforeBodyFetch": true,
+      "applyScopeFilterBeforeBodyFetch": true,
+      "applyCheapTitleAndUrlDeduplicationBeforeBodyFetch": true
+    },
+    "content": {
+      "startAfterMetadataFiltering": true,
+      "fetchOnlyPotentialEventRepresentatives": true,
+      "performContentLevelEventDeduplication": true,
+      "preferPrimaryEvidenceWithinEvent": true
+    }
+  },
+  "healthHistory": {
+    "lookbackEditions": 14,
+    "deriveFrom": "src/content/daily/*.json research.sourceScan",
+    "neverSkipRegisteredSource": true,
+    "preferMachineReadableRouteThatRecentlySucceeded": true,
+    "doNotOpenExpensiveFallbackAfterAuthoritativeEmptyResult": true,
+    "treatRepeatedEmptyAsCadenceSignalNotFailure": true
+  },
+  "adapterProfiles": {
+    "official-feed": {
+      "preferredRouteTypes": ["rss", "json-api", "sitemap", "date-archive"],
+      "bodyPolicy": "selected-event-only"
+    },
+    "github-repository-search": {
+      "preferredRouteTypes": ["connected-github"],
+      "timestampFields": ["created_at", "pushed_at", "published_at"],
+      "bodyPolicy": "selected-repository-only"
+    },
+    "github-org-releases": {
+      "preferredRouteTypes": ["connected-github"],
+      "timestampFields": ["created_at", "pushed_at", "published_at"],
+      "allowedMaterialEvents": ["new-repository", "release", "model-card", "material-documentation-update"],
+      "bodyPolicy": "material-event-only"
+    },
+    "community-api": {
+      "preferredRouteTypes": ["json-api", "rss"],
+      "bodyPolicy": "in-window-candidate-only"
+    },
+    "china-discovery": {
+      "preferredRouteTypes": ["rss", "sitemap", "date-archive", "web-index", "indexed-search"],
+      "queryTerms": ["人工智能", "大模型", "智能体", "算力", "芯片", "算法", "数据安全", "模型"],
+      "bodyPolicy": "resolved-primary-event-only"
+    },
+    "x-best-effort": {
+      "preferredRouteTypes": ["indexed-search", "web-index"],
+      "nativeAccessRequiresAuthenticatedPermittedSession": true,
+      "failureIsNonBlocking": true,
+      "bodyPolicy": "concrete-in-window-post-only"
+    }
+  },
+  "sourceAdapters": {
+    "openai-news": "official-feed",
+    "nvidia-developer-blog": "official-feed",
+    "github-changelog": "official-feed",
+    "phoronix": "official-feed",
+    "github-trending": "github-repository-search",
+    "hacker-news": "community-api",
+    "show-hn": "community-api",
+    "reddit-localllama": "community-api",
+    "x-curated-experts": "x-best-effort",
+    "vercel-ai": "github-org-releases",
+    "deepseek-official": "github-org-releases",
+    "qwen-official": "github-org-releases",
+    "bytedance-seed": "github-org-releases",
+    "zai-official": "github-org-releases",
+    "moonshot-ai": "github-org-releases",
+    "tencent-hunyuan": "github-org-releases",
+    "baidu-ernie-paddlepaddle": "github-org-releases",
+    "huawei-ascend": "github-org-releases",
+    "stepfun-official": "github-org-releases",
+    "modelscope-hub": "china-discovery",
+    "china-cac": "china-discovery",
+    "china-miit": "china-discovery",
+    "machine-heart": "china-discovery",
+    "qbitai": "china-discovery",
+    "36kr-ai": "china-discovery"
   },
   "plans": {
     "openai-news": [
@@ -114,16 +206,11 @@
         "type": "connected-github",
         "url": "https://api.github.com/search/repositories",
         "queries": [
-          "created:{windowDate} topic:artificial-intelligence",
-          "created:{windowDate} topic:llm",
-          "pushed:{windowDate} topic:machine-learning"
+          "created:{windowStartDate}..{editionDate} topic:artificial-intelligence",
+          "created:{windowStartDate}..{editionDate} topic:llm",
+          "pushed:{windowStartDate}..{editionDate} topic:machine-learning"
         ],
-        "note": "Primary dated route. Use connected GitHub access, deduplicate repositories, and verify license, release history, and maintainer activity."
-      },
-      {
-        "type": "web-index",
-        "url": "https://github.com/trending",
-        "note": "Discovery fallback only. The Today page lacks trustworthy per-repository timestamps, so it cannot by itself produce collected or empty status for the in-window window."
+        "note": "Primary and sufficient route. Filter returned created_at and pushed_at timestamps against the exact window, then inspect releases or material repository changes only for retained candidates. The undated GitHub Trending page is intentionally not used."
       }
     ],
     "hacker-news": [
@@ -197,12 +284,12 @@
       {
         "type": "indexed-search",
         "query": "site:x.com/{configuredHandle} {windowDate}",
-        "note": "Expand once for every fixed collectionHandles entry and inspect only posts inside the edition window."
+        "note": "Best-effort only. Expand once for every fixed collectionHandles entry and retain only canonical posts with trustworthy timestamps inside the edition window."
       },
       {
         "type": "web-index",
         "url": "https://x.com/{configuredHandle}",
-        "note": "Expand the fixed handle list only when an authenticated permitted session is available. Never scan the general feed."
+        "note": "Attempt only when an authenticated permitted cloud session is already available. Never request credentials, reuse a local login, or scan the general feed. Failure is nonblocking."
       }
     ],
     "phoronix": [
@@ -311,13 +398,13 @@
     ],
     "bytedance-seed": [
       {
-        "type": "web-index",
-        "url": "https://seed.bytedance.com/en/blog"
-      },
-      {
         "type": "connected-github",
         "url": "https://api.github.com/orgs/ByteDance-Seed/repos",
-        "note": "Sort by updated_at and inspect material releases or repository launches, not ordinary commits."
+        "note": "Sort by updated_at; retain exact-window new repositories, releases, model cards, or material documentation updates, not ordinary commits."
+      },
+      {
+        "type": "web-index",
+        "url": "https://seed.bytedance.com/en/blog"
       },
       {
         "type": "indexed-search",
@@ -651,13 +738,13 @@
     ],
     "deepseek-official": [
       {
-        "type": "web-index",
-        "url": "https://api-docs.deepseek.com/news/"
-      },
-      {
         "type": "connected-github",
         "url": "https://api.github.com/orgs/deepseek-ai/repos",
-        "note": "Inspect releases, new repositories, model cards, and material project changes; ignore ordinary commit noise."
+        "note": "Sort by updated_at; retain exact-window new repositories, releases, model cards, or material documentation updates; ignore ordinary commits."
+      },
+      {
+        "type": "web-index",
+        "url": "https://api-docs.deepseek.com/news/"
       },
       {
         "type": "indexed-search",
@@ -666,13 +753,13 @@
     ],
     "qwen-official": [
       {
-        "type": "web-index",
-        "url": "https://qwenlm.github.io/blog/"
-      },
-      {
         "type": "connected-github",
         "url": "https://api.github.com/orgs/QwenLM/repos",
-        "note": "Inspect releases, new repositories, model cards, and material project changes; ignore ordinary commit noise."
+        "note": "Sort by updated_at; retain exact-window new repositories, releases, model cards, or material documentation updates; ignore ordinary commits."
+      },
+      {
+        "type": "web-index",
+        "url": "https://qwenlm.github.io/blog/"
       },
       {
         "type": "indexed-search",
@@ -681,13 +768,13 @@
     ],
     "zai-official": [
       {
-        "type": "web-index",
-        "url": "https://z.ai/blog"
-      },
-      {
         "type": "connected-github",
         "url": "https://api.github.com/orgs/zai-org/repos",
-        "note": "Inspect releases, new repositories, model cards, and material project changes; ignore ordinary commit noise."
+        "note": "Sort by updated_at; retain exact-window new repositories, releases, model cards, or material documentation updates; ignore ordinary commits."
+      },
+      {
+        "type": "web-index",
+        "url": "https://z.ai/blog"
       },
       {
         "type": "indexed-search",
