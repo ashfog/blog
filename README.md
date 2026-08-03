@@ -1,55 +1,30 @@
 # ASHFOG
 
-ASHFOG is a static Astro publication for one source-linked AI, open-source, and
-developer-ecosystem brief per day.
+ASHFOG is a static Astro publication for independent, source-linked articles about AI models, agents, open source, developer tools, infrastructure, research, hardware, security, and policy.
 
-## Content contract
+## Content
 
-Published editions live at:
-
-```text
-src/content/daily/YYYY-MM-DD.json
-```
-
-Every edition must pass:
+Articles are Markdown files in:
 
 ```text
-pnpm run validate:daily -- src/content/daily/YYYY-MM-DD.json
+src/content/articles/<slug>.md
 ```
 
-The version 3 content model keeps collection and presentation separate. `signals`
-stores deduplicated events, concise factual briefs, original source links, and
-optional community voices. `article` turns those signals into exactly one daily
-article with internal subheadings. Every signal is assigned exactly once to an
-article section or the compact `otherSignalIds` list.
+Frontmatter is validated by `src/content.config.ts`. Each article has a title, description, publication date, category, tags, optional image override, featured state, and an essential source list. The Markdown body contains the complete article and inline links.
 
-When the formal content directory is empty, the site uses
-`tests/fixtures/2026-07-28.json` as a site preview. The preview fixture is not
-part of the publication directory. As soon as a formal edition exists, only
-formal editions are rendered.
+Astro chooses one stable image from the matching category pool in `editorial/image-library.json` when `heroImageId` is omitted. Existing articles keep the same image across rebuilds.
 
-## Source collection
+## Publishing workflow
 
-`editorial/sources.json` is the stable 54-source editorial registry. Machine-readable endpoints, two-phase collection rules, dedicated source adapters, health-history behavior, and ordered fallbacks live in `editorial/source-access.json`, so RSS, API, GitHub, page, and indexed-search routes can be maintained without changing source IDs or invalidating historical editions. Community collection behavior lives in `editorial/community-policy.md`.
+Use `skills/ashfog-article-publisher/SKILL.md` when researching, drafting, updating, or publishing an article. There is no scheduled daily collection task and no OpenAI API dependency. Publication begins when the user requests a subject.
 
-A collector first reads only titles, URLs, and timestamps, filters the exact window, and removes cheap duplicates. It reads article bodies only for retained event candidates. An authoritative dated feed or API may establish an empty result without opening expensive fallbacks; a broad discovery page may not. Every registered source is still attempted on every run.
+The normal workflow is:
 
-Run `pnpm run source:health` for a compact 14-edition source cadence report or add `--json` for machine-readable output. Health history guides route efficiency but never removes a source from the daily scan.
-
-## Image library
-
-The committed library contains 40 article artworks and 8 page artworks. Each
-artwork has 768 px and 1536 px WebP renditions. The canonical manifest is:
-
-```text
-editorial/image-library.json
-```
-
-Every edition displays exactly one article image. Astro uses the edition date to
-select from a stable shuffled rotation, which keeps rebuilds deterministic and
-avoids repeats across consecutive editions until the 40-image pool cycles.
-Daily JSON normally omits `heroImageId`; use it only for an intentional override
-from the manifest. Signals and internal article sections never receive images.
+1. research the requested topic from primary sources;
+2. write or update one Markdown article;
+3. run the production build;
+4. commit and push the validated change to GitHub;
+5. let Cloudflare Pages build and publish `ashfog.com`.
 
 ## Local development
 
@@ -64,36 +39,23 @@ pnpm run dev
 pnpm run build
 ```
 
-The build first validates every production daily JSON file and runs the editorial
-test suite. It then creates the Astro site, generates the Pagefind search index,
-and verifies canonical links, crawl directives, Sitemap output, and structured
-data. Invalid editorial content or a missing SEO artifact fails deployment.
+The build validates the content collection, generates the static Astro site, creates the Pagefind search index, and verifies article structured data, canonical links, RSS, robots directives, and Sitemap output.
 
-## Search indexing
+## Search and SEO
 
-Astro generates:
+The site generates:
 
 - `/robots.txt`
 - `/sitemap-index.xml`
 - `/sitemap-0.xml`
 - `/rss.xml`
 
-Daily pages include `NewsArticle` and breadcrumb JSON-LD. Collection and about
-pages declare their corresponding Schema.org page types. Search and 404 pages
-are marked `noindex`; search is also excluded from the Sitemap.
+Article pages include Schema.org `Article` and breadcrumb data. Search and 404 pages are excluded from indexing. Legacy `/daily` URLs redirect to `/articles` and are excluded from the Sitemap.
 
-After the production domain is online, verify `ashfog.com` in Google Search
-Console and submit:
+Submit this Sitemap to Google Search Console:
 
 ```text
 https://ashfog.com/sitemap-index.xml
-```
-
-If Search Console provides an HTML verification token, set this Cloudflare
-Pages build variable:
-
-```text
-PUBLIC_GOOGLE_SITE_VERIFICATION=your-token
 ```
 
 ## Cloudflare Pages
@@ -103,6 +65,4 @@ PUBLIC_GOOGLE_SITE_VERIFICATION=your-token
 - Node.js: `22.22.2` or newer
 - Production branch: `main`
 
-Cloudflare Pages does not need a database or server runtime. A daily task writes
-one validated JSON file, commits it to GitHub, and the resulting `main` update
-triggers the static build.
+Cloudflare Pages needs no database or server runtime. Every validated article commit to `main` triggers a static deployment.

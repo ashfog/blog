@@ -1,121 +1,46 @@
 ---
+import ArticleCard from "../../components/ArticleCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import {
-  categoryLabels,
-  formatDate,
-  getAllTopics,
-  getStoriesByTopic
-} from "../../lib/daily";
+import { categoryLabels, getAllArticleTopics, getArticles, getArticlesByTopic, type ArticleEntry } from "../../lib/articles";
 
-export function getStaticPaths() {
-  return getAllTopics().map((topic) => ({
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  return getAllArticleTopics(articles).map((topic) => ({
     params: { topic },
-    props: { topic }
+    props: { topic, articles: getArticlesByTopic(articles, topic) }
   }));
 }
 
-const { topic } = Astro.props;
-const items = getStoriesByTopic(topic);
-const title = categoryLabels[topic] ?? topic;
+interface Props { topic: string; articles: ArticleEntry[]; }
+const { topic, articles } = Astro.props;
+const label = categoryLabels[topic] ?? topic.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 ---
 
 <BaseLayout
-  title={`${title} Signals`}
-  description={`ASHFOG ${title} signal archive.`}
+  title={label}
+  description={`ASHFOG articles filed under ${label}.`}
   pageType="CollectionPage"
   breadcrumbs={[
     { name: "ASHFOG", path: "/" },
-    { name: "Topic Index", path: "/topics" },
-    { name: `${title} Signals`, path: `/topics/${topic}` }
+    { name: "Topics", path: "/topics" },
+    { name: label, path: `/topics/${topic}` }
   ]}
 >
-  <section class="topic-page page-shell">
+  <section class="topic page-shell">
     <header>
-      <a href="/topics">← All topics</a>
-      <span>{String(items.length).padStart(2, "0")} SIGNALS</span>
-      <h1>{title}</h1>
+      <div><a href="/topics">Topics</a><span>{articles.length} {articles.length === 1 ? "article" : "articles"}</span></div>
+      <h1>{label}</h1>
+      <p>Focused ASHFOG writing connected by this subject.</p>
     </header>
-
-    <div class="items">
-      {items.map(({ story, edition }, index) => (
-        <a href={`/daily/${edition.editionDate}#${story.id}`}>
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <div>
-            <small>{formatDate(edition.editionDate)} · {story.source.name}</small>
-            <h2>{story.headline}</h2>
-            <p>{story.brief}</p>
-          </div>
-          <i>↗</i>
-        </a>
-      ))}
-    </div>
+    <div class="items">{articles.map((article) => <ArticleCard article={article} />)}</div>
   </section>
 </BaseLayout>
 
 <style>
-  .topic-page {
-    padding-top: 76px;
-  }
-
-  header {
-    position: relative;
-    min-height: 260px;
-    border-bottom: 1px solid var(--line-strong);
-  }
-
-  header a,
-  header span {
-    color: var(--faint);
-    font-size: 11px;
-  }
-
-  header span {
-    position: absolute;
-    right: 0;
-  }
-
-  h1 {
-    position: absolute;
-    bottom: 30px;
-    margin: 0;
-    font-size: clamp(58px, 9vw, 104px);
-    font-weight: 500;
-    letter-spacing: -0.08em;
-    line-height: .9;
-  }
-
-  .items a {
-    display: grid;
-    grid-template-columns: 70px 1fr 30px;
-    gap: 30px;
-    padding: 34px 10px;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .items > a > span,
-  small {
-    color: var(--faint);
-    font-size: 10px;
-  }
-
-  h2 {
-    max-width: 900px;
-    margin: 8px 0 12px;
-    font-size: clamp(25px, 3vw, 38px);
-    font-weight: 530;
-    letter-spacing: -0.045em;
-    line-height: 1.1;
-  }
-
-  .items p {
-    max-width: 700px;
-    margin: 0;
-    color: var(--muted);
-    font-size: 13px;
-  }
-
-  .items i {
-    color: var(--accent);
-    font-style: normal;
-  }
+  .topic { padding-top: 76px; }
+  header { min-height: 300px; padding-bottom: 58px; }
+  header > div { display: flex; justify-content: space-between; color: var(--faint); font-size: 11px; }
+  h1 { margin: 58px 0 18px; font-size: clamp(58px, 9vw, 112px); font-weight: 500; letter-spacing: -.08em; line-height: .9; }
+  header p { margin: 0; color: var(--muted); }
+  .items { display: grid; gap: 24px; }
 </style>

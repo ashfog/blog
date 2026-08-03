@@ -25,8 +25,8 @@ interface Props {
 }
 
 const {
-  title = "ASHFOG — Daily AI Intelligence",
-  description = "A source-linked daily brief on AI, open source, developer tools, infrastructure, research, policy, and the signals collected today.",
+  title = "ASHFOG — Independent AI Articles",
+  description = "Independent, source-linked articles about AI models, agents, open source, developer tools, infrastructure, and research.",
   image,
   type = "website",
   pageType = "WebPage",
@@ -37,7 +37,7 @@ const {
 
 const site = Astro.site ?? new URL("https://ashfog.com");
 const canonical = new URL(Astro.url.pathname, site);
-const fullTitle = title.includes("ASHFOG") ? title : `${title} · ASHFOG`;
+const fullTitle = title.includes("ASHFOG") ? title : `${title} — ASHFOG`;
 const imageUrl = image ? new URL(image, site).href : undefined;
 const organizationId = new URL("/#organization", site).href;
 const websiteId = new URL("/#website", site).href;
@@ -46,12 +46,12 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const graph: Array<Record<string, unknown>> = [
   {
-    "@type": "NewsMediaOrganization",
+    "@type": "Organization",
     "@id": organizationId,
     name: "ASHFOG",
     url: new URL("/", site).href,
     description:
-      "Source-linked daily intelligence on AI, open source, developer tools, infrastructure, research, and policy."
+      "Independent, source-linked writing about AI models, systems, open source, and the people building them."
   },
   {
     "@type": "WebSite",
@@ -59,7 +59,7 @@ const graph: Array<Record<string, unknown>> = [
     url: new URL("/", site).href,
     name: "ASHFOG",
     description:
-      "A source-linked global AI and developer ecosystem briefing, published daily.",
+      "A growing library of focused articles about AI models, systems, tools, and research.",
     inLanguage: "en",
     publisher: { "@id": organizationId }
   },
@@ -92,7 +92,7 @@ if (breadcrumbs.length > 1) {
 
 if (article) {
   graph.push({
-    "@type": "NewsArticle",
+    "@type": "Article",
     "@id": `${canonical.href}#article`,
     mainEntityOfPage: { "@id": webpageId },
     headline: title,

@@ -1,0 +1,65 @@
+---
+import type { ArticleEntry } from "../lib/articles";
+import { articleReadingMinutes, categoryLabels, formatArticleDate } from "../lib/articles";
+import { getArticleHeroImage } from "../lib/images";
+
+interface Props {
+  article: ArticleEntry;
+  featured?: boolean;
+}
+
+const { article, featured = false } = Astro.props;
+const image = getArticleHeroImage(article);
+---
+
+<article class:list={["article-card", { featured }]}>
+  <a class="card-link" href={`/articles/${article.id}`} aria-label={article.data.title}></a>
+  {image && (
+    <figure>
+      <img
+        src={image.src}
+        srcset={image.srcset}
+        sizes={featured ? "(max-width: 900px) 100vw, 54vw" : "(max-width: 720px) 100vw, 42vw"}
+        width={image.width}
+        height={image.height}
+        alt={image.alt}
+        loading={featured ? "eager" : "lazy"}
+        decoding="async"
+        fetchpriority={featured ? "high" : "auto"}
+      />
+    </figure>
+  )}
+  <div class="card-body">
+    <div class="card-meta">
+      <span>{categoryLabels[article.data.category] ?? article.data.category}</span>
+      <span>{formatArticleDate(article.data.publishedAt)}</span>
+    </div>
+    <h2>{article.data.title}</h2>
+    <p>{article.data.description}</p>
+    <div class="card-foot">
+      <span>{articleReadingMinutes(article)} min read</span>
+      <span aria-hidden="true">↗</span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .article-card { position: relative; display: grid; grid-template-columns: minmax(260px, .86fr) minmax(0, 1.14fr); min-height: 360px; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); transition: transform 220ms ease, box-shadow 220ms ease; }
+  .article-card:hover { box-shadow: var(--shadow); transform: translateY(-4px); }
+  .card-link { position: absolute; z-index: 3; inset: 0; }
+  figure { min-height: 100%; margin: 0; overflow: hidden; background: var(--surface-raised); }
+  img { width: 100%; height: 100%; object-fit: cover; transition: transform 450ms ease; }
+  .article-card:hover img { transform: scale(1.018); }
+  .card-body { display: flex; min-width: 0; flex-direction: column; padding: clamp(26px, 4vw, 52px); }
+  .card-meta, .card-foot { display: flex; justify-content: space-between; gap: 16px; color: var(--faint); font-size: 10px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
+  h2 { max-width: 720px; margin: auto 0 18px; font-size: clamp(30px, 4.2vw, 58px); font-weight: 540; letter-spacing: -.052em; line-height: 1.02; text-wrap: balance; }
+  p { max-width: 650px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+  .card-foot { margin-top: auto; padding-top: 34px; }
+  .card-foot span:last-child { color: var(--accent); font-size: 16px; }
+  .featured { min-height: 520px; }
+  @media (max-width: 760px) {
+    .article-card, .featured { grid-template-columns: 1fr; min-height: 0; }
+    figure { min-height: 0; aspect-ratio: 3 / 2; }
+    h2 { margin-top: 42px; }
+  }
+</style>

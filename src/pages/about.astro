@@ -1,169 +1,55 @@
 ---
 import PageArtwork from "../components/PageArtwork.astro";
-import { getPageImage } from "../lib/images";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getPageImage } from "../lib/images";
 const pageImage = getPageImage("about");
 ---
 
 <BaseLayout
   title="About ASHFOG"
-  description="ASHFOG’s editorial principles, source collection, and automated publishing method."
+  description="ASHFOG publishes independent, source-linked articles about AI models, systems, open source, tools, research, and policy."
   image={pageImage?.largeSrc}
   pageType="AboutPage"
-  breadcrumbs={[
-    { name: "ASHFOG", path: "/" },
-    { name: "About", path: "/about" }
-  ]}
+  breadcrumbs={[{ name: "ASHFOG", path: "/" }, { name: "About", path: "/about" }]}
 >
   <section class="about page-shell">
     <header>
       <span class="eyebrow">About ASHFOG</span>
-      <h1>Not More News<br /><em>Less Noise</em></h1>
-      <p>ASHFOG tracks independent events across AI, open source, developer tools, infrastructure, research, policy, and relevant communities. Every item keeps its collected source link so readers can investigate directly.</p>
+      <h1>Less feed<br /><em>more understanding</em></h1>
+      <p>ASHFOG is an independent publication about the models, systems, tools, research, and decisions shaping artificial intelligence. Articles are published when a subject deserves a complete explanation—not because a daily slot needs to be filled.</p>
     </header>
     {pageImage && <PageArtwork image={pageImage} priority />}
 
     <div class="principles">
-      <article>
-        <span>01</span>
-        <h2>Sources First</h2>
-        <p>Reports about the same event are grouped by content. When an official announcement, repository, paper, specification, or policy page is available, it becomes the source link for that event.</p>
-      </article>
-      <article>
-        <span>02</span>
-        <h2>Breadth Without Ranking</h2>
-        <p>There is no importance threshold or routine story quota. Quiet days stay concise, while busy days include every independent in-scope event up to the 46-story anomaly guard.</p>
-      </article>
-      <article>
-        <span>03</span>
-        <h2>Community Uses the Same Pipeline</h2>
-        <p>Single tests, multiple-user reports, and maintainer confirmations are labeled separately. Popularity, votes, and reposts are never presented as proof.</p>
-      </article>
-      <article>
-        <span>04</span>
-        <h2>Machine Validated</h2>
-        <p>Before publication, local validation checks JSON structure, language, word counts, dates, all-source accounting, image assignments, and duplicate event IDs without network requests.</p>
-      </article>
+      <article><span>01</span><h2>One subject at a time</h2><p>Each article starts with a clear question and follows it far enough to leave the reader with a useful mental model.</p></article>
+      <article><span>02</span><h2>Sources stay visible</h2><p>Official documentation, model cards, papers, repositories, specifications, and credible independent work remain linked for direct inspection.</p></article>
+      <article><span>03</span><h2>Context before reaction</h2><p>Launch claims are separated from measured results, community experience, unresolved questions, and the systems surrounding a model.</p></article>
+      <article><span>04</span><h2>Published with purpose</h2><p>There is no daily quota. Short pieces stay concise, deeper subjects receive space, and existing articles can be updated when the evidence changes.</p></article>
     </div>
 
     <section class="manifesto">
-      <p>“Not everything worth seeing is visible.”</p>
-      <h2>Fog is not an obstacle.<br />It is a reminder:<br /><strong>what matters must be recognized.</strong></h2>
+      <p>Not everything worth seeing is visible.</p>
+      <h2>The field moves quickly.<br />Understanding can still be<br /><strong>careful, connected, and clear.</strong></h2>
     </section>
   </section>
 </BaseLayout>
 
 <style>
-  .about {
-    padding-top: 76px;
-  }
-
-  header {
-    display: grid;
-    min-height: 390px;
-    grid-template-columns: 1.5fr .7fr;
-    gap: 60px;
-    align-items: end;
-    padding-bottom: 58px;
-  }
-
-  .eyebrow {
-    grid-column: 1 / -1;
-    align-self: start;
-  }
-
-  h1 {
-    margin: 0;
-    font-size: clamp(50px, 6.5vw, 80px);
-    font-weight: 510;
-    letter-spacing: -0.075em;
-    line-height: .96;
-  }
-
-  h1 em {
-    color: var(--accent);
-    font-family: var(--font-serif);
-    font-weight: 430;
-  }
-
-  header p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 16px;
-    line-height: 1.7;
-  }
-
-  .principles {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border-top: 1px solid var(--line);
-    border-left: 1px solid var(--line);
-  }
-
-  .principles article {
-    min-height: 280px;
-    padding: 24px;
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    background: var(--surface);
-  }
-
-  article span {
-    color: var(--accent);
-    font-size: 11px;
-  }
-
-  article h2 {
-    margin: 72px 0 14px;
-    font-size: 23px;
-    font-weight: 540;
-    letter-spacing: -.04em;
-  }
-
-  article p {
-    color: var(--muted);
-    font-size: 13px;
-  }
-
-  .manifesto {
-    min-height: 520px;
-    padding-top: 100px;
-  }
-
-  .manifesto > p {
-    color: var(--faint);
-    font-family: var(--font-serif);
-  }
-
-  .manifesto h2 {
-    margin: 35px 0;
-    font-family: var(--font-serif);
-    font-size: clamp(38px, 5vw, 62px);
-    font-weight: 430;
-    letter-spacing: -.05em;
-    line-height: 1.08;
-  }
-
-  .manifesto strong {
-    color: var(--accent);
-    font-weight: inherit;
-  }
-
-  @media (max-width: 800px) {
-    header {
-      grid-template-columns: 1fr;
-      min-height: 0;
-      gap: 26px;
-    }
-
-    .principles {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  @media (max-width: 520px) {
-    .principles {
-      grid-template-columns: 1fr;
-    }
-  }
+  .about { padding-top: 76px; }
+  header { display: grid; min-height: 390px; grid-template-columns: 1.5fr .7fr; gap: 60px; align-items: end; padding-bottom: 58px; }
+  .eyebrow { grid-column: 1 / -1; align-self: start; }
+  h1 { margin: 0; font-size: clamp(50px, 6.5vw, 88px); font-weight: 510; letter-spacing: -.075em; line-height: .94; }
+  h1 em { color: var(--accent); font-family: var(--font-serif); font-weight: 430; }
+  header p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.75; }
+  .principles { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .principles article { min-height: 300px; padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+  article span { color: var(--accent); font-size: 11px; }
+  article h2 { margin: 76px 0 14px; font-size: 23px; font-weight: 540; letter-spacing: -.04em; }
+  article p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+  .manifesto { min-height: 520px; padding-top: 100px; }
+  .manifesto > p { color: var(--faint); font-family: var(--font-serif); }
+  .manifesto h2 { margin: 35px 0; font-family: var(--font-serif); font-size: clamp(38px, 5vw, 64px); font-weight: 430; letter-spacing: -.05em; line-height: 1.08; }
+  .manifesto strong { color: var(--accent); font-weight: inherit; }
+  @media (max-width: 800px) { header { grid-template-columns: 1fr; min-height: 0; gap: 26px; } .principles { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .principles { grid-template-columns: 1fr; } }
 </style>

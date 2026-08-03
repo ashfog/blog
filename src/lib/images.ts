@@ -1,5 +1,5 @@
 import imageLibrary from "../../editorial/image-library.json";
-import type { DailyEdition } from "./daily";
+import type { ArticleEntry } from "./articles";
 
 type ImageVariant = "main" | "light" | "dark";
 
@@ -74,18 +74,19 @@ export function getPageImage(page: string) {
   return entry ? toLibraryImage(entry) : undefined;
 }
 
-export function getEditionHeroImage(edition: DailyEdition) {
-  const requested = getImageById(edition.heroImageId);
+export function getArticleHeroImage(article: ArticleEntry) {
+  const requested = getImageById(article.data.heroImageId);
   if (requested) return requested;
 
-  const orderedPool = [...storyEntries].sort(
+  const categoryPool = storyEntries.filter(
+    (entry) => entry.category === article.data.category
+  );
+  const pool = categoryPool.length > 0 ? categoryPool : storyEntries;
+  const orderedPool = [...pool].sort(
     (first, second) => hash(first.id) - hash(second.id)
   );
-  const dayNumber = Math.floor(
-    Date.parse(`${edition.editionDate}T00:00:00Z`) / 86_400_000
-  );
-  const entry = orderedPool[((dayNumber % orderedPool.length) + orderedPool.length) % orderedPool.length];
-  return entry ? toLibraryImage(entry) : getPageImage("daily");
+  const entry = orderedPool[hash(article.id) % orderedPool.length];
+  return entry ? toLibraryImage(entry) : getPageImage("analysis");
 }
 
 export const storyImageIds = new Set(storyEntries.map((image) => image.id));
