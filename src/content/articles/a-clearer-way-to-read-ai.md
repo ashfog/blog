@@ -8,7 +8,7 @@ tags:
   - editorial
   - model-analysis
 heroImageId: models-main-a
-featured: true
+featured: false
 sources: []
 ---
 
