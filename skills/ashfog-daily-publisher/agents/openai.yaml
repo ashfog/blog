@@ -1,4 +1,0 @@
-interface:
-  display_name: "ASHFOG Daily Publisher"
-  short_description: "Collect signals and publish one connected daily article"
-  default_prompt: "Use $ashfog-daily-publisher in Preview mode to collect and deduplicate current signals, integrate useful community voices, and draft one connected ASHFOG Daily article."

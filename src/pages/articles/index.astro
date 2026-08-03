@@ -1,0 +1,41 @@
+---
+import ArticleCard from "../../components/ArticleCard.astro";
+import PageArtwork from "../../components/PageArtwork.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getArticles } from "../../lib/articles";
+import { getPageImage } from "../../lib/images";
+
+const articles = await getArticles();
+const pageImage = getPageImage("archive");
+---
+
+<BaseLayout
+  title="Articles"
+  description="Browse every ASHFOG article on AI models, agents, open source, infrastructure, tools, and research."
+  image={pageImage?.largeSrc}
+  pageType="CollectionPage"
+  breadcrumbs={[{ name: "ASHFOG", path: "/" }, { name: "Articles", path: "/articles" }]}
+>
+  <section class="articles page-shell">
+    <header>
+      <span class="eyebrow">Article library</span>
+      <h1>Ideas worth returning to<br /><em>after the feed moves on</em></h1>
+      <p>Focused explanations, model profiles, technical context, and informed perspectives. Published when a subject deserves a complete article.</p>
+    </header>
+    {pageImage && <PageArtwork image={pageImage} priority />}
+    <div class="article-list">
+      {articles.map((article) => <ArticleCard article={article} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .articles { padding-top: 76px; }
+  header { display: grid; min-height: 330px; grid-template-columns: 1.45fr .55fr; align-items: end; gap: 60px; padding-bottom: 58px; }
+  .eyebrow { grid-column: 1 / -1; align-self: start; }
+  h1 { margin: 0; font-size: clamp(48px, 6.5vw, 86px); font-weight: 510; letter-spacing: -.07em; line-height: .96; }
+  h1 em { color: var(--accent); font-family: var(--font-serif); font-weight: 430; }
+  header p { margin: 0; color: var(--muted); line-height: 1.75; }
+  .article-list { display: grid; gap: 24px; }
+  @media (max-width: 780px) { header { grid-template-columns: 1fr; min-height: 0; gap: 28px; } }
+</style>

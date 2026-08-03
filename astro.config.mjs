@@ -7,9 +7,15 @@ export default defineConfig({
   trailingSlash: "never",
   integrations: [
     sitemap({
-      filter: (page) => new URL(page).pathname !== "/search"
+      filter: (page) => {
+        const pathname = new URL(page).pathname;
+        return pathname !== "/search" && !pathname.startsWith("/daily");
+      }
     })
   ],
+  redirects: {
+    "/daily": "/articles"
+  },
   vite: {
     build: {
       cssMinify: true

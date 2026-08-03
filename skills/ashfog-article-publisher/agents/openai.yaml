@@ -1,0 +1,4 @@
+interface:
+  display_name: "ASHFOG Article Publisher"
+  short_description: "Research, write, validate, and publish ASHFOG articles"
+  default_prompt: "Use $ashfog-article-publisher to research, write, and publish an ASHFOG article about the requested AI topic."

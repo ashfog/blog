@@ -7,7 +7,7 @@ const pageImage = getPageImage("search");
 
 <BaseLayout
   title="Search"
-  description="Search ASHFOG editions, topics, companies, models, and sources."
+  description="Search ASHFOG articles, models, companies, tools, topics, and source material."
   image={pageImage?.largeSrc}
   noindex
   breadcrumbs={[
@@ -17,9 +17,9 @@ const pageImage = getPageImage("search");
 >
   <section class="search-page page-shell">
     <header>
-      <span class="eyebrow">Search the signals</span>
+      <span class="eyebrow">Search the library</span>
       <h1>Search ASHFOG</h1>
-      <p>Find archived signals by company, model, topic, source, or keyword.</p>
+      <p>Find articles by model, company, tool, topic, source, or keyword.</p>
     </header>
     {pageImage && <PageArtwork image={pageImage} />}
     <div id="search" class="search-box">
@@ -41,7 +41,7 @@ const pageImage = getPageImage("search");
       excerptLength: 22,
       translations: {
         placeholder: "Search open models, Ollama, agent security…",
-        zero_results: "No signals found for [SEARCH_TERM]",
+        zero_results: "No articles found for [SEARCH_TERM]",
         clear_search: "Clear",
         load_more: "Load more",
         search_label: "Search this site",

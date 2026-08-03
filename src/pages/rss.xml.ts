@@ -1,18 +1,18 @@
 import rss from "@astrojs/rss";
-import { getEditions } from "../lib/daily";
+import { getArticles } from "../lib/articles";
 
 export async function GET(context: { site: URL }) {
-  const editions = getEditions();
-
+  const articles = await getArticles();
   return rss({
-    title: "ASHFOG Daily",
-    description: "A source-linked global briefing on AI, open source, developer tools, infrastructure, research, and policy.",
+    title: "ASHFOG Articles",
+    description: "Independent, source-linked articles about AI models, systems, tools, open source, and research.",
     site: context.site,
-    items: editions.map((edition) => ({
-      title: edition.title,
-      description: edition.description,
-      pubDate: new Date(edition.generatedAt),
-      link: `/daily/${edition.editionDate}`
+    items: articles.map((article) => ({
+      title: article.data.title,
+      description: article.data.description,
+      pubDate: article.data.publishedAt,
+      link: `/articles/${article.id}`,
+      categories: [article.data.category, ...article.data.tags]
     })),
     customData: "<language>en</language>"
   });

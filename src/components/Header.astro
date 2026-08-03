@@ -3,8 +3,8 @@ import BrandMark from "./BrandMark.astro";
 
 const currentPath = Astro.url.pathname;
 const links = [
-  { href: "/", label: "Today" },
-  { href: "/daily", label: "Archive" },
+  { href: "/", label: "Home" },
+  { href: "/articles", label: "Articles" },
   { href: "/topics", label: "Topics" },
   { href: "/about", label: "About" }
 ];
@@ -15,7 +15,7 @@ const links = [
     <a class="brand" href="/" aria-label="ASHFOG home">
       <BrandMark />
       <span>ASHFOG</span>
-      <em>DAILY INTELLIGENCE</em>
+      <em>AI FIELD NOTES</em>
     </a>
 
     <nav aria-label="Primary navigation">
@@ -42,8 +42,8 @@ const links = [
         <span>Search</span>
       </a>
       <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle color theme">
-        <span class="sun" aria-hidden="true">☼</span>
-        <span class="moon" aria-hidden="true">◐</span>
+        <span class="sun" aria-hidden="true">◐</span>
+        <span class="moon" aria-hidden="true">◑</span>
       </button>
     </div>
   </div>
