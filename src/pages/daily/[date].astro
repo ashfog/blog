@@ -1,0 +1,9 @@
+---
+export function getStaticPaths() {
+  return ["2026-07-28", "2026-07-29", "2026-08-01", "2026-08-02"].map((date) => ({
+    params: { date }
+  }));
+}
+
+return Astro.redirect("/articles", 301);
+---

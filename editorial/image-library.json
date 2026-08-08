@@ -1,0 +1,312 @@
+{
+  "version": 2,
+  "dimensions": {
+    "width": 1536,
+    "height": 1024,
+    "aspectRatio": "3:2",
+    "renditions": [
+      768,
+      1536
+    ]
+  },
+  "storyImages": [
+    {
+      "id": "models-main-a",
+      "category": "models",
+      "variant": "main",
+      "alt": "Paper collage of abstract model structures and signal paths"
+    },
+    {
+      "id": "models-main-b",
+      "category": "models",
+      "variant": "main",
+      "alt": "Paper collage of layered model components and branching paths"
+    },
+    {
+      "id": "models-light",
+      "category": "models",
+      "variant": "light",
+      "alt": "Abstract model forms and signal paths on a light field"
+    },
+    {
+      "id": "models-dark",
+      "category": "models",
+      "variant": "dark",
+      "alt": "Abstract model forms and signal paths on a dark field"
+    },
+    {
+      "id": "agents-main-a",
+      "category": "agents",
+      "variant": "main",
+      "alt": "Paper collage of abstract agent structures and signal paths"
+    },
+    {
+      "id": "agents-main-b",
+      "category": "agents",
+      "variant": "main",
+      "alt": "Paper collage of layered agent components and branching paths"
+    },
+    {
+      "id": "agents-light",
+      "category": "agents",
+      "variant": "light",
+      "alt": "Abstract agent forms and signal paths on a light field"
+    },
+    {
+      "id": "agents-dark",
+      "category": "agents",
+      "variant": "dark",
+      "alt": "Abstract agent forms and signal paths on a dark field"
+    },
+    {
+      "id": "open-source-main-a",
+      "category": "open-source",
+      "variant": "main",
+      "alt": "Paper collage of abstract open-source structures and signal paths"
+    },
+    {
+      "id": "open-source-main-b",
+      "category": "open-source",
+      "variant": "main",
+      "alt": "Paper collage of layered open-source components and branching paths"
+    },
+    {
+      "id": "open-source-light",
+      "category": "open-source",
+      "variant": "light",
+      "alt": "Abstract open-source forms and signal paths on a light field"
+    },
+    {
+      "id": "open-source-dark",
+      "category": "open-source",
+      "variant": "dark",
+      "alt": "Abstract open-source forms and signal paths on a dark field"
+    },
+    {
+      "id": "developer-tools-main-a",
+      "category": "developer-tools",
+      "variant": "main",
+      "alt": "Paper collage of abstract developer-tool structures and signal paths"
+    },
+    {
+      "id": "developer-tools-main-b",
+      "category": "developer-tools",
+      "variant": "main",
+      "alt": "Paper collage of layered developer-tool components and branching paths"
+    },
+    {
+      "id": "developer-tools-light",
+      "category": "developer-tools",
+      "variant": "light",
+      "alt": "Abstract developer-tool forms and signal paths on a light field"
+    },
+    {
+      "id": "developer-tools-dark",
+      "category": "developer-tools",
+      "variant": "dark",
+      "alt": "Abstract developer-tool forms and signal paths on a dark field"
+    },
+    {
+      "id": "infrastructure-main-a",
+      "category": "infrastructure",
+      "variant": "main",
+      "alt": "Paper collage of abstract infrastructure structures and signal paths"
+    },
+    {
+      "id": "infrastructure-main-b",
+      "category": "infrastructure",
+      "variant": "main",
+      "alt": "Paper collage of layered infrastructure components and branching paths"
+    },
+    {
+      "id": "infrastructure-light",
+      "category": "infrastructure",
+      "variant": "light",
+      "alt": "Abstract infrastructure forms and signal paths on a light field"
+    },
+    {
+      "id": "infrastructure-dark",
+      "category": "infrastructure",
+      "variant": "dark",
+      "alt": "Abstract infrastructure forms and signal paths on a dark field"
+    },
+    {
+      "id": "research-main-a",
+      "category": "research",
+      "variant": "main",
+      "alt": "Paper collage of abstract research structures and signal paths"
+    },
+    {
+      "id": "research-main-b",
+      "category": "research",
+      "variant": "main",
+      "alt": "Paper collage of layered research components and branching paths"
+    },
+    {
+      "id": "research-light",
+      "category": "research",
+      "variant": "light",
+      "alt": "Abstract research forms and signal paths on a light field"
+    },
+    {
+      "id": "research-dark",
+      "category": "research",
+      "variant": "dark",
+      "alt": "Abstract research forms and signal paths on a dark field"
+    },
+    {
+      "id": "hardware-main-a",
+      "category": "hardware",
+      "variant": "main",
+      "alt": "Paper collage of abstract hardware structures and signal paths"
+    },
+    {
+      "id": "hardware-main-b",
+      "category": "hardware",
+      "variant": "main",
+      "alt": "Paper collage of layered hardware components and branching paths"
+    },
+    {
+      "id": "hardware-light",
+      "category": "hardware",
+      "variant": "light",
+      "alt": "Abstract hardware forms and signal paths on a light field"
+    },
+    {
+      "id": "hardware-dark",
+      "category": "hardware",
+      "variant": "dark",
+      "alt": "Abstract hardware forms and signal paths on a dark field"
+    },
+    {
+      "id": "security-main-a",
+      "category": "security",
+      "variant": "main",
+      "alt": "Paper collage of abstract security structures and signal paths"
+    },
+    {
+      "id": "security-main-b",
+      "category": "security",
+      "variant": "main",
+      "alt": "Paper collage of layered security components and branching paths"
+    },
+    {
+      "id": "security-light",
+      "category": "security",
+      "variant": "light",
+      "alt": "Abstract security forms and signal paths on a light field"
+    },
+    {
+      "id": "security-dark",
+      "category": "security",
+      "variant": "dark",
+      "alt": "Abstract security forms and signal paths on a dark field"
+    },
+    {
+      "id": "policy-main-a",
+      "category": "policy",
+      "variant": "main",
+      "alt": "Paper collage of abstract policy structures and signal paths"
+    },
+    {
+      "id": "policy-main-b",
+      "category": "policy",
+      "variant": "main",
+      "alt": "Paper collage of layered policy components and branching paths"
+    },
+    {
+      "id": "policy-light",
+      "category": "policy",
+      "variant": "light",
+      "alt": "Abstract policy forms and signal paths on a light field"
+    },
+    {
+      "id": "policy-dark",
+      "category": "policy",
+      "variant": "dark",
+      "alt": "Abstract policy forms and signal paths on a dark field"
+    },
+    {
+      "id": "community-main-a",
+      "category": "community",
+      "variant": "main",
+      "alt": "Paper collage of abstract community structures and signal paths"
+    },
+    {
+      "id": "community-main-b",
+      "category": "community",
+      "variant": "main",
+      "alt": "Paper collage of layered community components and branching paths"
+    },
+    {
+      "id": "community-light",
+      "category": "community",
+      "variant": "light",
+      "alt": "Abstract community forms and signal paths on a light field"
+    },
+    {
+      "id": "community-dark",
+      "category": "community",
+      "variant": "dark",
+      "alt": "Abstract community forms and signal paths on a dark field"
+    }
+  ],
+  "pageImages": [
+    {
+      "id": "page-home",
+      "page": "home",
+      "variant": "main",
+      "alt": "Abstract collage of layered signals converging into a clear path"
+    },
+    {
+      "id": "page-daily",
+      "page": "daily",
+      "variant": "main",
+      "alt": "Abstract collage of daily information fragments arranged into a briefing"
+    },
+    {
+      "id": "page-analysis",
+      "page": "analysis",
+      "variant": "main",
+      "alt": "Abstract collage of multiple evidence trails converging into analysis"
+    },
+    {
+      "id": "page-archive",
+      "page": "archive",
+      "variant": "light",
+      "alt": "Abstract collage of daily editions arranged along a timeline"
+    },
+    {
+      "id": "page-topics",
+      "page": "topics",
+      "variant": "main",
+      "alt": "Abstract collage of varied topics forming a signal map"
+    },
+    {
+      "id": "page-about",
+      "page": "about",
+      "variant": "dark",
+      "alt": "Abstract collage of evidence, boundaries, and editorial judgment"
+    },
+    {
+      "id": "page-search",
+      "page": "search",
+      "variant": "light",
+      "alt": "Abstract collage of one useful signal emerging from open space"
+    },
+    {
+      "id": "page-404",
+      "page": "404",
+      "variant": "dark",
+      "alt": "Abstract collage of an interrupted information path and a lost signal"
+    }
+  ],
+  "storyReservePageIds": [
+    "page-daily",
+    "page-archive",
+    "page-topics",
+    "page-about",
+    "page-search",
+    "page-404"
+  ]
+}

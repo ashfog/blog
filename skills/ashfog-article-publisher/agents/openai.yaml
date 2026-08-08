@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Publishing Workbench"
+  short_description: "Publish verified, source-linked articles"
+  default_prompt: "Read the repository root SKILL.md and site.config.json, then use $ashfog-article-publisher to research, validate, and publish an article about the requested subject."

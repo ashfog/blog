@@ -1,0 +1,10 @@
+{
+  "id": "ashfog-editorial",
+  "name": "ASHFOG Editorial",
+  "version": "1.0.0",
+  "supportsColorModes": ["light", "dark"],
+  "themeColors": {
+    "light": "#f4f3ef",
+    "dark": "#0b0c0c"
+  }
+}

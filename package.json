@@ -1,0 +1,29 @@
+{
+  "name": "ashfog-blog",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "scripts": {
+    "dev": "pnpm run build:config && astro dev",
+    "build:astro": "astro build",
+    "build:search": "pagefind --site dist",
+    "build:seo": "node scripts/validate-seo.mjs",
+    "build:config": "node scripts/validate-site-config.mjs",
+    "build:workbench": "node scripts/validate-workbench.mjs",
+    "build:articles": "node scripts/validate-articles.mjs",
+    "build": "pnpm run build:config && pnpm run build:workbench && pnpm run build:articles && pnpm run build:astro && pnpm run build:search && pnpm run build:seo",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.1.3",
+    "pagefind": "^1.5.2",
+    "remark-parse": "11.0.0",
+    "unified": "11.0.5",
+    "unist-util-visit": "5.1.0"
+  }
+}

@@ -1,0 +1,72 @@
+---
+import type { ArticleEntry } from "../lib/articles";
+import {
+  articleReadingMinutes,
+  categoryLabels,
+  getArticleSlug
+} from "../lib/articles";
+import { directionForLanguage, siteConfig } from "../config/site";
+
+interface Props {
+  article: ArticleEntry;
+  compact?: boolean;
+}
+
+const { article, compact = false } = Astro.props;
+const slug = getArticleSlug(article);
+const date = article.data.publishedAt;
+const day = new Intl.DateTimeFormat(siteConfig.site.locale, {
+  day: "2-digit",
+  timeZone: siteConfig.site.timezone
+}).format(date);
+const month = new Intl.DateTimeFormat(siteConfig.site.locale, {
+  month: "short",
+  timeZone: siteConfig.site.timezone
+}).format(date);
+const category = categoryLabels[article.data.category] ?? article.data.category;
+const articleLanguage = article.data.language ?? siteConfig.site.language;
+const articleDirection = directionForLanguage(articleLanguage);
+---
+
+<article class:list={["archive-row", { compact }]}>
+  <a href={`/articles/${slug}`}>
+    <time datetime={date.toISOString()}>
+      <strong>{day}</strong>
+      <span>{month}</span>
+    </time>
+    <div class="row-copy">
+      <span class="row-category">{category}</span>
+      <h3 lang={articleLanguage} dir={articleDirection}>{article.data.title}</h3>
+      {!compact && <p lang={articleLanguage} dir={articleDirection}>{article.data.description}</p>}
+    </div>
+    <div class="row-tail">
+      <span>{articleReadingMinutes(article)} min</span>
+      <b aria-hidden="true">↗</b>
+    </div>
+  </a>
+</article>
+
+<style>
+  .archive-row { border-bottom: 1px solid var(--line); }
+  .archive-row:first-child { border-top: 1px solid var(--line); }
+  a { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; gap: clamp(20px, 4vw, 54px); align-items: center; padding: clamp(24px, 3vw, 36px) 0; }
+  a:hover h3 { color: var(--accent); }
+  time { display: flex; align-items: baseline; gap: 7px; color: var(--faint); text-transform: uppercase; }
+  time strong { color: var(--ink); font-size: 28px; font-weight: 520; letter-spacing: -.045em; }
+  time span, .row-category, .row-tail { font-size: 10px; font-weight: 680; letter-spacing: .09em; text-transform: uppercase; }
+  .row-copy { min-width: 0; }
+  .row-category { display: block; margin-bottom: 10px; color: var(--accent); }
+  h3 { margin: 0; font-size: clamp(23px, 3vw, 38px); font-weight: 530; letter-spacing: -.045em; line-height: 1.08; text-wrap: balance; transition: color 180ms ease; }
+  p { max-width: 840px; margin: 13px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+  .row-tail { display: flex; align-items: center; gap: 24px; color: var(--faint); white-space: nowrap; }
+  .row-tail b { color: var(--accent); font-size: 17px; }
+  .compact a { padding-block: 20px; }
+  .compact h3 { font-size: clamp(20px, 2.4vw, 30px); }
+  @media (max-width: 680px) {
+    a { grid-template-columns: 58px minmax(0, 1fr); gap: 18px; }
+    .row-tail { display: none; }
+    time { align-self: start; flex-direction: column; gap: 1px; }
+    time strong { font-size: 24px; }
+    p { display: none; }
+  }
+</style>

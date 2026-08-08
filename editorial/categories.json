@@ -1,0 +1,70 @@
+{
+  "version": 2,
+  "categories": [
+    {
+      "id": "models",
+      "label": "Models",
+      "slug": "models"
+    },
+    {
+      "id": "agents",
+      "label": "Agents",
+      "slug": "agents"
+    },
+    {
+      "id": "open-source",
+      "label": "Open Source",
+      "slug": "open-source"
+    },
+    {
+      "id": "developer-tools",
+      "label": "Developer Tools",
+      "slug": "developer-tools"
+    },
+    {
+      "id": "infrastructure",
+      "label": "Infrastructure",
+      "slug": "infrastructure"
+    },
+    {
+      "id": "research",
+      "label": "Research",
+      "slug": "research"
+    },
+    {
+      "id": "hardware",
+      "label": "Hardware",
+      "slug": "hardware"
+    },
+    {
+      "id": "security",
+      "label": "Security",
+      "slug": "security"
+    },
+    {
+      "id": "policy",
+      "label": "Policy",
+      "slug": "policy"
+    },
+    {
+      "id": "community",
+      "label": "Community",
+      "slug": "community"
+    },
+    {
+      "id": "web",
+      "label": "Web",
+      "slug": "web"
+    },
+    {
+      "id": "media",
+      "label": "Media",
+      "slug": "media"
+    },
+    {
+      "id": "culture",
+      "label": "Culture",
+      "slug": "culture"
+    }
+  ]
+}

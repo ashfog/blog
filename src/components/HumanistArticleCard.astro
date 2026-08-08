@@ -1,0 +1,84 @@
+---
+import type { ArticleEntry } from "../lib/articles";
+import {
+  articleReadingMinutes,
+  categoryLabels,
+  formatArticleDate,
+  getArticleSlug
+} from "../lib/articles";
+import { getArticleHeroImage } from "../lib/images";
+import { directionForLanguage, siteConfig } from "../config/site";
+
+interface Props {
+  article: ArticleEntry;
+  priority?: boolean;
+}
+
+const { article, priority = false } = Astro.props;
+const slug = getArticleSlug(article);
+const image = getArticleHeroImage(article);
+const articleLanguage = article.data.language ?? siteConfig.site.language;
+const articleDirection = directionForLanguage(articleLanguage);
+const tones: Record<string, string> = {
+  models: "#d77f5d",
+  agents: "#78a393",
+  "open-source": "#899d6d",
+  "developer-tools": "#c99172",
+  infrastructure: "#8c86bd",
+  research: "#bd9d88",
+  hardware: "#80979b",
+  security: "#c57558",
+  policy: "#9b8f7c",
+  web: "#7d9fa3",
+  media: "#b493a4",
+  culture: "#c5a177",
+  community: "#908bb5"
+};
+const tone = tones[article.data.category] ?? "#d77f5d";
+---
+
+<article class="humanist-card" style={`--card-tone: ${tone};`} data-article-card data-category={article.data.category} data-search={`${article.data.title} ${article.data.description} ${article.data.tags.join(" ")}`.toLocaleLowerCase(siteConfig.site.locale)}>
+  <a class="card-link" href={`/articles/${slug}`} aria-label={article.data.title} lang={articleLanguage} dir={articleDirection}></a>
+  <figure>
+    {image && (
+      <img
+        src={image.src}
+        srcset={image.srcset}
+        sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 31vw"
+        width={image.width}
+        height={image.height}
+        alt={image.alt}
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
+        fetchpriority={priority ? "high" : "auto"}
+      />
+    )}
+  </figure>
+  <div class="card-copy">
+    <time datetime={article.data.publishedAt.toISOString()}>{formatArticleDate(article.data.publishedAt, articleLanguage)}</time>
+    <h2 lang={articleLanguage} dir={articleDirection}>{article.data.title}</h2>
+    <div class="card-bottom">
+      <span>{categoryLabels[article.data.category] ?? article.data.category}</span>
+      <span>{articleReadingMinutes(article)} min</span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .humanist-card { position: relative; min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); transition: transform 220ms ease, box-shadow 220ms ease; }
+  .humanist-card:hover { box-shadow: var(--shadow); transform: translateY(-5px); }
+  .card-link { position: absolute; z-index: 3; inset: 0; }
+  figure { position: relative; margin: 0; overflow: hidden; aspect-ratio: 4 / 2.65; background: var(--card-tone); }
+  figure::after { position: absolute; inset: 0; background: var(--card-tone); content: ""; mix-blend-mode: color; opacity: .52; pointer-events: none; }
+  img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.7) contrast(.95); transition: transform 500ms ease; }
+  .humanist-card:hover img { transform: scale(1.025); }
+  .card-copy { display: flex; min-height: 300px; flex-direction: column; padding: 30px; }
+  time { color: var(--faint); font-size: 11px; letter-spacing: .03em; }
+  h2 { margin: 24px 0 30px; font-family: var(--font-serif); font-size: clamp(28px, 2.5vw, 40px); font-weight: 500; letter-spacing: -.035em; line-height: 1.02; text-wrap: balance; }
+  .card-bottom { display: flex; justify-content: space-between; gap: 18px; margin-top: auto; color: var(--faint); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+  @media (max-width: 720px) {
+    .humanist-card { border-radius: 20px; }
+    .card-copy { min-height: 250px; padding: 26px; }
+    h2 { font-size: clamp(30px, 9vw, 42px); }
+  }
+</style>

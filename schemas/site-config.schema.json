@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Publishing Workbench site configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "site", "publisher", "branding", "theme", "navigation", "social"],
+  "properties": {
+    "$schema": { "const": "./schemas/site-config.schema.json" },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "shortName", "headerLabel", "tagline", "description", "url", "language", "locale", "timezone"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "shortName": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "headerLabel": { "type": "string", "maxLength": 40 },
+        "tagline": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "description": { "type": "string", "minLength": 40, "maxLength": 240 },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "language": { "type": "string", "pattern": "^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$" },
+        "locale": { "type": "string", "pattern": "^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$" },
+        "timezone": { "type": "string", "minLength": 1 }
+      }
+    },
+    "publisher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "name", "displayName", "email", "showEmail"],
+      "properties": {
+        "type": { "enum": ["person", "organization"] },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 254 },
+        "showEmail": { "type": "boolean" }
+      }
+    },
+    "branding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mark", "markDark", "favicon"],
+      "properties": {
+        "mark": { "type": "string", "pattern": "^/" },
+        "markDark": { "type": "string", "pattern": "^/" },
+        "favicon": { "type": "string", "pattern": "^/" }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "defaultColorMode", "allowColorModeToggle", "accentColor", "accentColorDark"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "defaultColorMode": { "enum": ["system", "light", "dark"] },
+        "allowColorModeToggle": { "type": "boolean" },
+        "accentColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "accentColorDark": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+      }
+    },
+    "navigation": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "href"],
+        "properties": {
+          "label": { "type": "string", "minLength": 1, "maxLength": 32 },
+          "href": { "type": "string", "pattern": "^/" }
+        }
+      }
+    },
+    "social": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["github", "x", "youtube"],
+      "properties": {
+        "github": { "type": "string" },
+        "x": { "type": "string" },
+        "youtube": { "type": "string" }
+      }
+    }
+  }
+}

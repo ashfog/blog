@@ -1,0 +1,44 @@
+{
+  "$schema": "./schemas/site-config.schema.json",
+  "site": {
+    "name": "ASHFOG",
+    "shortName": "ASHFOG",
+    "headerLabel": "FIELD NOTES",
+    "tagline": "Not everything worth seeing is visible.",
+    "description": "Independent, source-linked articles about technology, projects, websites, media, culture, and useful ideas.",
+    "url": "https://ashfog.com",
+    "language": "en",
+    "locale": "en-US",
+    "timezone": "America/New_York"
+  },
+  "publisher": {
+    "type": "organization",
+    "name": "ASHFOG",
+    "displayName": "ASHFOG",
+    "email": "milo@ashfog.com",
+    "showEmail": true
+  },
+  "branding": {
+    "mark": "/brand/ashfog-mark.svg",
+    "markDark": "/brand/ashfog-mark-inverse.svg",
+    "favicon": "/favicon.svg"
+  },
+  "theme": {
+    "id": "ashfog-humanist",
+    "defaultColorMode": "dark",
+    "allowColorModeToggle": true,
+    "accentColor": "#b96545",
+    "accentColorDark": "#d98a68"
+  },
+  "navigation": [
+    { "label": "Home", "href": "/" },
+    { "label": "Articles", "href": "/articles" },
+    { "label": "Topics", "href": "/topics" },
+    { "label": "About", "href": "/about" }
+  ],
+  "social": {
+    "github": "https://github.com/ashfog/blog",
+    "x": "",
+    "youtube": ""
+  }
+}

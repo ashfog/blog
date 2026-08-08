@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">ASHFOG mark</title>
+  <circle cx="32" cy="32" r="24" fill="#171816"/>
+  <defs>
+    <clipPath id="ashfog-mark-clip">
+      <circle cx="32" cy="32" r="24"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#ashfog-mark-clip)" fill="#F4F3EF" transform="rotate(-12 32 32)">
+    <rect x="15.8" y="5" width="4.2" height="54" transform="rotate(-8 17.9 32)"/>
+    <rect x="22.9" y="5" width="4.2" height="54" transform="rotate(-4 25 32)"/>
+    <rect x="29.9" y="5" width="4.2" height="54"/>
+    <rect x="36.9" y="5" width="4.2" height="54" transform="rotate(4 39 32)"/>
+    <rect x="44" y="5" width="4.2" height="54" transform="rotate(8 46.1 32)"/>
+  </g>
+</svg>

@@ -1,0 +1,130 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  articleReadingMinutes,
+  categoryLabels,
+  formatArticleDate,
+  getArticleSlug,
+  getArticles,
+  type ArticleEntry
+} from "../../lib/articles";
+import { getArticleHeroImage } from "../../lib/images";
+import { directionForLanguage, siteConfig } from "../../config/site";
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  const seen = new Set<string>();
+
+  return articles.map((article) => {
+    const slug = getArticleSlug(article);
+    if (seen.has(slug)) {
+      throw new Error(`Duplicate article slug: ${slug}`);
+    }
+    seen.add(slug);
+    return { params: { slug }, props: { article } };
+  });
+}
+
+interface Props { article: ArticleEntry; }
+const { article } = Astro.props;
+const { Content } = await render(article);
+const slug = getArticleSlug(article);
+const image = getArticleHeroImage(article);
+const category = categoryLabels[article.data.category] ?? article.data.category;
+const articleLanguage = article.data.language ?? siteConfig.site.language;
+const articleDirection = directionForLanguage(articleLanguage);
+const siteDirection = directionForLanguage(siteConfig.site.language);
+const publishedAt = article.data.publishedAt.toISOString();
+const modifiedAt = (article.data.updatedAt ?? article.data.publishedAt).toISOString();
+---
+
+<BaseLayout
+  title={article.data.title}
+  description={article.data.description}
+  language={articleLanguage}
+  image={image?.largeSrc}
+  type="article"
+  breadcrumbs={[
+    { name: siteConfig.site.name, path: "/" },
+    { name: "Articles", path: "/articles" },
+    { name: article.data.title, path: `/articles/${slug}` }
+  ]}
+  article={{
+    publishedTime: publishedAt,
+    modifiedTime: modifiedAt,
+    section: category,
+    tags: article.data.tags,
+    citations: article.data.sources.map((source) => source.url)
+  }}
+>
+  <article class="article page-shell" data-pagefind-body>
+    <header class="article-header" lang={articleLanguage} dir={articleDirection}>
+      <div class="article-kicker" lang={siteConfig.site.language} dir={siteDirection}>
+        <a href={`/topics/${article.data.category}`}>{category}</a>
+        <span>{siteConfig.site.shortName} ARTICLE</span>
+      </div>
+      <h1>{article.data.title}</h1>
+      <p>{article.data.description}</p>
+      <div class="article-meta" lang={siteConfig.site.language} dir={siteDirection}>
+        <span lang={articleLanguage} dir={articleDirection}>{formatArticleDate(article.data.publishedAt, articleLanguage)}</span>
+        <span>{articleReadingMinutes(article)} min read</span>
+        <span>By {siteConfig.publisher.displayName}</span>
+      </div>
+    </header>
+
+    {image && (
+      <figure class="article-cover">
+        <img src={image.src} srcset={image.srcset} sizes="(max-width: 1600px) 100vw, 1500px" width={image.width} height={image.height} alt={image.alt} lang={siteConfig.site.language} dir={siteDirection} loading="eager" decoding="async" fetchpriority="high" />
+      </figure>
+    )}
+
+    <div class="article-prose" lang={articleLanguage} dir={articleDirection}><Content /></div>
+
+    {article.data.sources.length > 0 && (
+      <aside class="sources" aria-label="Sources" lang={siteConfig.site.language} dir={siteDirection}>
+        <div lang={siteConfig.site.language} dir={siteDirection}><span class="eyebrow">Sources and further reading</span><h2>Follow the evidence</h2></div>
+        <ol>
+          {article.data.sources.map((source) => (
+            <li><a href={source.url} target="_blank" rel="noopener noreferrer"><span>{source.title}</span><b>↗</b></a></li>
+          ))}
+        </ol>
+      </aside>
+    )}
+
+    <footer class="article-footer" lang={siteConfig.site.language} dir={siteDirection}>
+      <span>Filed under</span>
+      <div>{article.data.tags.map((tag) => <a class="tag" href={`/topics/${tag}`}>{tag}</a>)}</div>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .article { padding-top: clamp(48px, 7vw, 90px); }
+  .article-header { width: 100%; padding: 30px 0 clamp(52px, 7vw, 90px); }
+  .article-kicker { display: flex; justify-content: space-between; color: var(--faint); font-size: 10px; font-weight: 680; letter-spacing: .12em; text-transform: uppercase; }
+  .article-kicker a { color: var(--accent); }
+  h1 { max-width: 1400px; margin: 34px 0 28px; font-size: clamp(52px, 7.5vw, 112px); font-weight: 510; letter-spacing: -.07em; line-height: .94; text-wrap: balance; }
+  .article-header > p { max-width: 820px; margin: 0; color: var(--muted); font-size: clamp(18px, 1.8vw, 22px); line-height: 1.7; }
+  .article-meta { display: flex; flex-wrap: wrap; gap: 10px 30px; margin-top: 32px; color: var(--faint); font-size: 11px; }
+  .article-meta span + span::before { margin-right: 30px; color: var(--line-strong); content: "·"; }
+  .article-cover { width: 100%; max-height: 760px; margin: 0 0 clamp(64px, 8vw, 110px); overflow: hidden; border: 1px solid var(--line); border-radius: 10px; aspect-ratio: 3 / 1.55; background: var(--surface); }
+  .article-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .sources { display: grid; grid-template-columns: .7fr 1.3fr; gap: 60px; margin-top: 100px; padding: 58px 0; border-block: 1px solid var(--line-strong); }
+  .sources h2 { margin: 16px 0 0; font-size: clamp(30px, 4vw, 48px); letter-spacing: -.05em; }
+  .sources ol { margin: 0; padding: 0; list-style: none; }
+  .sources li { border-bottom: 1px solid var(--line); }
+  .sources a { display: flex; justify-content: space-between; gap: 24px; padding: 17px 0; color: var(--muted); font-size: 13px; }
+  .sources a:hover { color: var(--ink); }
+  .sources b { color: var(--accent); }
+  .article-footer { display: flex; align-items: center; gap: 24px; padding: 36px 0 0; color: var(--faint); font-size: 11px; }
+  .article-footer div { display: flex; flex-wrap: wrap; gap: 7px; }
+  @media (max-width: 760px) {
+    .article-kicker { align-items: start; flex-direction: column; gap: 8px; }
+    h1 { font-size: clamp(46px, 13vw, 62px); }
+    .article-meta span + span::before { display: none; }
+    .article-cover { aspect-ratio: 3 / 2; }
+    .sources { grid-template-columns: 1fr; gap: 34px; }
+    .article-footer { align-items: start; flex-direction: column; }
+  }
+</style>

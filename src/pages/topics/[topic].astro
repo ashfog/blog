@@ -1,0 +1,47 @@
+---
+import ArticleCard from "../../components/ArticleCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { categoryLabels, getAllArticleTopics, getArticles, getArticlesByTopic, type ArticleEntry } from "../../lib/articles";
+import { siteConfig } from "../../config/site";
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  return getAllArticleTopics(articles).map((topic) => ({
+    params: { topic },
+    props: { topic, articles: getArticlesByTopic(articles, topic) }
+  }));
+}
+
+interface Props { topic: string; articles: ArticleEntry[]; }
+const { topic, articles } = Astro.props;
+const label = categoryLabels[topic] ?? topic.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
+---
+
+<BaseLayout
+  title={label}
+  description={`${siteConfig.site.name} articles filed under ${label}.`}
+  pageType="CollectionPage"
+  breadcrumbs={[
+    { name: siteConfig.site.name, path: "/" },
+    { name: "Topics", path: "/topics" },
+    { name: label, path: `/topics/${topic}` }
+  ]}
+>
+  <section class="topic page-shell">
+    <header>
+      <div><a href="/topics">Topics</a><span>{articles.length} {articles.length === 1 ? "article" : "articles"}</span></div>
+      <h1>{label}</h1>
+      <p>Focused {siteConfig.site.shortName} writing connected by this subject.</p>
+    </header>
+    <div class="items">{articles.map((article) => <ArticleCard article={article} />)}</div>
+  </section>
+</BaseLayout>
+
+<style>
+  .topic { padding-top: 76px; }
+  header { min-height: 300px; padding-bottom: 58px; }
+  header > div { display: flex; justify-content: space-between; color: var(--faint); font-size: 11px; }
+  h1 { margin: 58px 0 18px; font-size: clamp(58px, 9vw, 112px); font-weight: 500; letter-spacing: -.08em; line-height: .9; }
+  header p { margin: 0; color: var(--muted); }
+  .items { display: grid; gap: 24px; }
+</style>

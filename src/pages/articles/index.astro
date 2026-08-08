@@ -1,0 +1,234 @@
+---
+import ArticleArchiveRow from "../../components/ArticleArchiveRow.astro";
+import HumanistArticleCard from "../../components/HumanistArticleCard.astro";
+import PageArtwork from "../../components/PageArtwork.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  getActiveArticleCategories,
+  getArticles,
+  getArticlesFromLatestDays,
+  groupArticlesByDay,
+  groupArticlesByMonth
+} from "../../lib/articles";
+import { getPageImage } from "../../lib/images";
+import { siteConfig } from "../../config/site";
+
+const articles = await getArticles();
+const recentArticles = getArticlesFromLatestDays(articles, 3);
+const recentDays = groupArticlesByDay(recentArticles);
+const monthlyArchive = groupArticlesByMonth(articles);
+const categories = getActiveArticleCategories(articles, 20);
+const pageImage = getPageImage("archive");
+const isHumanist = siteConfig.theme.id === "ashfog-humanist";
+---
+
+<BaseLayout
+  title="Articles"
+  description={`Browse recent ${siteConfig.site.name} articles and explore the complete archive.`}
+  image={pageImage?.largeSrc}
+  pageType="CollectionPage"
+  breadcrumbs={[{ name: siteConfig.site.name, path: "/" }, { name: "Articles", path: "/articles" }]}
+>
+  {isHumanist ? (
+    <section class="humanist-articles page-shell" data-article-library>
+      <header class="humanist-page-header">
+        <div><span class="eyebrow">ASHFOG library</span><h1>Articles</h1></div>
+        <p>Independent, source-linked writing across technology, projects, websites, media, culture and useful ideas.</p>
+      </header>
+
+      <div class="humanist-browser">
+        <aside class="filter-panel" aria-label="Filter articles">
+          <div class="filter-title"><span>Filter and search</span><button type="button" data-reset-filters>Reset</button></div>
+          <label class="search-field">
+            <span class="sr-only">Search articles</span>
+            <input type="search" placeholder="Search articles" data-article-search />
+          </label>
+          <div class="filter-group">
+            <span>Category</span>
+            <button class="active" type="button" data-category="all">All articles <b>{articles.length}</b></button>
+            {categories.map((category) => (
+              <button type="button" data-category={category.slug}>{category.label} <b>{category.count}</b></button>
+            ))}
+          </div>
+        </aside>
+
+        <div class="library-results">
+          <div class="result-bar">
+            <span><b data-result-count>{articles.length}</b> articles</span>
+            <a href="/rss.xml">Follow via RSS ↗</a>
+          </div>
+          <div class="humanist-card-grid" data-card-grid>
+            {articles.map((article, index) => <HumanistArticleCard article={article} priority={index < 3} />)}
+          </div>
+          <p class="no-results" data-no-results hidden>No articles match that search.</p>
+        </div>
+      </div>
+
+      <div class="mobile-filter-bar">
+        <a href="/search">Search articles</a>
+        <button type="button" data-mobile-filter>Filters</button>
+      </div>
+    </section>
+  ) : (
+    <section class="articles page-shell">
+      <header class="page-header">
+        <span class="eyebrow">Article library</span>
+        <h1>Recent writing up front.<br /><em>The full archive by month.</em></h1>
+        <p>The main view stays focused on the latest three publication days. Every article remains available below in a compact monthly archive.</p>
+      </header>
+
+      {pageImage && <PageArtwork image={pageImage} priority />}
+
+      {recentDays.length > 0 && (
+        <section class="recent-section" aria-labelledby="recent-heading">
+          <div class="section-heading">
+            <div><span class="eyebrow">Latest three days</span><h2 id="recent-heading">Recently published</h2></div>
+            <p>{recentArticles.length} {recentArticles.length === 1 ? "article" : "articles"} across the newest three calendar days in the library.</p>
+          </div>
+          <div class="recent-days">
+            {recentDays.map((day) => (
+              <section class="day-group" aria-labelledby={`day-${day.key}`}>
+                <div class="day-heading"><h3 id={`day-${day.key}`}>{day.label}</h3><span>{day.articles.length}</span></div>
+                <div>{day.articles.map((article) => <ArticleArchiveRow article={article} />)}</div>
+              </section>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section class="archive-section" aria-labelledby="archive-heading">
+        <div class="section-heading">
+          <div><span class="eyebrow">Complete archive</span><h2 id="archive-heading">All articles by month</h2></div>
+          <p>Open a month to browse its full index. The newest month stays expanded by default.</p>
+        </div>
+        <div class="month-list">
+          {monthlyArchive.map((month, index) => (
+            <details class="month-group" open={index === 0}>
+              <summary><span class="month-name">{month.label}</span><span class="month-count">{month.articles.length} {month.articles.length === 1 ? "article" : "articles"}</span><span class="month-toggle" aria-hidden="true">+</span></summary>
+              <div class="month-articles">{month.articles.map((article) => <ArticleArchiveRow article={article} compact />)}</div>
+            </details>
+          ))}
+        </div>
+      </section>
+    </section>
+  )}
+</BaseLayout>
+
+{isHumanist && (
+  <script>
+    const library = document.querySelector("[data-article-library]");
+    if (library instanceof HTMLElement) {
+      const input = library.querySelector("[data-article-search]");
+      const buttons = [...library.querySelectorAll("[data-category]")];
+      const cards = [...library.querySelectorAll("[data-article-card]")];
+      const resultCount = library.querySelector("[data-result-count]");
+      const noResults = library.querySelector("[data-no-results]");
+      const panel = library.querySelector(".filter-panel");
+      let activeCategory = "all";
+
+      const applyFilters = () => {
+        const query = input instanceof HTMLInputElement ? input.value.trim().toLocaleLowerCase() : "";
+        let visible = 0;
+        for (const card of cards) {
+          if (!(card instanceof HTMLElement)) continue;
+          const matchesCategory = activeCategory === "all" || card.dataset.category === activeCategory;
+          const matchesQuery = !query || (card.dataset.search ?? "").includes(query);
+          card.hidden = !(matchesCategory && matchesQuery);
+          if (!card.hidden) visible += 1;
+        }
+        if (resultCount) resultCount.textContent = String(visible);
+        if (noResults instanceof HTMLElement) noResults.hidden = visible !== 0;
+      };
+
+      for (const button of buttons) {
+        button.addEventListener("click", () => {
+          activeCategory = button.getAttribute("data-category") ?? "all";
+          for (const option of buttons) option.classList.toggle("active", option === button);
+          applyFilters();
+          panel?.classList.remove("open");
+        });
+      }
+      input?.addEventListener("input", applyFilters);
+      library.querySelector("[data-reset-filters]")?.addEventListener("click", () => {
+        activeCategory = "all";
+        if (input instanceof HTMLInputElement) input.value = "";
+        for (const option of buttons) option.classList.toggle("active", option.getAttribute("data-category") === "all");
+        applyFilters();
+      });
+      library.querySelector("[data-mobile-filter]")?.addEventListener("click", () => panel?.classList.toggle("open"));
+    }
+  </script>
+)}
+
+<style>
+  .humanist-articles { padding-block: clamp(60px, 8vw, 110px); }
+  .humanist-page-header { display: grid; grid-template-columns: 1.25fr .75fr; gap: 80px; align-items: end; padding-bottom: clamp(64px, 8vw, 110px); }
+  .humanist-page-header h1 { margin: 16px 0 0; font-family: var(--font-serif); font-size: clamp(72px, 11vw, 164px); font-weight: 500; letter-spacing: -.065em; line-height: .8; }
+  .humanist-page-header p { max-width: 520px; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.65; }
+  .humanist-browser { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: clamp(42px, 6vw, 92px); padding-top: 52px; border-top: 1px solid var(--line-strong); }
+  .filter-panel { position: sticky; top: 104px; align-self: start; }
+  .filter-title { display: flex; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--line-strong); font-size: 12px; font-weight: 650; }
+  .filter-title button { border: 0; background: none; color: var(--faint); cursor: pointer; font-size: 11px; }
+  .search-field { display: block; margin: 18px 0 28px; }
+  .search-field input { width: 100%; min-height: 44px; padding: 0 13px; border: 1px solid var(--line); border-radius: 8px; outline: 0; background: var(--surface); color: var(--ink); }
+  .search-field input:focus { border-color: var(--accent); }
+  .filter-group { display: grid; }
+  .filter-group > span { margin-bottom: 8px; color: var(--faint); font-size: 10px; letter-spacing: .09em; text-transform: uppercase; }
+  .filter-group button { display: flex; justify-content: space-between; gap: 14px; padding: 11px 0; border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--muted); cursor: pointer; font-size: 12px; text-align: left; }
+  .filter-group button.active, .filter-group button:hover { color: var(--ink); }
+  .filter-group button.active::before { color: var(--accent); content: "◆"; font-size: 8px; }
+  .filter-group button b { margin-left: auto; color: var(--faint); font-weight: 500; }
+  .result-bar { display: flex; justify-content: space-between; gap: 24px; margin-bottom: 26px; color: var(--faint); font-size: 11px; }
+  .result-bar b { color: var(--ink); }
+  .humanist-card-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+  .humanist-card-grid > :global(.humanist-card[hidden]) { display: none; }
+  .no-results { min-height: 300px; padding-top: 70px; border-top: 1px solid var(--line); color: var(--muted); font-family: var(--font-serif); font-size: 32px; }
+  .mobile-filter-bar { display: none; }
+
+  .articles { padding-top: 76px; }
+  .page-header { display: grid; min-height: 330px; grid-template-columns: 1.45fr .55fr; align-items: end; gap: 60px; padding-bottom: 58px; }
+  .page-header .eyebrow { grid-column: 1 / -1; align-self: start; }
+  .page-header h1 { margin: 0; font-size: clamp(48px, 6.5vw, 86px); font-weight: 510; letter-spacing: -.07em; line-height: .96; }
+  .page-header h1 em { color: var(--accent); font-family: var(--font-serif); font-weight: 430; }
+  .page-header p { margin: 0; color: var(--muted); line-height: 1.75; }
+  .recent-section, .archive-section { padding-top: clamp(74px, 9vw, 124px); }
+  .section-heading { align-items: end; }
+  .section-heading h2 { margin: 14px 0 0; font-size: clamp(38px, 5vw, 64px); font-weight: 520; letter-spacing: -.06em; line-height: 1; }
+  .section-heading > p { max-width: 420px; color: var(--muted); line-height: 1.65; }
+  .recent-days { margin-top: 38px; }
+  .day-group + .day-group { margin-top: 62px; }
+  .day-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--line-strong); }
+  .day-heading h3 { margin: 0; font-size: clamp(22px, 2.8vw, 34px); font-weight: 530; letter-spacing: -.04em; }
+  .day-heading span { min-width: 28px; color: var(--faint); font-size: 11px; text-align: right; }
+  .month-list { margin-top: 38px; border-top: 1px solid var(--line-strong); }
+  .month-group { border-bottom: 1px solid var(--line-strong); }
+  summary { display: grid; grid-template-columns: minmax(0, 1fr) auto 28px; gap: 24px; align-items: center; padding: 27px 0; cursor: pointer; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  .month-name { font-size: clamp(27px, 4vw, 46px); font-weight: 520; letter-spacing: -.05em; }
+  .month-count { color: var(--faint); font-size: 10px; font-weight: 680; letter-spacing: .09em; text-transform: uppercase; }
+  .month-toggle { color: var(--accent); font-size: 25px; font-weight: 300; text-align: right; transition: transform 180ms ease; }
+  details[open] .month-toggle { transform: rotate(45deg); }
+  .month-articles { padding-bottom: 20px; }
+
+  @media (max-width: 1120px) {
+    .humanist-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 780px) {
+    .humanist-page-header { grid-template-columns: 1fr; gap: 34px; }
+    .humanist-browser { grid-template-columns: 1fr; padding-bottom: 72px; }
+    .filter-panel { position: fixed; z-index: 35; right: 16px; bottom: 76px; left: 16px; top: auto; display: none; max-height: 70vh; padding: 24px; overflow-y: auto; border: 1px solid var(--line-strong); border-radius: 18px; background: var(--surface-raised); box-shadow: var(--shadow); }
+    .filter-panel.open { display: block; }
+    .humanist-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mobile-filter-bar { position: fixed; z-index: 30; right: 16px; bottom: 16px; left: 16px; display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 8px; border: 1px solid var(--line-strong); border-radius: 14px; background: color-mix(in srgb, var(--surface-raised) 92%, transparent); box-shadow: var(--shadow); backdrop-filter: blur(14px); }
+    .mobile-filter-bar a, .mobile-filter-bar button { min-height: 42px; padding: 0 14px; border: 0; border-radius: 9px; background: var(--surface); color: var(--muted); font-size: 12px; line-height: 42px; text-align: left; }
+    .mobile-filter-bar button { background: var(--accent); color: #fff; cursor: pointer; line-height: normal; }
+    .page-header { grid-template-columns: 1fr; min-height: 0; gap: 28px; }
+    .section-heading { align-items: start; flex-direction: column; gap: 18px; }
+  }
+  @media (max-width: 590px) {
+    .humanist-page-header h1 { font-size: clamp(68px, 24vw, 110px); }
+    .humanist-card-grid { grid-template-columns: 1fr; }
+    summary { grid-template-columns: minmax(0, 1fr) 24px; }
+    .month-count { display: none; }
+  }
+</style>

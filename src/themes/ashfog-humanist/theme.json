@@ -1,0 +1,10 @@
+{
+  "id": "ashfog-humanist",
+  "name": "ASHFOG Humanist",
+  "version": "1.0.0",
+  "supportsColorModes": ["light", "dark"],
+  "themeColors": {
+    "light": "#f2eee6",
+    "dark": "#141412"
+  }
+}

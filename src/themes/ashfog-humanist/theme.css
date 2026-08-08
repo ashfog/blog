@@ -1,0 +1,206 @@
+:root[data-site-theme="ashfog-humanist"] {
+  color-scheme: light;
+  --bg: #f2eee6;
+  --surface: #eae4da;
+  --surface-raised: #faf7f0;
+  --ink: #1d1c19;
+  --muted: #69665f;
+  --faint: #918c82;
+  --line: rgba(29, 28, 25, 0.13);
+  --line-strong: rgba(29, 28, 25, 0.24);
+  --accent: var(--site-accent, #b96545);
+  --accent-soft: #efd3c4;
+  --signal: #84966b;
+  --community: #d7c4b6;
+  --shadow: 0 24px 70px rgba(53, 42, 31, 0.12);
+  --page: min(1440px, calc(100% - 64px));
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Noto Sans SC", sans-serif;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, "Noto Serif SC", serif;
+}
+
+:root[data-site-theme="ashfog-humanist"][data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #141412;
+  --surface: #1d1c19;
+  --surface-raised: #24231f;
+  --ink: #f5f1e8;
+  --muted: #aaa59b;
+  --faint: #77736b;
+  --line: rgba(245, 241, 232, 0.1);
+  --line-strong: rgba(245, 241, 232, 0.2);
+  --accent: var(--site-accent-dark, #d98a68);
+  --accent-soft: #4a2d22;
+  --signal: #8c9e73;
+  --community: #312c27;
+  --shadow: 0 26px 80px rgba(0, 0, 0, 0.34);
+}
+
+:root[data-site-theme="ashfog-humanist"] body {
+  background: var(--bg);
+}
+
+:root[data-site-theme="ashfog-humanist"] .eyebrow::before {
+  border-radius: 0;
+  transform: rotate(45deg);
+}
+
+:root[data-site-theme="ashfog-humanist"] .section-heading h2,
+:root[data-site-theme="ashfog-humanist"] .article-prose h2,
+:root[data-site-theme="ashfog-humanist"] .article-prose h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+:root[data-site-theme="ashfog-humanist"] .article {
+  max-width: 1240px;
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
+  column-gap: clamp(48px, 8vw, 124px);
+  align-items: end;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-header::before {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  width: 116px;
+  height: 116px;
+  margin-bottom: 54px;
+  border-radius: 26px;
+  background-color: var(--accent);
+  background-image: url("/brand/ashfog-mark-inverse.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 52px;
+  content: "";
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-kicker {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin-bottom: 44px;
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-header h1 {
+  grid-column: 1;
+  grid-row: 3;
+  margin: 0 0 28px;
+  font-family: var(--font-serif);
+  font-size: clamp(54px, 6vw, 88px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-header > p {
+  grid-column: 1;
+  grid-row: 4;
+  margin-bottom: 18px;
+  font-size: clamp(20px, 2vw, 26px);
+  line-height: 1.5;
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-meta {
+  grid-column: 2;
+  grid-row: 3 / 5;
+  display: grid;
+  gap: 0;
+  align-self: end;
+  margin: 0 0 18px;
+  border-top: 1px solid var(--line);
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-meta span {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-meta span + span::before {
+  display: none;
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-cover {
+  max-height: none;
+  margin-top: 54px;
+  border: 0;
+  border-radius: 26px;
+  aspect-ratio: 16 / 8.4;
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-prose {
+  --article-copy-width: 720px;
+  font-size: clamp(19px, 1.7vw, 22px);
+  line-height: 1.7;
+}
+
+:root[data-site-theme="ashfog-humanist"] .article-prose > p:first-child::first-letter {
+  float: left;
+  margin: 0.04em 0.12em 0 0;
+  color: var(--accent);
+  font-family: var(--font-serif);
+  font-size: 4.2em;
+  line-height: 0.78;
+}
+
+:root[data-site-theme="ashfog-humanist"] .sources {
+  max-width: 960px;
+  margin-inline: auto;
+}
+
+:root[data-site-theme="ashfog-humanist"] footer {
+  background: var(--bg);
+}
+
+@media (max-width: 760px) {
+  :root[data-site-theme="ashfog-humanist"] {
+    --page: min(100% - 32px, 1440px);
+  }
+
+  :root[data-site-theme="ashfog-humanist"] .article-header {
+    grid-template-columns: 1fr;
+  }
+
+  :root[data-site-theme="ashfog-humanist"] .article-header::before,
+  :root[data-site-theme="ashfog-humanist"] .article-kicker,
+  :root[data-site-theme="ashfog-humanist"] .article-header h1,
+  :root[data-site-theme="ashfog-humanist"] .article-header > p,
+  :root[data-site-theme="ashfog-humanist"] .article-meta {
+    grid-column: 1;
+  }
+
+  :root[data-site-theme="ashfog-humanist"] .article-header::before {
+    width: 84px;
+    height: 84px;
+    margin-bottom: 34px;
+    border-radius: 20px;
+    background-size: 38px;
+  }
+
+  :root[data-site-theme="ashfog-humanist"] .article-kicker {
+    grid-row: 2;
+    margin-bottom: 28px;
+  }
+
+  :root[data-site-theme="ashfog-humanist"] .article-header h1 {
+    grid-row: 3;
+    font-size: clamp(45px, 13vw, 65px);
+  }
+
+  :root[data-site-theme="ashfog-humanist"] .article-meta {
+    grid-row: 5;
+    margin-top: 20px;
+  }
+
+  :root[data-site-theme="ashfog-humanist"] .article-cover {
+    margin-top: 36px;
+    border-radius: 18px;
+    aspect-ratio: 3 / 2;
+  }
+}
