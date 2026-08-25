@@ -24,7 +24,7 @@
     "favicon": "/favicon.svg"
   },
   "theme": {
-    "id": "ashfog-humanist",
+    "id": "ashfog-editorial",
     "defaultColorMode": "dark",
     "allowColorModeToggle": true,
     "accentColor": "#b96545",
