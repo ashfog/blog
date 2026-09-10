@@ -146,7 +146,10 @@ src/themes/
 ├── ashfog-editorial/
 │   ├── theme.json
 │   └── theme.css
-└── ashfog-humanist/
+├── ashfog-humanist/
+│   ├── theme.json
+│   └── theme.css
+└── ashfog-horizon/
     ├── theme.json
     └── theme.css
 ```
@@ -154,6 +157,22 @@ src/themes/
 `ashfog-editorial` preserves the original ASHFOG visual system. `ashfog-humanist` is a warm, fog-orange publication theme with serif-led headlines, topic-forward navigation, illustrated cards, a filterable article library, and a long-form reading layout. Theme manifests declare identity, version, supported color modes, and browser theme colors. Shared accessibility, article rendering, responsive behavior, publishing, search, RSS, and SEO remain in the common site code.
 
 Future themes can be added without changing article content or site configuration structure: create a theme directory, register its manifest, import its namespaced stylesheet, and select its ID in `site.config.json`.
+
+`ashfog-horizon` is an illustrated, sky-blue journal theme with an original mountain panorama, a reading-window illustration, sage-green accents, rounded article cards, and a filterable library. Its homepage features the newest article plus up to eight more in two columns, live topic links, an About invitation, and an RSS link. A quiet river-valley panorama closes the footer on every page, with responsive crops, a soft upper fade, and a subdued dark-mode treatment. The article layout keeps tables and code locally scrollable on small screens. Existing article images, external image URLs, content, publishing workflows, and SEO are unchanged.
+
+To select Horizon, set these fields in `site.config.json`, then run the full build:
+
+```json
+"theme": {
+  "id": "ashfog-horizon",
+  "defaultColorMode": "light",
+  "allowColorModeToggle": true,
+  "accentColor": "#176b60",
+  "accentColorDark": "#9bd9c7"
+}
+```
+
+The default mode applies when a visitor has no saved color preference. A visitor's existing light/dark choice is preserved; the header button can change it. The two previous themes remain selectable by their IDs. Original Horizon illustration prompts, optimized file sizes, and usage notes are documented in [the theme asset notes](src/themes/ashfog-horizon/ASSETS.md).
 
 ## Article storage
 

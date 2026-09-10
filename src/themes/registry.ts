@@ -1,9 +1,11 @@
 import ashfogEditorial from "./ashfog-editorial/theme.json";
 import ashfogHumanist from "./ashfog-humanist/theme.json";
+import ashfogHorizon from "./ashfog-horizon/theme.json";
 
 const registry = {
   [ashfogEditorial.id]: ashfogEditorial,
-  [ashfogHumanist.id]: ashfogHumanist
+  [ashfogHumanist.id]: ashfogHumanist,
+  [ashfogHorizon.id]: ashfogHorizon
 } as const;
 
 export type ThemeId = keyof typeof registry;

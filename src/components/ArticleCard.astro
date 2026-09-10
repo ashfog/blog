@@ -13,9 +13,10 @@ interface Props {
   article: ArticleEntry;
   featured?: boolean;
   grid?: boolean;
+  priority?: boolean;
 }
 
-const { article, featured = false, grid = false } = Astro.props;
+const { article, featured = false, grid = false, priority = featured } = Astro.props;
 const image = getArticleHeroImage(article);
 const slug = getArticleSlug(article);
 const articleLanguage = article.data.language ?? siteConfig.site.language;
@@ -37,9 +38,9 @@ const articleDirection = directionForLanguage(articleLanguage);
         width={image.width}
         height={image.height}
         alt={image.alt}
-        loading={featured ? "eager" : "lazy"}
+        loading={priority ? "eager" : "lazy"}
         decoding="async"
-        fetchpriority={featured ? "high" : "auto"}
+        fetchpriority={priority ? "high" : "auto"}
       />
     </figure>
   )}

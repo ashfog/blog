@@ -1,0 +1,10 @@
+{
+  "id": "ashfog-horizon",
+  "name": "ASHFOG Horizon",
+  "version": "1.0.0",
+  "supportsColorModes": ["light", "dark"],
+  "themeColors": {
+    "light": "#fafbf8",
+    "dark": "#111e24"
+  }
+}

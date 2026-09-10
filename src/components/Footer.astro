@@ -9,7 +9,7 @@ const socialLinks = [
 ].filter((link) => link.href);
 ---
 
-<footer lang={siteConfig.site.language} dir={directionForLanguage(siteConfig.site.language)}>
+<footer id="site-footer" class="site-footer" lang={siteConfig.site.language} dir={directionForLanguage(siteConfig.site.language)}>
   <div class="page-shell footer-grid">
     <div class="footer-brand">
       <a href="/"><SiteMark compact /> <strong>{siteConfig.site.shortName}</strong></a>
@@ -43,6 +43,21 @@ const socialLinks = [
     </div>
     <span>{siteConfig.site.description}</span>
   </div>
+  {siteConfig.theme.id === "ashfog-horizon" && (
+    <div class="horizon-footer-art" aria-hidden="true">
+      <img
+        src="/images/themes/horizon/river-valley-2048.webp"
+        srcset="/images/themes/horizon/river-valley-640.webp 640w, /images/themes/horizon/river-valley-1024.webp 1024w, /images/themes/horizon/river-valley-2048.webp 2048w"
+        sizes="100vw"
+        width="2048"
+        height="683"
+        alt=""
+        loading="lazy"
+        decoding="async"
+        fetchpriority="low"
+      />
+    </div>
+  )}
 </footer>
 
 <style>

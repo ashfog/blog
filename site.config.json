@@ -24,11 +24,11 @@
     "favicon": "/favicon.svg"
   },
   "theme": {
-    "id": "ashfog-editorial",
-    "defaultColorMode": "dark",
+    "id": "ashfog-horizon",
+    "defaultColorMode": "light",
     "allowColorModeToggle": true,
-    "accentColor": "#b96545",
-    "accentColorDark": "#d98a68"
+    "accentColor": "#176b60",
+    "accentColorDark": "#9bd9c7"
   },
   "navigation": [
     { "label": "Home", "href": "/" },

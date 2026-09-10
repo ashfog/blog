@@ -6,18 +6,19 @@ import { getPageImage } from "../../lib/images";
 import { siteConfig } from "../../config/site";
 
 const articles = await getArticles();
+const isHorizon = siteConfig.theme.id === "ashfog-horizon";
 const topics = Object.entries(categoryLabels).map(([slug, label]) => ({
   slug,
   label,
   count: articles.filter((article) => article.data.category === slug).length
-}));
+})).filter((topic) => !isHorizon || topic.count > 0);
 const pageImage = getPageImage("topics");
 ---
 
 <BaseLayout
   title="Topics"
   description={`Explore ${siteConfig.site.name} articles by subject.`}
-  image={pageImage?.largeSrc}
+  image={isHorizon ? "/images/themes/horizon/landscape-1536.webp" : pageImage?.largeSrc}
   pageType="CollectionPage"
   breadcrumbs={[{ name: siteConfig.site.name, path: "/" }, { name: "Topics", path: "/topics" }]}
 >
@@ -27,7 +28,7 @@ const pageImage = getPageImage("topics");
       <h1>Follow the ideas<br /><em>behind what matters</em></h1>
       <p>Browse focused writing across technology, the internet, creative work, culture, and the wider world around them.</p>
     </header>
-    {pageImage && <PageArtwork image={pageImage} priority />}
+    {!isHorizon && pageImage && <PageArtwork image={pageImage} priority />}
     <div class="topic-grid">
       {topics.map((topic, index) => (
         <a href={`/topics/${topic.slug}`}>

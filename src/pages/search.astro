@@ -22,7 +22,7 @@ const pageImage = getPageImage("search");
       <h1>Search {siteConfig.site.shortName}</h1>
       <p>Find articles by project, website, person, tool, topic, source, or keyword.</p>
     </header>
-    {pageImage && <PageArtwork image={pageImage} />}
+    {siteConfig.theme.id !== "ashfog-horizon" && pageImage && <PageArtwork image={pageImage} />}
     <div id="search" class="search-box">
       <p class="loading">Loading the search index…</p>
     </div>

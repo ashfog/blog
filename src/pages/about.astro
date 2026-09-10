@@ -4,22 +4,31 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getPageImage } from "../lib/images";
 import { siteConfig } from "../config/site";
 const pageImage = getPageImage("about");
+const isHorizon = siteConfig.theme.id === "ashfog-horizon";
 ---
 
 <BaseLayout
   title={`About ${siteConfig.site.name}`}
   description={siteConfig.site.description}
-  image={pageImage?.largeSrc}
+  image={isHorizon ? "/images/themes/horizon/reading-window-1024.webp" : pageImage?.largeSrc}
   pageType="AboutPage"
   breadcrumbs={[{ name: siteConfig.site.name, path: "/" }, { name: "About", path: "/about" }]}
 >
   <section class="about page-shell">
     <header>
       <span class="eyebrow">About {siteConfig.site.shortName}</span>
-      <h1>Less feed<br /><em>more understanding</em></h1>
+      {isHorizon ? <h1>A wider world<br /><em>starts with curiosity</em></h1> : <h1>Less feed<br /><em>more understanding</em></h1>}
       <p>{siteConfig.site.name} is an independent publication. {siteConfig.site.description} Articles are published when a subject deserves a complete explanation—not because a daily slot needs to be filled.</p>
     </header>
-    {pageImage && <PageArtwork image={pageImage} priority />}
+    {isHorizon ? (
+      <figure class="horizon-about-art">
+        <img src="/images/themes/horizon/reading-window-1024.webp"
+          srcset="/images/themes/horizon/reading-window-640.webp 640w, /images/themes/horizon/reading-window-1024.webp 1024w"
+          sizes="(max-width: 680px) 90vw, 560px" width="1024" height="1024"
+          alt="An open book, telescope, and olive branches at an arched window overlooking a mountain lake."
+          decoding="async" />
+      </figure>
+    ) : pageImage && <PageArtwork image={pageImage} priority />}
 
     <div class="principles">
       <article><span>01</span><h2>One subject at a time</h2><p>Each article starts with a clear question and follows it far enough to leave the reader with a useful mental model.</p></article>
