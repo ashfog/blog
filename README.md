@@ -149,9 +149,16 @@ src/themes/
 ├── ashfog-humanist/
 │   ├── theme.json
 │   └── theme.css
-└── ashfog-horizon/
+├── ashfog-horizon/
+│   ├── theme.json
+│   └── theme.css
+└── ashfog-gallery/
     ├── theme.json
-    └── theme.css
+    ├── theme.css
+    ├── GalleryHome.astro
+    ├── gallery.css
+    ├── gallery.ts
+    └── geometry.mjs
 ```
 
 `ashfog-editorial` preserves the original ASHFOG visual system. `ashfog-humanist` is a warm, fog-orange publication theme with serif-led headlines, topic-forward navigation, illustrated cards, a filterable article library, and a long-form reading layout. Theme manifests declare identity, version, supported color modes, and browser theme colors. Shared accessibility, article rendering, responsive behavior, publishing, search, RSS, and SEO remain in the common site code.
@@ -160,19 +167,21 @@ Future themes can be added without changing article content or site configuratio
 
 `ashfog-horizon` is an illustrated, sky-blue journal theme with an original mountain panorama, a reading-window illustration, sage-green accents, rounded article cards, and a filterable library. Its homepage features the newest article plus up to eight more in two columns, live topic links, an About invitation, and an RSS link. A quiet river-valley panorama closes the footer on every page, with responsive crops, a soft upper fade, and a subdued dark-mode treatment. The article layout keeps tables and code locally scrollable on small screens. Existing article images, external image URLs, content, publishing workflows, and SEO are unchanged.
 
-To select Horizon, set these fields in `site.config.json`, then run the full build:
+`ashfog-gallery` turns the homepage into an accessible three-sided reading room. The twelve newest article covers and their labels move together along a distant back wall, smoothly around both corners, and onto the side walls. The room itself uses the page background, so the moving articles reveal an otherwise invisible gallery. It supports slow automatic wandering, hover and focus pause, pointer dragging, keyboard navigation, explicit motion controls, reduced-motion fallback, light and dark modes, and a non-JavaScript article strip. The rest of the site uses the same restrained museum typography and flat reading surfaces while preserving the shared article, search, RSS, Sitemap, and SEO system.
+
+To select Gallery, set these fields in `site.config.json`, then run the full build:
 
 ```json
 "theme": {
-  "id": "ashfog-horizon",
+  "id": "ashfog-gallery",
   "defaultColorMode": "light",
   "allowColorModeToggle": true,
-  "accentColor": "#176b60",
-  "accentColorDark": "#9bd9c7"
+  "accentColor": "#9c4e30",
+  "accentColorDark": "#e4a387"
 }
 ```
 
-The default mode applies when a visitor has no saved color preference. A visitor's existing light/dark choice is preserved; the header button can change it. The two previous themes remain selectable by their IDs. Original Horizon illustration prompts, optimized file sizes, and usage notes are documented in [the theme asset notes](src/themes/ashfog-horizon/ASSETS.md).
+The default mode applies when a visitor has no saved color preference. A visitor's existing light/dark choice is preserved; the header button can change it. The three previous themes remain selectable by their IDs. Original Horizon illustration prompts, optimized file sizes, and usage notes remain documented in [the theme asset notes](src/themes/ashfog-horizon/ASSETS.md).
 
 ## Article storage
 

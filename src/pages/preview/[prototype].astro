@@ -1,0 +1,10 @@
+---
+import GalleryPreview from "../../themes/ashfog-gallery/GalleryPreview.astro";
+
+// Local design review only: this route does not exist in production output.
+export function getStaticPaths() {
+  return import.meta.env.DEV ? [{ params: { prototype: "gallery" } }] : [];
+}
+---
+
+<GalleryPreview />

@@ -41,7 +41,10 @@ const socialLinks = [
         >{siteConfig.publisher.email}</a>
       )}
     </div>
-    <span>{siteConfig.site.description}</span>
+    <span>{siteConfig.theme.id === "ashfog-gallery" ? "Made for the curious" : siteConfig.site.description}</span>
+    {siteConfig.theme.id === "ashfog-gallery" && (
+      <a class="gallery-footer-rss" href="/rss.xml">RSS Feed ↗</a>
+    )}
   </div>
   {siteConfig.theme.id === "ashfog-horizon" && (
     <div class="horizon-footer-art" aria-hidden="true">

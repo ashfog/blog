@@ -1,0 +1,62 @@
+---
+import { siteConfig } from "../../config/site";
+import GalleryHome from "./GalleryHome.astro";
+---
+
+<!doctype html>
+<html lang={siteConfig.site.language} data-gallery-mode="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta
+      name="description"
+      content={`${siteConfig.site.name} Gallery — a local, interactive theme preview.`}
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href={siteConfig.branding.favicon} />
+    <title>{siteConfig.site.name} Gallery — Local Preview</title>
+  </head>
+  <body>
+    <header class="gallery-header">
+      <a class="gallery-brand" href="/" aria-label={`${siteConfig.site.name} home`}>
+        <img class="mark-light" src={siteConfig.branding.mark} width="32" height="32" alt="" />
+        <img class="mark-dark" src={siteConfig.branding.markDark} width="32" height="32" alt="" />
+        <span>{siteConfig.site.shortName}</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        {siteConfig.navigation
+          .filter((link) => link.href !== "/")
+          .map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+      <div class="gallery-header-actions">
+        <a href="/search" aria-label="Search articles" class="gallery-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m16 16 4.5 4.5" />
+          </svg>
+        </a>
+        <button
+          class="gallery-icon"
+          data-gallery-theme
+          type="button"
+          aria-label="Use dark color theme"
+          aria-pressed="false"
+        >
+          <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true">
+            <circle cx="12" cy="12" r="8" />
+            <path d="M12 4a8 8 0 0 1 0 16Z" fill="currentColor" stroke="none" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main><GalleryHome /></main>
+
+    <footer class="gallery-footer">
+      <span>© {new Date().getFullYear()} {siteConfig.site.name}</span>
+      <span>Made for the curious</span>
+      <a href="/rss.xml">RSS Feed ↗</a>
+    </footer>
+  </body>
+</html>

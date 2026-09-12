@@ -2,6 +2,7 @@
 import ArticleCard from "../components/ArticleCard.astro";
 import HumanistArticleCard from "../components/HumanistArticleCard.astro";
 import HorizonHome from "../components/HorizonHome.astro";
+import GalleryHome from "../themes/ashfog-gallery/GalleryHome.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import {
   categoryLabels,
@@ -21,6 +22,7 @@ const railArticles = articles.slice(0, 8);
 const pageImage = getPageImage("home");
 const isHumanist = siteConfig.theme.id === "ashfog-humanist";
 const isHorizon = siteConfig.theme.id === "ashfog-horizon";
+const isGallery = siteConfig.theme.id === "ashfog-gallery";
 ---
 
 <BaseLayout
@@ -28,7 +30,7 @@ const isHorizon = siteConfig.theme.id === "ashfog-horizon";
   description={siteConfig.site.description}
   image={isHorizon ? "/images/themes/horizon/landscape-1536.webp" : pageImage?.largeSrc}
 >
-  {isHorizon ? <HorizonHome articles={articles} /> : isHumanist ? (
+  {isGallery ? <GalleryHome articles={articles} /> : isHorizon ? <HorizonHome articles={articles} /> : isHumanist ? (
     <>
       <section class="humanist-hero page-shell">
         <div class="humanist-intro">

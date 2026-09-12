@@ -1,0 +1,10 @@
+{
+  "id": "ashfog-gallery",
+  "name": "ASHFOG Gallery",
+  "version": "1.0.0",
+  "supportsColorModes": ["light", "dark"],
+  "themeColors": {
+    "light": "#ffffff",
+    "dark": "#141414"
+  }
+}

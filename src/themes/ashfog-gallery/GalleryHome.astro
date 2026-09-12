@@ -1,0 +1,168 @@
+---
+import { siteConfig, directionForLanguage } from "../../config/site";
+import {
+  getArticles,
+  getArticleSlug,
+  formatArticleDate,
+  categoryLabels,
+  articleReadingMinutes,
+  type ArticleEntry
+} from "../../lib/articles";
+import { getArticleHeroImage } from "../../lib/images";
+import "./gallery.css";
+
+interface Props {
+  articles?: ArticleEntry[];
+}
+
+const articles = Astro.props.articles ?? await getArticles();
+const exhibits = articles.slice(0, 12).map((article) => ({
+  article,
+  image: getArticleHeroImage(article),
+  fallback: getArticleHeroImage({
+    ...article,
+    data: { ...article.data, heroImageUrl: undefined, heroImageAlt: undefined }
+  }),
+  href: `/articles/${getArticleSlug(article)}`,
+  language: article.data.language ?? siteConfig.site.language
+}));
+const latest = exhibits[0];
+const cornerSegmentCount = 12;
+const roomCornerSegments = [-1, 1].flatMap((side) =>
+  Array.from({length: cornerSegmentCount}, (_, index) => ({side, index}))
+);
+---
+
+<a class="gallery-skip" href="#gallery-intro">Skip to featured article</a>
+<div class="gallery-overline">
+  <span>THE READING ROOM</span>
+  <span>Ideas, in good company</span>
+</div>
+
+{latest ? (
+  <ashfog-gallery>
+    <section
+      class="gallery-viewport"
+      tabindex="0"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Article gallery. Use the left and right arrow keys to explore."
+      aria-describedby="gallery-help"
+    >
+      <div class="gallery-scene">
+        <div class="gallery-room-wall gallery-room-wall--back" aria-hidden="true"></div>
+        <div class="gallery-room-wall gallery-room-wall--left" aria-hidden="true"></div>
+        <div class="gallery-room-wall gallery-room-wall--right" aria-hidden="true"></div>
+        {roomCornerSegments.map(({side, index}) => (
+          <div
+            class="gallery-room-corner-slice"
+            data-room-corner-side={side}
+            data-room-corner-index={index}
+            aria-hidden="true"
+          ></div>
+        ))}
+        <div class="gallery-room-floor" aria-hidden="true"></div>
+        {exhibits.map(({article, image, fallback, href, language}, index) => (
+          <a
+            class="gallery-exhibit"
+            href={href}
+            aria-label={article.data.title}
+            data-index={index}
+            data-category={categoryLabels[article.data.category]}
+            data-date={formatArticleDate(article.data.publishedAt)}
+            data-minutes={articleReadingMinutes(article)}
+            lang={language}
+            dir={directionForLanguage(language)}
+          >
+            <figure>
+              <div class="gallery-art">
+                {image ? (
+                  <img
+                    src={image.src}
+                    srcset={image.srcset}
+                    data-fallback-src={fallback?.src}
+                    data-fallback-alt={fallback?.alt}
+                    sizes="(max-width: 700px) 65vw, 380px"
+                    width={image.width}
+                    height={image.height}
+                    loading={index < 4 || index > exhibits.length - 4 ? "eager" : "lazy"}
+                    decoding="async"
+                    draggable="false"
+                    alt={image.alt}
+                  />
+                ) : (
+                  <div class="gallery-art-empty">{categoryLabels[article.data.category]}</div>
+                )}
+              </div>
+              <figcaption>
+                <span class="gallery-exhibit-category">{categoryLabels[article.data.category]}</span>
+                <span class="gallery-exhibit-title">{article.data.title}</span>
+                <time datetime={article.data.publishedAt.toISOString()}>
+                  {formatArticleDate(article.data.publishedAt)}
+                </time>
+              </figcaption>
+            </figure>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <div class="gallery-controls" hidden>
+      <p id="gallery-help">Drag to explore <span aria-hidden="true">·</span> Click to read</p>
+      <div class="gallery-transport">
+        <button type="button" class="gallery-icon" data-gallery-previous aria-label="Previous article">
+          <span aria-hidden="true">←</span>
+        </button>
+        <span class="gallery-counter">
+          <span data-gallery-count>01</span>
+          <span class="counter-divider">/</span>
+          {String(exhibits.length).padStart(2,"0")}
+        </span>
+        <button type="button" class="gallery-icon" data-gallery-next aria-label="Next article">
+          <span aria-hidden="true">→</span>
+        </button>
+        <button
+          type="button"
+          class="gallery-icon gallery-pause"
+          data-gallery-pause
+          aria-label="Pause automatic movement"
+          aria-pressed="false"
+        >
+          <span aria-hidden="true">Ⅱ</span>
+        </button>
+      </div>
+      <p class="gallery-state" data-gallery-state>Slowly wandering</p>
+    </div>
+
+    <section class="gallery-intro" id="gallery-intro" aria-labelledby="gallery-heading">
+      <p class="gallery-kicker">A FIELD GUIDE TO THE INTERESTING</p>
+      <h1 id="gallery-heading">Not everything worth seeing<br /><em>is visible</em></h1>
+      <p class="gallery-description">
+        Technology, culture, and useful ideas.<br />An independent collection for a curious mind.
+      </p>
+      <a class="gallery-all" href="/articles">
+        Browse all articles <span aria-hidden="true">↗</span>
+      </a>
+    </section>
+
+    <aside class="gallery-current" aria-label="Currently centered article">
+      <span class="gallery-current-label">ON VIEW</span>
+      <div>
+        <a data-gallery-current href={latest.href} lang={latest.language}>{latest.article.data.title}</a>
+        <p data-gallery-current-meta>
+          {categoryLabels[latest.article.data.category]} · {articleReadingMinutes(latest.article)} min read
+        </p>
+      </div>
+    </aside>
+    <p class="gallery-sr-only" data-gallery-announcement aria-live="polite" aria-atomic="true"></p>
+  </ashfog-gallery>
+) : (
+  <section class="gallery-intro" id="gallery-intro">
+    <h1>The collection is taking shape</h1>
+    <a href="/about">About {siteConfig.site.name}</a>
+  </section>
+)}
+
+<script>
+  import "./gallery";
+</script>

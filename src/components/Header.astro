@@ -4,7 +4,9 @@ import { colorModeStorageKey, directionForLanguage, siteConfig } from "../config
 import { getThemeManifest } from "../themes/registry";
 
 const currentPath = Astro.url.pathname;
-const links = siteConfig.navigation;
+const links = siteConfig.theme.id === "ashfog-gallery"
+  ? siteConfig.navigation.filter((link) => link.href !== "/")
+  : siteConfig.navigation;
 const activeTheme = getThemeManifest(siteConfig.theme.id);
 const lightThemeColor = activeTheme.themeColors.light;
 const darkThemeColor = activeTheme.themeColors.dark;

@@ -1,9 +1,11 @@
 import ashfogEditorial from "./ashfog-editorial/theme.json";
+import ashfogGallery from "./ashfog-gallery/theme.json";
 import ashfogHumanist from "./ashfog-humanist/theme.json";
 import ashfogHorizon from "./ashfog-horizon/theme.json";
 
 const registry = {
   [ashfogEditorial.id]: ashfogEditorial,
+  [ashfogGallery.id]: ashfogGallery,
   [ashfogHumanist.id]: ashfogHumanist,
   [ashfogHorizon.id]: ashfogHorizon
 } as const;
