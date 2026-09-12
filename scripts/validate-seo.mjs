@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { getArticleProseHtml, getHtmlAttribute, isExternalHttpHref } from "./lib/external-article-links.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
@@ -10,6 +11,7 @@ const siteOrigin = siteConfig.site.url;
 const sitePattern = siteOrigin.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const rtlLanguages = new Set(["ar", "arc", "ckb", "dv", "fa", "he", "ku", "nqo", "ps", "sd", "ug", "ur", "yi"]);
 const rtlScripts = new Set(["Adlm", "Arab", "Hebr", "Mand", "Nkoo", "Rohg", "Syrc", "Thaa"]);
+let externalArticleBodyLinkCount = 0;
 
 function directionForLanguage(language) {
   try {
@@ -41,6 +43,23 @@ function getJsonLd(html, label) {
   const match = html.match(/<script[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/);
   assert.ok(match, `${label}: missing JSON-LD`);
   return JSON.parse(match[1]);
+}
+
+function validateExternalArticleBodyLinks(html, label) {
+  const prose = getArticleProseHtml(html);
+  assert.ok(prose, `${label}: missing article prose`);
+
+  for (const match of prose.matchAll(/<a\b[^>]*>/giu)) {
+    const tag = match[0];
+    const href = getHtmlAttribute(tag, "href");
+    if (!href) continue;
+    if (!isExternalHttpHref(href, siteOrigin)) continue;
+
+    externalArticleBodyLinkCount += 1;
+    assert.equal(getHtmlAttribute(tag, "target"), "_blank", `${label}: external article-body link must open in a new tab: ${href}`);
+    const rel = new Set((getHtmlAttribute(tag, "rel") ?? "").split(/\s+/u).filter(Boolean));
+    assert.ok(rel.has("noopener") && rel.has("noreferrer"), `${label}: external article-body link needs noopener noreferrer: ${href}`);
+  }
 }
 
 const articleDirectories = (await readdir(path.join(dist, "articles"), { withFileTypes: true }))
@@ -96,8 +115,11 @@ for (const file of htmlFiles) {
   const structuredArticle = graph.find((item) => item["@type"] === "Article");
   if (structuredArticle) {
     assert.equal(structuredArticle.inLanguage, documentLanguage, `${label}: article structured-data language`);
+    validateExternalArticleBodyLinks(html, label);
   }
 }
+
+assert.ok(externalArticleBodyLinkCount > 0, "missing external article-body link regression coverage");
 
 const homeGraph = getJsonLd(home, "home")["@graph"];
 const expectedPublisherType = siteConfig.publisher.type === "person" ? "Person" : "Organization";

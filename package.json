@@ -9,12 +9,13 @@
   "scripts": {
     "dev": "pnpm run build:config && astro dev",
     "build:astro": "astro build",
+    "build:article-links": "node scripts/postprocess-external-article-links.mjs",
     "build:search": "pagefind --site dist",
     "build:seo": "node scripts/validate-seo.mjs",
     "build:config": "node scripts/validate-site-config.mjs",
     "build:workbench": "node scripts/validate-workbench.mjs",
     "build:articles": "node scripts/validate-articles.mjs",
-    "build": "pnpm run build:config && pnpm run build:workbench && pnpm run build:articles && pnpm run build:astro && pnpm run build:search && pnpm run build:seo",
+    "build": "pnpm run build:config && pnpm run build:workbench && pnpm run build:articles && pnpm run build:astro && pnpm run build:article-links && pnpm run build:search && pnpm run build:seo",
     "preview": "astro preview"
   },
   "dependencies": {

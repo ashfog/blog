@@ -197,7 +197,7 @@ The public URL remains flat and stable:
 https://your-domain.example/articles/<stable-slug>
 ```
 
-Frontmatter is validated by `src/content.config.ts`. Each article contains a title, description, publication time, category, focused tags, optional article-language override, optional library or external hero-image override, featured state, and an essential source list. The user's explicit article language overrides the site default; when no language is requested, the article inherits `site.language`. The Markdown body contains the complete article, inline source links, and optional direct HTTPS images.
+Frontmatter is validated by `src/content.config.ts`. Each article contains a title, description, publication time, category, focused tags, optional article-language override, optional library or external hero-image override, featured state, and an essential source list. The user's explicit article language overrides the site default; when no language is requested, the article inherits `site.language`. The Markdown body contains the complete article, inline source links, and optional direct HTTPS images. External HTTP or HTTPS links in article Markdown open in a new tab with `noopener noreferrer`; internal ASHFOG links and section anchors stay in the current tab.
 
 Unless the user asks for a specific length, the publisher targets about 1,000 English words (normally 800–1,200), or equivalent depth in another language. Narrow announcements may be shorter. Longer articles are reserved for explicit deep-dive requests or subjects whose evidence and complexity genuinely require more space.
 
